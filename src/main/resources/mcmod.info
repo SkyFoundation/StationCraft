@@ -1,0 +1,16 @@
+[
+{
+  "modid": "lanfasy",
+  "name": "Lanfasy",
+  "description": "A mod.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["cvrunmin"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
