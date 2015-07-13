@@ -1,43 +1,30 @@
 package tk.cvrunmin.railwayp.item;
 
-import java.util.List;
-
 import tk.cvrunmin.railwayp.init.RPBlocks;
-import tk.cvrunmin.railwayp.init.RPItems;
 import tk.cvrunmin.railwayp.tileentity.TileEntityPlatformBanner;
+import tk.cvrunmin.railwayp.tileentity.TileEntityRouteSignage;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockStandingSign;
 import net.minecraft.block.BlockWallSign;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemPlatformBanner extends Item
-{
+public class ItemRouteSignage extends Item{
 
-    public ItemPlatformBanner()
+    public ItemRouteSignage()
     {
         super();
         this.maxStackSize = 16;
         this.setCreativeTab(CreativeTabs.tabDecorations);
     }
-    public ItemPlatformBanner(Block block){
+    public ItemRouteSignage(Block block){
     	this();
     }
     
@@ -71,13 +58,13 @@ public class ItemPlatformBanner extends Item
             }
             else
             {
-                worldIn.setBlockState(pos, RPBlocks.wall_platform_banner.getDefaultState().withProperty(BlockWallSign.FACING, side), 3);
+                worldIn.setBlockState(pos, RPBlocks.wall_route_sign.getDefaultState().withProperty(BlockWallSign.FACING, side), 3);
                 --stack.stackSize;
                 TileEntity tileentity = worldIn.getTileEntity(pos);
 
-                if (tileentity instanceof TileEntityPlatformBanner)
+                if (tileentity instanceof TileEntityRouteSignage)
                 {
-                    ((TileEntityPlatformBanner)tileentity).setItemValues(stack);
+                    ((TileEntityRouteSignage)tileentity).setItemValues(stack);
                 }
 
                 return true;

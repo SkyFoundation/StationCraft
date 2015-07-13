@@ -1,22 +1,35 @@
 package tk.cvrunmin.railwayp.client.renderer;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 
 import tk.cvrunmin.railwayp.client.model.ModelPlatformBanner;
+import tk.cvrunmin.railwayp.client.model.ModelRouteSignage;
 import tk.cvrunmin.railwayp.client.renderer.texture.LayeredCustomColorMaskTexture;
 import tk.cvrunmin.railwayp.init.RPBlocks;
-import tk.cvrunmin.railwayp.tileentity.TileEntityPlatformBanner;
+import tk.cvrunmin.railwayp.tileentity.TileEntityRouteSignage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.LayeredColorMaskTexture;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.item.EnumDyeColor;
 //import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -31,14 +44,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 @SideOnly(Side.CLIENT)
-public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
+public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer
 {
     /** An array of all the patterns that are being currently rendered. */
     private static final Map DESIGNS = Maps.newHashMap();
-    private static final ResourceLocation BANNERTEXTURES = new ResourceLocation("railwayp", "textures/entity/banner_base.png");
-    private ModelPlatformBanner bannerModel = new ModelPlatformBanner();
+    private static final ResourceLocation BANNERTEXTURES = new ResourceLocation("railwayp", "textures/entity/signage_base.png");
+    private ModelRouteSignage bannerModel = new ModelRouteSignage();
 
-    public void renderTileEntityBanner(TileEntityPlatformBanner entityBanner, double x, double y, double z, float p_180545_8_, int p_180545_9_)
+    public void renderTileEntityBanner(TileEntityRouteSignage entityBanner, double x, double y, double z, float p_180545_8_, int p_180545_9_)
     {
         boolean flag = entityBanner.getWorld() != null;
         int j = flag ? entityBanner.getBlockMetadata() : 0;
@@ -67,7 +80,7 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
             GlStateManager.translate((float)x + 0.5F, (float)y - 0.25F * f1, (float)z + 0.5F);
             GlStateManager.rotate(-f3, 0.0F, 1.0F, 0.0F);
             GlStateManager.translate(-0.0175F, -0.3125F, -0.5375F);
-            this.bannerModel.extensionViews(entityBanner.shouldExtend);
+//            this.bannerModel.extensionViews(true);
         GlStateManager.enableRescaleNormal();
         ResourceLocation resourcelocation = this.func_178463_a(entityBanner);
 
@@ -79,24 +92,22 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
             this.bannerModel.renderBanner();
             GlStateManager.popMatrix();
         }
-        if(entityBanner.getDirection() != 1){
         FontRenderer fontrenderer = this.getFontRenderer();
         f3 = 0.015625F * f1;
+        //Main
         GlStateManager.pushMatrix();
         GlStateManager.translate(-0.4F + 0.4, 0.5F * f1 + 0.6, 0.07F * f1);
-        GlStateManager.scale(f3 * 2, -f3 * 2, f3 * 2);
+        GlStateManager.scale(f3 * 1.5, -f3 * 1.5, f3 * 1.5);
         GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
         GlStateManager.depthMask(false);
-        int xx;
         if (p_180545_9_ < 0)
         {
-                if (entityBanner.signText[0] != null)
+                if (entityBanner.stationText[0] != null)
                 {
-                    IChatComponent ichatcomponent = entityBanner.signText[0];
+                    IChatComponent ichatcomponent = entityBanner.stationText[0];
                     List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false, true);
                     String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
-                    xx = entityBanner.getDirection() == 0 ? 12 : (entityBanner.getDirection() == 2 ? 36 - fontrenderer.getStringWidth(s) : 0);
-                        fontrenderer.drawString(s, xx, 0 * 10 - entityBanner.signText.length * 5, 0);
+                        fontrenderer.drawString(s, (float)(-fontrenderer.getStringWidth(s) / 2) + 33.333333333f, 0 * 10 - entityBanner.stationText.length * 5, 0, false);
                 }
         }
         GlStateManager.depthMask(true);
@@ -108,23 +119,62 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
         GlStateManager.depthMask(false);
         if (p_180545_9_ < 0)
         {
-                if (entityBanner.signText[1] != null)
+                if (entityBanner.stationText[1] != null)
                 {
-                    IChatComponent ichatcomponent = entityBanner.signText[1];
+                    IChatComponent ichatcomponent = entityBanner.stationText[1];
                     List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false, true);
                     String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
-                    xx = entityBanner.getDirection() == 0 ? 24 : (entityBanner.getDirection() == 2 ? 72 - fontrenderer.getStringWidth(s) : 0);
-                        fontrenderer.drawString(s, xx, 1 * 10 - entityBanner.signText.length * 5, 0);
+                        fontrenderer.drawString(s, (float)(-fontrenderer.getStringWidth(s) / 2) + 50, (float)(1 * 10 - entityBanner.stationText.length * 5), 0, false);
+                }
+        }
+        GlStateManager.depthMask(true);
+        GlStateManager.popMatrix();
+        //MainEnd
+        if(entityBanner.getDirection() != 1){
+        f3 = 0.015625F * f1;
+        //Next
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(-0.4F + 0.4, 0.5F * f1 + 0.6, 0.07F * f1);
+        GlStateManager.scale(f3, -f3, f3);
+        GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
+        GlStateManager.depthMask(false);
+        int xx = entityBanner.getDirection() == 0 ? -125 : 280;
+        if (p_180545_9_ < 0)
+        {
+                if (entityBanner.nextText[0] != null)
+                {
+                    IChatComponent ichatcomponent = entityBanner.nextText[0];
+                    List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false, true);
+                    String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
+                        fontrenderer.drawString(s, (-fontrenderer.getStringWidth(s) / 2) + xx * 0.6666667f, 0 * 10 - entityBanner.nextText.length * 5 + 20 * 0.6666667f, 0, false);
+                }
+        }
+        GlStateManager.depthMask(true);
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(-0.4F + 0.4, 0.5F * f1 + 0.6, 0.07F * f1);
+        GlStateManager.scale(f3 * 0.6666667f, -f3 * 0.6666667f, f3 * 0.6666667f);
+        GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
+        GlStateManager.depthMask(false);
+        if (p_180545_9_ < 0)
+        {
+                if (entityBanner.nextText[1] != null)
+                {
+                    IChatComponent ichatcomponent = entityBanner.nextText[1];
+                    List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false, true);
+                    String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
+                        fontrenderer.drawString(s, (-fontrenderer.getStringWidth(s) / 2) + xx, 1 * 10 - entityBanner.nextText.length * 5 + 20, 0, false);
                 }
         }
         GlStateManager.depthMask(true);
         GlStateManager.popMatrix();
         }
+        //NextEnd
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.popMatrix();
     }
 
-    private ResourceLocation func_178463_a(TileEntityPlatformBanner bannerObj)
+    private ResourceLocation func_178463_a(TileEntityRouteSignage bannerObj)
     {
         String s = bannerObj.func_175116_e();
 
@@ -134,7 +184,7 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
         }
         else
         {
-            TileEntityPlatformBannerRenderer.TimedBannerTexture timedbannertexture = (TileEntityPlatformBannerRenderer.TimedBannerTexture)DESIGNS.get(s);
+            TileEntityRouteSignageRenderer.TimedBannerTexture timedbannertexture = (TileEntityRouteSignageRenderer.TimedBannerTexture)DESIGNS.get(s);
 
             if (timedbannertexture == null)
             {
@@ -146,7 +196,7 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
                     while (iterator.hasNext())
                     {
                         String s1 = (String)iterator.next();
-                        TileEntityPlatformBannerRenderer.TimedBannerTexture timedbannertexture1 = (TileEntityPlatformBannerRenderer.TimedBannerTexture)DESIGNS.get(s1);
+                        TileEntityRouteSignageRenderer.TimedBannerTexture timedbannertexture1 = (TileEntityRouteSignageRenderer.TimedBannerTexture)DESIGNS.get(s1);
 
                         if (i - timedbannertexture1.systemTime > 60000L)
                         {
@@ -168,11 +218,11 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
 
                 while (iterator1.hasNext())
                 {
-                    TileEntityPlatformBanner.EnumBannerPattern enumbannerpattern = (TileEntityPlatformBanner.EnumBannerPattern)iterator1.next();
+                    TileEntityRouteSignage.EnumBannerPattern enumbannerpattern = (TileEntityRouteSignage.EnumBannerPattern)iterator1.next();
                     arraylist.add("railwayp" + ":" + "textures/entity/banner/" + enumbannerpattern.getPatternName() + ".png");
                 }
 
-                timedbannertexture = new TileEntityPlatformBannerRenderer.TimedBannerTexture(null);
+                timedbannertexture = new TileEntityRouteSignageRenderer.TimedBannerTexture(null);
                 timedbannertexture.bannerTexture = new ResourceLocation("railwayp", s);
                 Minecraft.getMinecraft().getTextureManager().loadTexture(timedbannertexture.bannerTexture, new LayeredCustomColorMaskTexture(BANNERTEXTURES, arraylist, list));
                 DESIGNS.put(s, timedbannertexture);
@@ -185,7 +235,7 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
 
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage)
     {
-        this.renderTileEntityBanner((TileEntityPlatformBanner)te, x, y, z, partialTicks, destroyStage);
+        this.renderTileEntityBanner((TileEntityRouteSignage)te, x, y, z, partialTicks, destroyStage);
     }
 
     @SideOnly(Side.CLIENT)

@@ -8,10 +8,12 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import tk.cvrunmin.railwayp.CommonProxy;
 import tk.cvrunmin.railwayp.client.renderer.TileEntityNameBannerRenderer;
 import tk.cvrunmin.railwayp.client.renderer.TileEntityPlatformBannerRenderer;
+import tk.cvrunmin.railwayp.client.renderer.TileEntityRouteSignageRenderer;
 import tk.cvrunmin.railwayp.init.RPBlocks;
 import tk.cvrunmin.railwayp.init.RPItems;
 import tk.cvrunmin.railwayp.tileentity.TileEntityNameBanner;
 import tk.cvrunmin.railwayp.tileentity.TileEntityPlatformBanner;
+import tk.cvrunmin.railwayp.tileentity.TileEntityRouteSignage;
 
 public class ClientProxy extends CommonProxy{
 	@Override
@@ -21,5 +23,6 @@ public class ClientProxy extends CommonProxy{
 		itemRend(RPItems.name_banner, "name_banner");
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPlatformBanner.class, new TileEntityPlatformBannerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNameBanner.class, new TileEntityNameBannerRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRouteSignage.class, new TileEntityRouteSignageRenderer());
 	}
 }

@@ -2,8 +2,6 @@ package tk.cvrunmin.railwayp.block;
 
 import java.util.Random;
 
-import tk.cvrunmin.railwayp.init.RPItems;
-import tk.cvrunmin.railwayp.tileentity.TileEntityPlatformBanner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -24,13 +22,15 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import tk.cvrunmin.railwayp.init.RPItems;
+import tk.cvrunmin.railwayp.tileentity.TileEntityRouteSignage;
 
-public class BlockPlatformBanner extends BlockContainer
+public class BlockRouteSignage extends BlockContainer
 {
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 15);
 
-    protected BlockPlatformBanner()
+    protected BlockRouteSignage()
     {
         super(Material.wood);
         float f = 0.25F;
@@ -70,7 +70,7 @@ public class BlockPlatformBanner extends BlockContainer
      */
     public TileEntity createNewTileEntity(World worldIn, int meta)
     {
-        return new TileEntityPlatformBanner();
+        return new TileEntityRouteSignage();
     }
 
     /**
@@ -80,7 +80,7 @@ public class BlockPlatformBanner extends BlockContainer
      */
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
-        return RPItems.platform_banner;
+        return RPItems.route_sign;
     }
 
     /**
@@ -93,9 +93,9 @@ public class BlockPlatformBanner extends BlockContainer
     {
         TileEntity tileentity = worldIn.getTileEntity(pos);
 
-        if (tileentity instanceof TileEntityPlatformBanner)
+        if (tileentity instanceof TileEntityRouteSignage)
         {
-            ItemStack itemstack = new ItemStack(RPItems.platform_banner, 1);
+            ItemStack itemstack = new ItemStack(RPItems.route_sign, 1);
             NBTTagCompound nbttagcompound = new NBTTagCompound();
             tileentity.writeToNBT(nbttagcompound);
             nbttagcompound.removeTag("x");
@@ -113,9 +113,9 @@ public class BlockPlatformBanner extends BlockContainer
 
     public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te)
     {
-        if (te instanceof TileEntityPlatformBanner)
+        if (te instanceof TileEntityRouteSignage)
         {
-            ItemStack itemstack = new ItemStack(RPItems.platform_banner, 1);
+            ItemStack itemstack = new ItemStack(RPItems.route_sign, 1);
             NBTTagCompound nbttagcompound = new NBTTagCompound();
             te.writeToNBT(nbttagcompound);
             nbttagcompound.removeTag("x");
@@ -134,10 +134,10 @@ public class BlockPlatformBanner extends BlockContainer
     @SideOnly(Side.CLIENT)
     public Item getItem(World worldIn, BlockPos pos)
     {
-        return RPItems.platform_banner;
+        return RPItems.route_sign;
     }
 
-    public static class BlockBannerHanging extends BlockPlatformBanner
+    public static class BlockBannerHanging extends BlockRouteSignage
         {
 
             public BlockBannerHanging()
@@ -158,7 +158,7 @@ public class BlockPlatformBanner extends BlockContainer
                 float f4 = 0.125F;
                 this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 
-                switch (BlockPlatformBanner.SwitchEnumFacing.FACING_LOOKUP[enumfacing.ordinal()])
+                switch (BlockRouteSignage.SwitchEnumFacing.FACING_LOOKUP[enumfacing.ordinal()])
                 {
                     case 1:
                     default:

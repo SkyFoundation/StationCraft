@@ -21,7 +21,27 @@ import com.google.gson.JsonParseException;
 public class TileEntityNameBanner extends TileEntityBanner
 {
 	public final IChatComponent[] signText = new IChatComponent[] {new ChatComponentText(""), new ChatComponentText("")};
-
+    private int color;
+    private String colorEncoded;
+    private void decodeColor(){
+    	if(colorEncoded.length() <= 6)
+    	if(!colorEncoded.startsWith("0x")){
+    		try{
+    			color = Integer.decode("0x" + colorEncoded);
+    		}
+    		catch(Exception e){
+    			color = 0;
+    		}
+    	}
+    	else{
+    		try{
+    			color = Integer.decode(colorEncoded);
+    		}
+    		catch(Exception e){
+    			color = 0;
+    		}
+    	}
+    }
 	@Override
     public void setItemValues(ItemStack stack)
     {
@@ -29,7 +49,10 @@ public class TileEntityNameBanner extends TileEntityBanner
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag", 10))
         {
             NBTTagCompound nbttagcompound = stack.getTagCompound().getCompoundTag("BlockEntityTag");
-
+            if(nbttagcompound.hasKey("Color", 8)){
+            	colorEncoded = nbttagcompound.getString("Color");
+            	decodeColor();
+            }
             for (int i = 0; i < 2; ++i)
             {
             	if(nbttagcompound.hasKey("Text" + (i + 1))){
@@ -53,7 +76,9 @@ public class TileEntityNameBanner extends TileEntityBanner
     public void writeToNBT(NBTTagCompound compound)
     {
         super.writeToNBT(compound);
-
+        if(color >= 0x0 && color < 0x1000000){
+        	compound.setString("Color", Integer.toHexString(this.color));
+        }
         for (int i = 0; i < 2; ++i)
         {
             String s = IChatComponent.Serializer.componentToJson(this.signText[i]);
@@ -64,6 +89,8 @@ public class TileEntityNameBanner extends TileEntityBanner
     public void readFromNBT(NBTTagCompound compound)
     {
         super.readFromNBT(compound);
+    	colorEncoded = compound.getString("Color");
+    	decodeColor();
         for (int i = 0; i < 2; ++i)
         {
             String s = compound.getString("Text" + (i + 1));
@@ -80,6 +107,9 @@ public class TileEntityNameBanner extends TileEntityBanner
         }
     }
 
+	public int getColor(){
+		return color != 0 ? color : 0;
+	}
     /**
      * Allows for a specialized description packet to be created. This is often used to sync tile entity data from the
      * server to the client easily. For example this is used by signs to synchronise the text to be displayed.

@@ -6,13 +6,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelPlatformBanner extends ModelBase
+public class ModelRouteSignage extends ModelBase
 {
     public ModelRenderer bannerSlate;
     public ModelRenderer bannerExtension1;
     public ModelRenderer bannerExtension2;
 
-    public ModelPlatformBanner()
+    public ModelRouteSignage()
     {
         this.textureWidth = 128;
         this.textureHeight = 64;
@@ -20,7 +20,7 @@ public class ModelPlatformBanner extends ModelBase
         this.bannerSlate.addBox(-11.5F, -1.0F, -1.0F, 48, 20, 1, 0.0F);
         this.bannerExtension1 = new ModelRenderer(this, 0, 21);
         this.bannerExtension1.addBox(-35.5f, -1.0f, -1.0f, 24, 20, 1, 0.0f);
-        this.bannerExtension2 = new ModelRenderer(this, 0, 21);
+        this.bannerExtension2 = new ModelRenderer(this, 50, 21);
         this.bannerExtension2.addBox(36.5f, -1.0f, -1.0f, 24, 20, 1, 0.0f);
 //        this.bannerStand = new ModelRenderer(this, 44, 0);
 //        this.bannerStand.addBox(-1.0F, -30.0F, -1.0F, 2, 42, 2, 0.0F);

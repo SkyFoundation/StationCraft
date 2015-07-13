@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -67,7 +68,7 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer
                     IChatComponent ichatcomponent = entityBanner.signText[0];
                     List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false, true);
                     String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
-                        fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, 0 * 10 - entityBanner.signText.length * 5, 0);
+                        fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, 0 * 10 - entityBanner.signText.length * 5, entityBanner.getColor());
                 }
         }
         GlStateManager.depthMask(true);
@@ -84,7 +85,7 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer
                     IChatComponent ichatcomponent = entityBanner.signText[1];
                     List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false, true);
                     String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
-                        fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, 1 * 10 - entityBanner.signText.length * 5, 0);
+                        fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, 1 * 10 - entityBanner.signText.length * 5, entityBanner.getColor());
                 }
         }
         GlStateManager.depthMask(true);
