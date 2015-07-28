@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import tk.cvrunmin.railwayp.init.RPBlocks;
+import tk.cvrunmin.railwayp.tileentity.TileEntityPFDoor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockSnow;
@@ -22,7 +23,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityPiston;
+//import net.minecraft.tileentity.TileEntityPiston;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -188,9 +189,9 @@ public class BlockPlatformDoor {
 	        {
 	            TileEntity tileentity1 = worldIn.getTileEntity(pos.offset(enumfacing));
 
-	            if (tileentity1 instanceof TileEntityPiston)
+	            if (tileentity1 instanceof TileEntityPFDoor)
 	            {
-	                ((TileEntityPiston)tileentity1).clearPistonTileEntity();
+	                ((TileEntityPFDoor)tileentity1).clearPistonTileEntity();
 	            }
 
 	            worldIn.setBlockState(pos, RPBlocks.platform_door_extension.getDefaultState().withProperty(Moving.FACING, enumfacing).withProperty(Moving.TYPE, this.isSticky ? Extension.EnumPistonType.STICKY : Extension.EnumPistonType.DEFAULT), 3);
@@ -206,9 +207,9 @@ public class BlockPlatformDoor {
 	                {
 	                    TileEntity tileentity = worldIn.getTileEntity(blockpos1);
 
-	                    if (tileentity instanceof TileEntityPiston)
+	                    if (tileentity instanceof TileEntityPFDoor)
 	                    {
-	                        TileEntityPiston tileentitypiston = (TileEntityPiston)tileentity;
+	                    	TileEntityPFDoor tileentitypiston = (TileEntityPFDoor)tileentity;
 
 	                        if (tileentitypiston.getFacing() == enumfacing && tileentitypiston.isExtending())
 	                        {
@@ -847,16 +848,16 @@ public class BlockPlatformDoor {
 
 	    public static TileEntity newTileEntity(IBlockState state, EnumFacing facing, boolean extending, boolean renderHead)
 	    {
-	        return new TileEntityPiston(state, facing, extending, renderHead);
+	        return new TileEntityPFDoor(state, facing, extending, renderHead);
 	    }
 
 	    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	    {
 	        TileEntity tileentity = worldIn.getTileEntity(pos);
 
-	        if (tileentity instanceof TileEntityPiston)
+	        if (tileentity instanceof TileEntityPFDoor)
 	        {
-	            ((TileEntityPiston)tileentity).clearPistonTileEntity();
+	            ((TileEntityPFDoor)tileentity).clearPistonTileEntity();
 	        }
 	        else
 	        {
@@ -959,7 +960,7 @@ public class BlockPlatformDoor {
 
 	    public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state)
 	    {
-	        TileEntityPiston tileentitypiston = this.getTileEntity(worldIn, pos);
+	    	TileEntityPFDoor tileentitypiston = this.getTileEntity(worldIn, pos);
 
 	        if (tileentitypiston == null)
 	        {
@@ -980,7 +981,7 @@ public class BlockPlatformDoor {
 
 	    public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos)
 	    {
-	        TileEntityPiston tileentitypiston = this.getTileEntity(worldIn, pos);
+	    	TileEntityPFDoor tileentitypiston = this.getTileEntity(worldIn, pos);
 
 	        if (tileentitypiston != null)
 	        {
@@ -1071,10 +1072,10 @@ public class BlockPlatformDoor {
 	        }
 	    }
 
-	    private TileEntityPiston getTileEntity(IBlockAccess worldIn, BlockPos pos)
+	    private TileEntityPFDoor getTileEntity(IBlockAccess worldIn, BlockPos pos)
 	    {
 	        TileEntity tileentity = worldIn.getTileEntity(pos);
-	        return tileentity instanceof TileEntityPiston ? (TileEntityPiston)tileentity : null;
+	        return tileentity instanceof TileEntityPFDoor ? (TileEntityPFDoor)tileentity : null;
 	    }
 
 	    @SideOnly(Side.CLIENT)
@@ -1115,7 +1116,7 @@ public class BlockPlatformDoor {
 	    @Override
 	    public java.util.List<net.minecraft.item.ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	    {
-	        TileEntityPiston tileentitypiston = this.getTileEntity(world, pos);
+	    	TileEntityPFDoor tileentitypiston = this.getTileEntity(world, pos);
 	        if (tileentitypiston != null)
 	        {
 	            IBlockState pushed = tileentitypiston.getPistonState();

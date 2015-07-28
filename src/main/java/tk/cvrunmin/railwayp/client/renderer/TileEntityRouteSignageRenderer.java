@@ -107,7 +107,7 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer
                     IChatComponent ichatcomponent = entityBanner.stationText[0];
                     List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false, true);
                     String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
-                        fontrenderer.drawString(s, (float)(-fontrenderer.getStringWidth(s) / 2) + 33.333333333f, 0 * 10 - entityBanner.stationText.length * 5, 0, false);
+                        fontrenderer.drawString(s, (float)(-fontrenderer.getStringWidth(s) / 2)/* + 33.333333333f*/ + 2, 0 * 10 - entityBanner.stationText.length * 5, 0, false);
                 }
         }
         GlStateManager.depthMask(true);
@@ -124,7 +124,7 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer
                     IChatComponent ichatcomponent = entityBanner.stationText[1];
                     List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false, true);
                     String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
-                        fontrenderer.drawString(s, (float)(-fontrenderer.getStringWidth(s) / 2) + 50, (float)(1 * 10 - entityBanner.stationText.length * 5), 0, false);
+                        fontrenderer.drawString(s, (float)(-fontrenderer.getStringWidth(s) / 2)/* + 50*/ + (2 * 1.5f), (float)(1 * 10 - entityBanner.stationText.length * 5), 0, false);
                 }
         }
         GlStateManager.depthMask(true);
@@ -138,7 +138,7 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer
         GlStateManager.scale(f3, -f3, f3);
         GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
         GlStateManager.depthMask(false);
-        int xx = entityBanner.getDirection() == 0 ? -125 : 280;
+        int xx = entityBanner.getDirection() == 0 ? -150 : 280-25-100;
         if (p_180545_9_ < 0)
         {
                 if (entityBanner.nextText[0] != null)

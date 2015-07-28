@@ -13,9 +13,9 @@ public class RPBlocks {
 	public static final BlockPlatformBanner wall_platform_banner = (BlockPlatformBanner)(new BlockPlatformBanner.BlockBannerHanging()).setUnlocalizedName("banner");
 	public static final BlockNameBanner wall_name_banner = (BlockNameBanner)new BlockNameBanner().setUnlocalizedName("banner"); 
 	public static final BlockRouteSignage wall_route_sign = (BlockRouteSignage)new BlockRouteSignage.BlockBannerHanging().setUnlocalizedName("signage"); 
-	public static final Block platform_door_base = new BlockPlatformDoor.Base(false);
-	public static final Block platform_door_head = new BlockPlatformDoor.Extension();
-	public static final Block platform_door_extension = new BlockPlatformDoor.Moving();
+	public static final BlockPlatformDoor.Base platform_door_base = new BlockPlatformDoor.Base(false);
+	public static final BlockPlatformDoor.Extension platform_door_head = new BlockPlatformDoor.Extension();
+	public static final BlockPlatformDoor.Moving platform_door_extension = new BlockPlatformDoor.Moving();
 	public static void register(){
 		registerBlock(wall_platform_banner, "wall_platform_banner");
 		registerBlock(wall_name_banner, "wall_name_banner");

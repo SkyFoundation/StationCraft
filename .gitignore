@@ -66,3 +66,11 @@ hs_err_pid*
 
 # image
 *.psd
+/bin/
+/eclipse/
+/gradle/
+/build.gradle
+/call CMD.bat
+/gradlew
+/gradlew.bat
+/untitled - client.bat
