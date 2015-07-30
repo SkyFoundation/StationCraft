@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "facing=north": { "model": "railrayp:pfdoor_head" },
+        "facing=south": { "model": "railrayp:pfdoor_head", "y": 180 },
+        "facing=west": { "model": "railrayp:pfdoor_head", "y": 270 },
+        "facing=east": { "model": "railrayp:pfdoor_head", "y": 90 },
+		"facing=down": {"model":""},
+		"facing=up": {"model":""}
+    }
+}

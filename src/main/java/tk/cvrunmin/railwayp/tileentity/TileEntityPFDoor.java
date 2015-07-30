@@ -172,7 +172,7 @@ public class TileEntityPFDoor extends TileEntity implements IUpdatePlayerListBox
         }
         else
         {
-            this.progress += 0.5F * 0.2f;
+            this.progress += 0.5F * 0.1f;
 
             if (this.progress >= 1.0F)
             {

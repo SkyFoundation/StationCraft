@@ -1,0 +1,27 @@
+{
+	"forge_marker": 1,
+	"variants":{
+		"short":{
+			"true":{
+				"model":"railwayp:pfdoor_head_short"
+			},
+			"false":{
+				"model":"railrayp:pfdoor_head"
+			}
+		},
+		"facing":{
+			"north":{
+				
+			},
+			"south":{
+				"y":180
+			},
+			"east":{
+				"y":90
+			},
+			"west":{
+				"y":270
+			}
+		}
+	}
+}
