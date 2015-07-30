@@ -1,10 +1,7 @@
 package tk.cvrunmin.railwayp.client;
 
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import tk.cvrunmin.railwayp.CommonProxy;
 import tk.cvrunmin.railwayp.client.renderer.TileEntityNameBannerRenderer;
 import tk.cvrunmin.railwayp.client.renderer.TileEntityPFDoorRenderer;
@@ -21,6 +18,8 @@ public class ClientProxy extends CommonProxy{
 	@Override
 	public void init(FMLInitializationEvent event) {
 //		blockRend(RPBlocks.platform_banner, "wall_platform_banner");
+		blockRend(RPBlocks.platform_door_base, "platform_door");
+		blockRend(RPBlocks.platform_door_head, "platform_door_head");
 		itemRend(RPItems.platform_banner, "platform_banner");
 		itemRend(RPItems.name_banner, "name_banner");
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPlatformBanner.class, new TileEntityPlatformBannerRenderer());

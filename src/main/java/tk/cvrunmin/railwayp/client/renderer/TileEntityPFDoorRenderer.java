@@ -1,6 +1,7 @@
 package tk.cvrunmin.railwayp.client.renderer;
 
 import tk.cvrunmin.railwayp.block.BlockPlatformDoor;
+import tk.cvrunmin.railwayp.init.RPBlocks;
 import tk.cvrunmin.railwayp.tileentity.TileEntityPFDoor;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -14,7 +15,6 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -53,19 +53,18 @@ public class TileEntityPFDoorRenderer extends TileEntitySpecialRenderer
 
             worldrenderer.startDrawingQuads();
             worldrenderer.setVertexFormat(DefaultVertexFormats.BLOCK);
-            worldrenderer.setTranslation((double)((float)p_178461_2_ - (float)blockpos.getX() + piston.func_174929_b(p_178461_8_)), (double)((float)p_178461_4_ - (float)blockpos.getY() + piston.func_174928_c(p_178461_8_)), (double)((float)p_178461_6_ - (float)blockpos.getZ() + piston.func_174926_d(p_178461_8_)));
+            worldrenderer.setTranslation((double)((float)p_178461_2_ - (float)blockpos.getX() + (piston.func_174929_b(p_178461_8_) * 0.5f)), (double)((float)p_178461_4_ - (float)blockpos.getY() + (piston.func_174928_c(p_178461_8_) * 0.5f)), (double)((float)p_178461_6_ - (float)blockpos.getZ() + (piston.func_174926_d(p_178461_8_) * 0.5f)));
             worldrenderer.setColorOpaque_F(1.0F, 1.0F, 1.0F);
             World world = this.getWorld();
 
-            if (block == Blocks.piston_head && piston.func_145860_a(p_178461_8_) < 0.5F)
+            if (block == RPBlocks.platform_door_head && piston.func_145860_a(p_178461_8_) < 0.5F)
             {
                 iblockstate = iblockstate.withProperty(BlockPlatformDoor.Extension.SHORT, Boolean.valueOf(true));
                 this.blockRenderer.getBlockModelRenderer().renderModel(world, this.blockRenderer.getModelFromBlockState(iblockstate, world, blockpos), iblockstate, blockpos, worldrenderer, true);
             }
             else if (piston.shouldPistonHeadBeRendered() && !piston.isExtending())
             {
-            	BlockPlatformDoor.Extension.EnumPistonType enumpistontype = block == Blocks.sticky_piston ? BlockPlatformDoor.Extension.EnumPistonType.STICKY : BlockPlatformDoor.Extension.EnumPistonType.DEFAULT;
-                IBlockState iblockstate1 = Blocks.piston_head.getDefaultState().withProperty(BlockPlatformDoor.Extension.TYPE, enumpistontype).withProperty(BlockPlatformDoor.Extension.FACING, iblockstate.getValue(BlockPlatformDoor.Base.FACING));
+                IBlockState iblockstate1 = RPBlocks.platform_door_head.getDefaultState().withProperty(BlockPlatformDoor.Extension.FACING, iblockstate.getValue(BlockPlatformDoor.Base.FACING));
                 iblockstate1 = iblockstate1.withProperty(BlockPlatformDoor.Extension.SHORT, Boolean.valueOf(piston.func_145860_a(p_178461_8_) >= 0.5F));
                 this.blockRenderer.getBlockModelRenderer().renderModel(world, this.blockRenderer.getModelFromBlockState(iblockstate1, world, blockpos), iblockstate1, blockpos, worldrenderer, true);
                 worldrenderer.setTranslation((double)((float)p_178461_2_ - (float)blockpos.getX()), (double)((float)p_178461_4_ - (float)blockpos.getY()), (double)((float)p_178461_6_ - (float)blockpos.getZ()));
