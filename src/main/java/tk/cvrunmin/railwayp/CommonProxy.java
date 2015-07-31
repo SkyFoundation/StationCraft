@@ -4,6 +4,7 @@ import tk.cvrunmin.railwayp.client.renderer.TileEntityPlatformBannerRenderer;
 import tk.cvrunmin.railwayp.init.RPBlocks;
 import tk.cvrunmin.railwayp.init.RPItems;
 import tk.cvrunmin.railwayp.item.ItemPlatformBanner;
+import tk.cvrunmin.railwayp.tileentity.TileEntityColorful;
 import tk.cvrunmin.railwayp.tileentity.TileEntityNameBanner;
 import tk.cvrunmin.railwayp.tileentity.TileEntityPFDoor;
 import tk.cvrunmin.railwayp.tileentity.TileEntityPlatformBanner;
@@ -40,6 +41,7 @@ public class CommonProxy {
     	GameRegistry.registerTileEntity(TileEntityNameBanner.class, "NameBanner");
     	GameRegistry.registerTileEntity(TileEntityRouteSignage.class, "RouteSignage");
     	GameRegistry.registerTileEntity(TileEntityPFDoor.class, "PlatformDoor");
+    	GameRegistry.registerTileEntity(TileEntityColorful.class, "Colorful");
     }
 	protected void blockRend(Block block, String registerName){
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0,

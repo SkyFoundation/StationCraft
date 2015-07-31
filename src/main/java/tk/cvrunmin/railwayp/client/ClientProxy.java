@@ -20,6 +20,9 @@ public class ClientProxy extends CommonProxy{
 //		blockRend(RPBlocks.platform_banner, "wall_platform_banner");
 		blockRend(RPBlocks.platform_door_base, "platform_door");
 		blockRend(RPBlocks.platform_door_head, "platform_door_head");
+		blockRend(RPBlocks.platform_glass, "platform_glass");
+		blockRend(RPBlocks.plate, "plate");
+		blockRend(RPBlocks.mosaic_tile, "mosaic_tile");
 		itemRend(RPItems.platform_banner, "platform_banner");
 		itemRend(RPItems.name_banner, "name_banner");
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPlatformBanner.class, new TileEntityPlatformBannerRenderer());
