@@ -9,6 +9,7 @@ import tk.cvrunmin.railwayp.tileentity.TileEntityNameBanner;
 import tk.cvrunmin.railwayp.tileentity.TileEntityPFDoor;
 import tk.cvrunmin.railwayp.tileentity.TileEntityPlatformBanner;
 import tk.cvrunmin.railwayp.tileentity.TileEntityRouteSignage;
+import tk.cvrunmin.railwayp.tileentity.TileEntityWHPF;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -41,6 +42,7 @@ public class CommonProxy {
     	GameRegistry.registerTileEntity(TileEntityNameBanner.class, "NameBanner");
     	GameRegistry.registerTileEntity(TileEntityRouteSignage.class, "RouteSignage");
     	GameRegistry.registerTileEntity(TileEntityPFDoor.class, "PlatformDoor");
+    	GameRegistry.registerTileEntity(TileEntityWHPF.class, "whpf");
     	GameRegistry.registerTileEntity(TileEntityColorful.class, "Colorful");
     }
 	protected void blockRend(Block block, String registerName){

@@ -6,11 +6,16 @@ import tk.cvrunmin.railwayp.block.BlockPlatformBanner;
 import tk.cvrunmin.railwayp.block.BlockPlatformDoor;
 import tk.cvrunmin.railwayp.block.BlockPlatformDoor.Base;
 import tk.cvrunmin.railwayp.block.BlockPlatformGlass;
+import tk.cvrunmin.railwayp.block.BlockRColorful;
 import tk.cvrunmin.railwayp.block.BlockRouteSignage;
+import tk.cvrunmin.railwayp.block.BlockWHPF;
 import tk.cvrunmin.railwayp.item.ItemPlatformBanner;
+import tk.cvrunmin.railwayp.item.ItemRColorful;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemColored;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class RPBlocks {
@@ -21,10 +26,12 @@ public class RPBlocks {
 	public static final BlockPlatformDoor.Extension platform_door_head = new BlockPlatformDoor.Extension();
 	public static final BlockPlatformDoor.Moving platform_door_extension = new BlockPlatformDoor.Moving();
 	public static final BlockPlatformGlass platform_glass = (BlockPlatformGlass) new BlockPlatformGlass().setUnlocalizedName("pfglass");
+	public static final BlockWHPF roof_where_pf = (BlockWHPF) new BlockWHPF.BlockBannerStanding().setUnlocalizedName("whpf");
+	public static final BlockWHPF wall_where_pf = (BlockWHPF) new BlockWHPF.BlockBannerHanging().setUnlocalizedName("whpf");
 	//焗漆板
-	public static final BlockColorful plate = (BlockColorful) new BlockColorful(Material.iron).setUnlocalizedName("plate");
+	public static final BlockRColorful plate = (BlockRColorful) new BlockRColorful(Material.iron).setUnlocalizedName("plate");
 	//紙皮石
-	public static final BlockColorful mosaic_tile = (BlockColorful) new BlockColorful(Material.rock).setUnlocalizedName("mosaic_tile");
+	public static final BlockRColorful mosaic_tile = (BlockRColorful) new BlockRColorful(Material.rock).setUnlocalizedName("mosaic_tile");
 	public static void register(){
 		registerBlock(wall_platform_banner, "wall_platform_banner");
 		registerBlock(wall_name_banner, "wall_name_banner");
@@ -33,8 +40,10 @@ public class RPBlocks {
 		registerBlock(platform_door_head, "platform_door_head");
 		registerBlock(platform_door_extension, "platform_door_extension");
 		registerBlock(platform_glass, "platform_glass");
-		registerBlock(plate, "plate");
-		registerBlock(mosaic_tile, "mosaic_tile");
+		registerBlock(roof_where_pf, "roof_whpf");
+		registerBlock(wall_where_pf, "wall_whpf");
+		GameRegistry.registerBlock(plate, ItemRColorful.class, "plate");
+		GameRegistry.registerBlock(mosaic_tile, ItemRColorful.class, "mosaic_tile");
 	}
 	private static void registerBlock(Block block, String name){
 		GameRegistry.registerBlock(block, name);

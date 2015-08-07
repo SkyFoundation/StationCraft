@@ -7,12 +7,14 @@ import tk.cvrunmin.railwayp.client.renderer.TileEntityNameBannerRenderer;
 import tk.cvrunmin.railwayp.client.renderer.TileEntityPFDoorRenderer;
 import tk.cvrunmin.railwayp.client.renderer.TileEntityPlatformBannerRenderer;
 import tk.cvrunmin.railwayp.client.renderer.TileEntityRouteSignageRenderer;
+import tk.cvrunmin.railwayp.client.renderer.TileEntityWHPFRenderer;
 import tk.cvrunmin.railwayp.init.RPBlocks;
 import tk.cvrunmin.railwayp.init.RPItems;
 import tk.cvrunmin.railwayp.tileentity.TileEntityNameBanner;
 import tk.cvrunmin.railwayp.tileentity.TileEntityPFDoor;
 import tk.cvrunmin.railwayp.tileentity.TileEntityPlatformBanner;
 import tk.cvrunmin.railwayp.tileentity.TileEntityRouteSignage;
+import tk.cvrunmin.railwayp.tileentity.TileEntityWHPF;
 
 public class ClientProxy extends CommonProxy{
 	@Override
@@ -29,5 +31,6 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNameBanner.class, new TileEntityNameBannerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRouteSignage.class, new TileEntityRouteSignageRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPFDoor.class, new TileEntityPFDoorRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWHPF.class, new TileEntityWHPFRenderer());
 	}
 }

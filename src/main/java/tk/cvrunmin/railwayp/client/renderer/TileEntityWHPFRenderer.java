@@ -8,46 +8,50 @@ import java.util.Map;
 import org.lwjgl.opengl.GL11;
 
 import tk.cvrunmin.railwayp.client.model.ModelPFSignL;
-import tk.cvrunmin.railwayp.client.model.ModelPlatformBanner;
 import tk.cvrunmin.railwayp.client.renderer.texture.LayeredCustomColorMaskTexture;
 import tk.cvrunmin.railwayp.init.RPBlocks;
-import tk.cvrunmin.railwayp.tileentity.TileEntityPlatformBanner;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiUtilRenderComponents;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.LayeredColorMaskTexture;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-//import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import tk.cvrunmin.railwayp.tileentity.TileEntityWHPF;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-@SideOnly(Side.CLIENT)
-public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
-{
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiUtilRenderComponents;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+public class TileEntityWHPFRenderer extends TileEntitySpecialRenderer{
     /** An array of all the patterns that are being currently rendered. */
     private static final Map DESIGNS = Maps.newHashMap();
     private static final ResourceLocation BANNERTEXTURES = new ResourceLocation("railwayp", "textures/entity/banner_base.png");
-    private ModelPlatformBanner bannerModel = new ModelPlatformBanner();
+    private ModelPFSignL bannerModel = new ModelPFSignL();
 
-    public void renderTileEntityBanner(TileEntityPlatformBanner entityBanner, double x, double y, double z, float p_180545_8_, int p_180545_9_)
+    public void renderTileEntityBanner(TileEntityWHPF entityBanner, double x, double y, double z, float p_180545_8_, int p_180545_9_)
     {
         boolean flag = entityBanner.getWorld() != null;
+        boolean flag1 = !flag || entityBanner.getBlockType() == RPBlocks.roof_where_pf;
         int j = flag ? entityBanner.getBlockMetadata() : 0;
         long k = flag ? entityBanner.getWorld().getTotalWorldTime() : 0L;
         GlStateManager.pushMatrix();
         float f1 = 0.6666667F;
         float f3;
 
+        if (flag1)
+        {
+            GlStateManager.translate((float)x + 0.5F, (float)y - 0.5F * f1, (float)z + 0.5F);
+            float f2 = (float)(j * 360) / 16.0F;
+            GlStateManager.rotate(-f2, 0.0F, 1.0F, 0.0F);
+            this.bannerModel.rodShow(true);
+        }
+        else
+        {
             f3 = 0.0F;
 
             if (j == 2)
@@ -67,8 +71,9 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
 
             GlStateManager.translate((float)x + 0.5F, (float)y - 0.25F * f1, (float)z + 0.5F);
             GlStateManager.rotate(-f3, 0.0F, 1.0F, 0.0F);
-            GlStateManager.translate(-0.0175F, -0.3125F, -0.5375F);
-            this.bannerModel.extensionViews(entityBanner.shouldExtend);
+            GlStateManager.translate(-0.0175F, -0.3125F, -0.6375F);
+            this.bannerModel.rodShow(false);
+        }
         GlStateManager.enableRescaleNormal();
         ResourceLocation resourcelocation = this.func_178463_a(entityBanner);
 
@@ -77,7 +82,7 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
             this.bindTexture(resourcelocation);
             GlStateManager.pushMatrix();
             GlStateManager.scale(f1, -f1, -f1);
-            this.bannerModel.renderBanner();
+            this.bannerModel.render();
             GlStateManager.popMatrix();
         }
         if(entityBanner.getDirection() != 1){
@@ -125,7 +130,7 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
         GlStateManager.popMatrix();
     }
 
-    private ResourceLocation func_178463_a(TileEntityPlatformBanner bannerObj)
+    private ResourceLocation func_178463_a(TileEntityWHPF bannerObj)
     {
         String s = bannerObj.func_175116_e();
 
@@ -135,7 +140,7 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
         }
         else
         {
-            TileEntityPlatformBannerRenderer.TimedBannerTexture timedbannertexture = (TileEntityPlatformBannerRenderer.TimedBannerTexture)DESIGNS.get(s);
+            TileEntityWHPFRenderer.TimedBannerTexture timedbannertexture = (TileEntityWHPFRenderer.TimedBannerTexture)DESIGNS.get(s);
 
             if (timedbannertexture == null)
             {
@@ -147,7 +152,7 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
                     while (iterator.hasNext())
                     {
                         String s1 = (String)iterator.next();
-                        TileEntityPlatformBannerRenderer.TimedBannerTexture timedbannertexture1 = (TileEntityPlatformBannerRenderer.TimedBannerTexture)DESIGNS.get(s1);
+                        TileEntityWHPFRenderer.TimedBannerTexture timedbannertexture1 = (TileEntityWHPFRenderer.TimedBannerTexture)DESIGNS.get(s1);
 
                         if (i - timedbannertexture1.systemTime > 60000L)
                         {
@@ -169,11 +174,11 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
 
                 while (iterator1.hasNext())
                 {
-                    TileEntityPlatformBanner.EnumBannerPattern enumbannerpattern = (TileEntityPlatformBanner.EnumBannerPattern)iterator1.next();
+                    TileEntityWHPF.EnumBannerPattern enumbannerpattern = (TileEntityWHPF.EnumBannerPattern)iterator1.next();
                     arraylist.add("railwayp" + ":" + "textures/entity/banner/" + enumbannerpattern.getPatternName() + ".png");
                 }
 
-                timedbannertexture = new TileEntityPlatformBannerRenderer.TimedBannerTexture(null);
+                timedbannertexture = new TileEntityWHPFRenderer.TimedBannerTexture(null);
                 timedbannertexture.bannerTexture = new ResourceLocation("railwayp", s);
                 Minecraft.getMinecraft().getTextureManager().loadTexture(timedbannertexture.bannerTexture, new LayeredCustomColorMaskTexture(BANNERTEXTURES, arraylist, list));
                 DESIGNS.put(s, timedbannertexture);
@@ -186,7 +191,7 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer
 
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage)
     {
-        this.renderTileEntityBanner((TileEntityPlatformBanner)te, x, y, z, partialTicks, destroyStage);
+        this.renderTileEntityBanner((TileEntityWHPF)te, x, y, z, partialTicks, destroyStage);
     }
 
     @SideOnly(Side.CLIENT)
