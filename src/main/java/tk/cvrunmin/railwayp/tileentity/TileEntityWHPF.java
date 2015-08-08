@@ -22,7 +22,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityWHPF extends TileEntityBanner{
 	public final IChatComponent[] signText = new IChatComponent[] {new ChatComponentText(""), new ChatComponentText("")};
-	    public boolean shouldExtend;
 	    private int baseColor;
 	    private boolean field_175119_g;
 	    /** A list of all patterns stored on this banner. */
@@ -124,8 +123,9 @@ public class TileEntityWHPF extends TileEntityBanner{
 	        else if ((existColor >= 0 && existColor < 15) && !useCustomColor) {
 				compound.setInteger("ExistColor", existColor);
 				compound.setString("LineColor", Integer.toHexString(EnumDyeColor.byDyeDamage(existColor).getMapColor().colorValue));
-			}
-	        if(direction >= 0 && direction <= 2){
+		}
+	        compound.setInteger("C", this.routeColor);
+	        if(direction >= 0 && direction <= 3){
 	        	compound.setByte("Direction", direction);
 	        }
 	        for (int i = 0; i < 2; ++i)
@@ -270,11 +270,27 @@ public class TileEntityWHPF extends TileEntityBanner{
 	                this.patternList = Lists.newArrayList();
 	                this.colorList = Lists.newArrayList();
 	                this.patternList.add(TileEntityWHPF.EnumBannerPattern.BASE);
-	                this.colorList.add(EnumDyeColor.byDyeDamage(15));
-	                this.patternResourceLocation = "b" + this.baseColor;
+	                this.colorList.add(EnumDyeColor.byDyeDamage(0));
+	                this.patternResourceLocation = "b" + 0;
 	                
 	                if (this.checkGoodBanner()) {
-	                    TileEntityWHPF.EnumBannerPattern enumbannerpattern = TileEntityWHPF.EnumBannerPattern.getPatternByID("rb");
+	                    TileEntityWHPF.EnumBannerPattern enumbannerpattern = TileEntityWHPF.EnumBannerPattern.getPatternByID(Byte.toString(direction));
+
+	                    if (enumbannerpattern != null)
+	                    {
+	                        this.patternList.add(enumbannerpattern);
+	                        this.colorList.add(EnumDyeColor.byDyeDamage(15));
+	                        this.patternResourceLocation = this.patternResourceLocation + enumbannerpattern.getPatternID() + 15;
+	                    }
+	                    enumbannerpattern = TileEntityWHPF.EnumBannerPattern.getPatternByID("bg_" + (this.direction % 2 == 0 ? this.direction : this.direction - 1));
+
+	                    if (enumbannerpattern != null)
+	                    {
+	                        this.patternList.add(enumbannerpattern);
+	                        this.colorList.add(EnumDyeColor.byDyeDamage(15));
+	                        this.patternResourceLocation = this.patternResourceLocation + enumbannerpattern.getPatternID() + 15;
+	                    }
+	                    enumbannerpattern = TileEntityWHPF.EnumBannerPattern.getPatternByID(this.route + "_" + (this.direction % 2 == 0 ? this.direction : this.direction - 1));
 
 	                    if (enumbannerpattern != null)
 	                    {
@@ -284,31 +300,10 @@ public class TileEntityWHPF extends TileEntityBanner{
 	                        }
 	                        else {
 	                        	this.colorList.add(EnumDyeColor.byDyeDamage(this.existColor));	
-							}
+				}
 	                        this.patternResourceLocation = this.patternResourceLocation + enumbannerpattern.getPatternID() + (useCustomColor ? this.routeColor : this.existColor);
 	                    }
-	                    enumbannerpattern = TileEntityWHPF.EnumBannerPattern.getPatternByID(Byte.toString(direction));
-
-	                    if (enumbannerpattern != null)
-	                    {
-	                        this.patternList.add(enumbannerpattern);
-	                        this.colorList.add(0);
-	                        this.patternResourceLocation = this.patternResourceLocation + enumbannerpattern.getPatternID() + 0;
-	                    }
-	                    enumbannerpattern = TileEntityWHPF.EnumBannerPattern.getPatternByID(this.route + "_" + this.direction);
-
-	                    if (enumbannerpattern != null)
-	                    {
-	                        this.patternList.add(enumbannerpattern);
-	                        if(this.useCustomColor){
-	                        	this.colorList.add(this.routeColor);
-	                        }
-	                        else {
-	                        	this.colorList.add(EnumDyeColor.byDyeDamage(this.existColor));	
-							}
-	                        this.patternResourceLocation = this.patternResourceLocation + enumbannerpattern.getPatternID() + (useCustomColor ? this.routeColor : this.existColor);
-	                    }
-					}
+			}
 	            }
 	        }
 	    }
@@ -316,7 +311,7 @@ public class TileEntityWHPF extends TileEntityBanner{
 	    	boolean flag = route > 0 && route < 10;
 	    	boolean flag1 = routeColor >= 0x0 && routeColor < 0x1000000;
 	    	boolean flag11 = existColor >= 0 && existColor < 16;
-	    	boolean flag2 = direction >= 0 && direction <= 2;
+	    	boolean flag2 = direction >= 0 && direction <= 3;
 	    	return flag && (flag1 || flag11) && flag2;
 	    }
 	    public byte getDirection(){
@@ -327,34 +322,27 @@ public class TileEntityWHPF extends TileEntityBanner{
 	        BASE("base", "b"),
 	        AL("al", "0"),
 	        AR("ar", "2"),
-	        AU("au", "1"),
-	        AD("ad", "3"),
+	        AUL("aul", "1"),
+	        AUR("aur", "3"),
+	        BG_L("bg_l", "bg_0"),
+	        BG_R("bg_r", "bg_2"),
 	        NO1_L("no1_l", "1_0"),
-	        NO1_M("no1_m", "1_1"),
 	        NO1_R("no1_r", "1_2"),
 	        NO2_L("no2_l", "2_0"),
-	        NO2_M("no2_m", "2_1"),
 	        NO2_R("no2_r", "2_2"),
 	        NO3_L("no3_l", "3_0"),
-	        NO3_M("no3_m", "3_1"),
 	        NO3_R("no3_r", "3_2"),
 	        NO4_L("no4_l", "4_0"),
-	        NO4_M("no4_m", "4_1"),
 	        NO4_R("no4_r", "4_2"),
 	        NO5_L("no5_l", "5_0"),
-	        NO5_M("no5_m", "5_1"),
 	        NO5_R("no5_r", "5_2"),
 	        NO6_L("no6_l", "6_0"),
-	        NO6_M("no6_m", "6_1"),
 	        NO6_R("no6_r", "6_2"),
 	        NO7_L("no7_l", "7_0"),
-	        NO7_M("no7_m", "7_1"),
 	        NO7_R("no7_r", "7_2"),
 	        NO8_L("no8_l", "8_0"),
-	        NO8_M("no8_m", "8_1"),
 	        NO8_R("no8_r", "8_2"),
 	        NO9_L("no9_l", "9_0"),
-	        NO9_M("no9_m", "9_1"),
 	        NO9_R("no9_r", "9_2");
 	        /** The name used to represent this pattern. */
 	        private String patternName;
