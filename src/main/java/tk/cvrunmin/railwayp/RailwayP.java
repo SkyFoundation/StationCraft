@@ -2,6 +2,7 @@ package tk.cvrunmin.railwayp;
 
 import org.apache.logging.log4j.Level;
 
+import tk.cvrunmin.railwayp.network.RPChannelHandler;
 import tk.cvrunmin.railwayp.tileentity.TileEntityPlatformBanner;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraftforge.fml.common.FMLLog;
@@ -19,6 +20,7 @@ public class RailwayP {
 	public static CommonProxy proxy;
 	@Instance(Reference.MODID)
 	public static RailwayP instance;
+	public static RPChannelHandler channelHandle;
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
     	proxy.preInit(event);
@@ -26,6 +28,7 @@ public class RailwayP {
     @EventHandler
     public void init(FMLInitializationEvent event) {
     	proxy.init(event);
+    	channelHandle = RPChannelHandler.init();
     }
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {

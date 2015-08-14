@@ -1,8 +1,13 @@
 package tk.cvrunmin.railwayp.client;
 
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import tk.cvrunmin.railwayp.CommonProxy;
+import tk.cvrunmin.railwayp.client.gui.GuiPen;
 import tk.cvrunmin.railwayp.client.renderer.TileEntityNameBannerRenderer;
 import tk.cvrunmin.railwayp.client.renderer.TileEntityPFDoorRenderer;
 import tk.cvrunmin.railwayp.client.renderer.TileEntityPlatformBannerRenderer;
@@ -17,6 +22,7 @@ import tk.cvrunmin.railwayp.tileentity.TileEntityRouteSignage;
 import tk.cvrunmin.railwayp.tileentity.TileEntityWHPF;
 
 public class ClientProxy extends CommonProxy{
+    public static GuiPen statio;
 	@Override
 	public void init(FMLInitializationEvent event) {
 //		blockRend(RPBlocks.platform_banner, "wall_platform_banner");
@@ -38,5 +44,7 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRouteSignage.class, new TileEntityRouteSignageRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPFDoor.class, new TileEntityPFDoorRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWHPF.class, new TileEntityWHPFRenderer());
+		statio = new GuiPen(FMLClientHandler.instance().getClient());
+		MinecraftForge.EVENT_BUS.register(statio);
 	}
 }

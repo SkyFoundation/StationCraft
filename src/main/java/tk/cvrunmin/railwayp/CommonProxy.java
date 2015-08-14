@@ -1,25 +1,26 @@
 package tk.cvrunmin.railwayp;
 
-import tk.cvrunmin.railwayp.client.renderer.TileEntityPlatformBannerRenderer;
-import tk.cvrunmin.railwayp.init.RPBlocks;
-import tk.cvrunmin.railwayp.init.RPItems;
-import tk.cvrunmin.railwayp.item.ItemPlatformBanner;
-import tk.cvrunmin.railwayp.tileentity.TileEntityColorful;
-import tk.cvrunmin.railwayp.tileentity.TileEntityNameBanner;
-import tk.cvrunmin.railwayp.tileentity.TileEntityPFDoor;
-import tk.cvrunmin.railwayp.tileentity.TileEntityPlatformBanner;
-import tk.cvrunmin.railwayp.tileentity.TileEntityRouteSignage;
-import tk.cvrunmin.railwayp.tileentity.TileEntityWHPF;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraft.network.INetHandler;
+import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import tk.cvrunmin.railwayp.init.RPBlocks;
+import tk.cvrunmin.railwayp.init.RPItems;
+import tk.cvrunmin.railwayp.tileentity.TileEntityColorful;
+import tk.cvrunmin.railwayp.tileentity.TileEntityNameBanner;
+import tk.cvrunmin.railwayp.tileentity.TileEntityPFDoor;
+import tk.cvrunmin.railwayp.tileentity.TileEntityPlatformBanner;
+import tk.cvrunmin.railwayp.tileentity.TileEntityRailNoticer;
+import tk.cvrunmin.railwayp.tileentity.TileEntityRouteSignage;
+import tk.cvrunmin.railwayp.tileentity.TileEntityWHPF;
 
 public class CommonProxy {
     @EventHandler
@@ -44,6 +45,7 @@ public class CommonProxy {
     	GameRegistry.registerTileEntity(TileEntityPFDoor.class, "PlatformDoor");
     	GameRegistry.registerTileEntity(TileEntityWHPF.class, "whpf");
     	GameRegistry.registerTileEntity(TileEntityColorful.class, "Colorful");
+    	GameRegistry.registerTileEntity(TileEntityRailNoticer.class, "noticer");
     }
 	protected void blockRend(Block block, String registerName){
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0,
@@ -56,5 +58,16 @@ public class CommonProxy {
 	protected void itemRend(Item item, int damage, String ideniter){
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, damage,
                 new ModelResourceLocation("railwayp:" + ideniter, "inventory"));
+	}
+	public EntityPlayer getPlayerFromNetHandler(INetHandler handler)
+	{
+		if (handler instanceof NetHandlerPlayServer)
+		{
+			return ((NetHandlerPlayServer) handler).playerEntity;
+		}
+		else
+		{
+			return null;
+		}
 	}
 }

@@ -7,6 +7,7 @@ import tk.cvrunmin.railwayp.block.BlockPlatformDoor;
 import tk.cvrunmin.railwayp.block.BlockPlatformDoor.Base;
 import tk.cvrunmin.railwayp.block.BlockPlatformGlass;
 import tk.cvrunmin.railwayp.block.BlockRColorful;
+import tk.cvrunmin.railwayp.block.BlockRailNoticer;
 import tk.cvrunmin.railwayp.block.BlockRouteSignage;
 import tk.cvrunmin.railwayp.block.BlockWHPF;
 import tk.cvrunmin.railwayp.item.ItemPlatformBanner;
@@ -14,6 +15,7 @@ import tk.cvrunmin.railwayp.item.ItemRColorful;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemColored;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -32,6 +34,7 @@ public class RPBlocks {
 	public static final BlockRColorful plate = (BlockRColorful) new BlockRColorful(Material.iron).setUnlocalizedName("plate");
 	//紙皮石
 	public static final BlockRColorful mosaic_tile = (BlockRColorful) new BlockRColorful(Material.rock).setUnlocalizedName("mosaic_tile");
+	public static final BlockRailNoticer noticer = (BlockRailNoticer) new BlockRailNoticer().setUnlocalizedName("noticer").setCreativeTab(CreativeTabs.tabTransport);
 	public static void register(){
 		registerBlock(wall_platform_banner, "wall_platform_banner");
 		registerBlock(wall_name_banner, "wall_name_banner");
@@ -44,6 +47,7 @@ public class RPBlocks {
 		registerBlock(wall_where_pf, "wall_whpf");
 		GameRegistry.registerBlock(plate, ItemRColorful.class, "plate");
 		GameRegistry.registerBlock(mosaic_tile, ItemRColorful.class, "mosaic_tile");
+		registerBlock(noticer, "rail_noticer");
 	}
 	private static void registerBlock(Block block, String name){
 		GameRegistry.registerBlock(block, name);
