@@ -24,19 +24,19 @@ public class GuiPen extends Gui {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void eventHandler(RenderGameOverlayEvent event){
 	EntityPlayer entity = Minecraft.getMinecraft().thePlayer;
-	
+	int cenX = event.resolution.getScaledWidth() / 6 / 2, y = event.resolution.getScaledHeight() / 5 * 2;
 	if(entity.ridingEntity instanceof EntityMinecartEmpty){
 	    drawRect(0, event.resolution.getScaledHeight() / 5 * 2, event.resolution.getScaledWidth() / 6, event.resolution.getScaledHeight() / 5 * 3, 419430400);
 	    String s = I18n.format("gui.railway");
-	    this.mc.fontRendererObj.drawString(s, event.resolution.getScaledWidth() / 6 / 2 - mc.fontRendererObj.getStringWidth(s) / 2, event.resolution.getScaledHeight() / 5 * 2 + event.resolution.getScaledHeight() / 5 / 10, 0xffffff);
-	    if(thisStation != ""){
-		if(nextStation != ""){
+	    this.mc.fontRendererObj.drawString(s, cenX - mc.fontRendererObj.getStringWidth(s) / 2, y + event.resolution.getScaledHeight() / 5 / 10, 0xffffff);
+	    if(thisStation != null && thisStation != ""){
+		if(nextStation != null && nextStation != ""){
 		    String s1 = thisStation + rt + nextStation;
-		    mc.fontRendererObj.drawString(s1, event.resolution.getScaledWidth() / 6 / 2 - mc.fontRendererObj.getStringWidth(s1) / 2, event.resolution.getScaledHeight() / 5 * 2 + event.resolution.getScaledHeight() / 5 / 10 * 2, 0xffffff);
+		    mc.fontRendererObj.drawString(s1, cenX - mc.fontRendererObj.getStringWidth(s1) / 2, y + event.resolution.getScaledHeight() / 5 / 10 * 2, 0xffffff);
 		}
 		else{
 		    String s1 = pt + thisStation;
-		    mc.fontRendererObj.drawString(s1, event.resolution.getScaledWidth() / 6 / 2 - mc.fontRendererObj.getStringWidth(s1) / 2, event.resolution.getScaledHeight() / 5 * 2 + event.resolution.getScaledHeight() / 5 / 10 * 2, 0xffffff);
+		    mc.fontRendererObj.drawString(s1, cenX - mc.fontRendererObj.getStringWidth(s1) / 2, y + event.resolution.getScaledHeight() / 5 / 10 * 2, 0xffffff);
 		}
 	    }
 	}

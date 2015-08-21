@@ -119,18 +119,18 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
 
         if (flag1 && !flag)
         {
-            worldIn.setBlockState(pos, state.withProperty(POWERED, Boolean.valueOf(true)), 3);
+/*            worldIn.setBlockState(pos, state.withProperty(POWERED, Boolean.valueOf(true)), 3);
             worldIn.notifyNeighborsOfStateChange(pos, this);
             worldIn.notifyNeighborsOfStateChange(pos.down(), this);
-            worldIn.markBlockRangeForRenderUpdate(pos, pos);
+            worldIn.markBlockRangeForRenderUpdate(pos, pos);*/
         }
 
         if (!flag1 && flag)
         {
-            worldIn.setBlockState(pos, state.withProperty(POWERED, Boolean.valueOf(false)), 3);
+/*            worldIn.setBlockState(pos, state.withProperty(POWERED, Boolean.valueOf(false)), 3);
             worldIn.notifyNeighborsOfStateChange(pos, this);
             worldIn.notifyNeighborsOfStateChange(pos.down(), this);
-            worldIn.markBlockRangeForRenderUpdate(pos, pos);
+            worldIn.markBlockRangeForRenderUpdate(pos, pos);*/
             this.readyupdate = true;
         }
 
@@ -139,7 +139,7 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
             worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
         }
 
-        worldIn.updateComparatorOutputLevel(pos, this);
+//        worldIn.updateComparatorOutputLevel(pos, this);
     }
 
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
@@ -153,12 +153,12 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
         return SHAPE;
     }
 
-    public boolean hasComparatorInputOverride()
+/*    public boolean hasComparatorInputOverride()
     {
         return true;
-    }
+    }*/
 
-    public int getComparatorInputOverride(World worldIn, BlockPos pos)
+/*    public int getComparatorInputOverride(World worldIn, BlockPos pos)
     {
         if (((Boolean)worldIn.getBlockState(pos).getValue(POWERED)).booleanValue())
         {
@@ -178,7 +178,7 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
         }
 
         return 0;
-    }
+    }*/
 
     protected List findMinecarts(World worldIn, BlockPos pos, Class clazz, Predicate ... filter)
     {
@@ -220,15 +220,7 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
 	TileEntity te = world.getTileEntity(pos);
 	Entity eti = cart.riddenByEntity;
 	if(readyupdate && te instanceof TileEntityRailNoticer && eti != null && eti instanceof EntityPlayerMP){
-	    if(!isEmpty(((TileEntityRailNoticer) te).thisStat)){
-		RailwayP.channelHandle.sendTo(new RPPacket(RPPacket.EnumRPPacket.C_UPDATETHISSTATION, new Object[]{((TileEntityRailNoticer) te).thisStat}), (EntityPlayerMP)eti);
-	    }
-	    if(!isEmpty(((TileEntityRailNoticer) te).nextStat)){
-		RailwayP.channelHandle.sendTo(new RPPacket(RPPacket.EnumRPPacket.C_UPDATENEXTSTATION, new Object[]{((TileEntityRailNoticer) te).nextStat}), (EntityPlayerMP)eti);
-	    }
-	    if(!isEmpty(((TileEntityRailNoticer) te).interchange)){
-		RailwayP.channelHandle.sendTo(new RPPacket(RPPacket.EnumRPPacket.C_UPDATEINTERCHANGE, new Object[]{((TileEntityRailNoticer) te).interchange}), (EntityPlayerMP)eti);
-	    }
+		((TileEntityRailNoticer)te).sendNotice((EntityPlayerMP) eti);
 //		readyupdate = false;
 	}
     }
@@ -255,8 +247,5 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
         super.onBlockEventReceived(worldIn, pos, state, eventID, eventParam);
         TileEntity tileentity = worldIn.getTileEntity(pos);
         return tileentity == null ? false : tileentity.receiveClientEvent(eventID, eventParam);
-    }
-    private boolean isEmpty(String s){
-	return s == null || s == "";
     }
 }
