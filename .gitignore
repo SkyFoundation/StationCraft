@@ -74,3 +74,6 @@ hs_err_pid*
 /gradlew
 /gradlew.bat
 /untitled - client.bat
+
+.classpath
+.project
