@@ -3,22 +3,22 @@ package tk.cvrunmin.railwayp.tileentity;
 import java.util.Iterator;
 import java.util.List;
 
-import tk.cvrunmin.railwayp.init.RPBlocks;
+import com.google.common.collect.Lists;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 //import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import tk.cvrunmin.railwayp.init.RPBlocks;
 
-import com.google.common.collect.Lists;
-
-public class TileEntityPFDoor extends TileEntity implements IUpdatePlayerListBox
+public class TileEntityPFDoor extends TileEntity implements ITickable
 {
     private IBlockState pistonState;
     private EnumFacing pistonFacing;

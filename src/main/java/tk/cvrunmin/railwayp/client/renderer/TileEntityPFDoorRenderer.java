@@ -51,10 +51,8 @@ public class TileEntityPFDoorRenderer extends TileEntitySpecialRenderer
                 GlStateManager.shadeModel(7424);
             }
 
-            worldrenderer.startDrawingQuads();
-            worldrenderer.setVertexFormat(DefaultVertexFormats.BLOCK);
+            worldrenderer.begin(7, DefaultVertexFormats.BLOCK);
             worldrenderer.setTranslation((double)((float)p_178461_2_ - (float)blockpos.getX() + (piston.func_174929_b(p_178461_8_) * 0.5f)), (double)((float)p_178461_4_ - (float)blockpos.getY() + (piston.func_174928_c(p_178461_8_) * 0.5f)), (double)((float)p_178461_6_ - (float)blockpos.getZ() + (piston.func_174926_d(p_178461_8_) * 0.5f)));
-            worldrenderer.setColorOpaque_F(1.0F, 1.0F, 1.0F);
             World world = this.getWorld();
 
             if (block == RPBlocks.platform_door_head && piston.func_145860_a(p_178461_8_) < 0.5F)
