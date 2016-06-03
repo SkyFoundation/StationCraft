@@ -1,0 +1,15 @@
+{
+    "ambientocclusion": false,
+    "textures": {
+		"pane":"railwayp:blocks/pfdoor_side",
+        "particle": "#pane"
+    },
+    "elements": [
+        {   "from": [ 6.4, 0, 6.4 ],
+            "to": [ 9.6, 16, 9.6 ],
+            "faces": {
+                "north": { "uv": [  9.6, 0,  6.4, 16 ], "texture": "#pane" }
+            }
+        }
+    ]
+}

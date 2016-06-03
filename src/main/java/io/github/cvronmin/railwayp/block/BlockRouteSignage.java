@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -35,7 +36,11 @@ public class BlockRouteSignage extends BlockContainer
         super(Material.wood);
     }
 
-    public boolean isFullCube()
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
+    {
+        return NULL_AABB;
+    }
+    public boolean isFullCube(IBlockState state)
     {
         return false;
     }
@@ -44,12 +49,27 @@ public class BlockRouteSignage extends BlockContainer
     {
         return true;
     }
-
-    public boolean isOpaqueCube()
+    /**
+     * The type of render function called. 3 for standard block models, 2 for TESR's, 1 for liquids, -1 is no render
+     */
+    public EnumBlockRenderType getRenderType(IBlockState state)
+    {
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+    }
+    /**
+     * Used to determine ambient occlusion and culling when rebuilding chunks for render
+     */
+    public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
-
+    /**
+     * Return true if an entity can be spawned inside the block (used to get the player's bed spawn location)
+     */
+    public boolean canSpawnInBlock()
+    {
+        return true;
+    }
     /**
      * Returns a new instance of a block's tile entity class. Called on placing the block.
      */
@@ -130,9 +150,9 @@ public class BlockRouteSignage extends BlockContainer
                 this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
             }
 
-            protected static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0.0D, 0.109375, 0.875D, 0.75D, 0.890625, 1.0D);
-            protected static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(0.0D, 0.109375f, 0.0D, 0.75D, 0.890625f, 0.125D);
-            protected static final AxisAlignedBB WEST_AABB = new AxisAlignedBB(1.0, 0.109375f, 0.0D, 1.0D, 0.890625f, 1.0D);
+            protected static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0.0D, 0.109375, 0.875D, 1.0D, 0.890625, 1.0D);
+            protected static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(0.0D, 0.109375f, 0.0D, 1.0D, 0.890625f, 0.125D);
+            protected static final AxisAlignedBB WEST_AABB = new AxisAlignedBB(0.875, 0.109375f, 0.0D, 1.0D, 0.890625f, 1.0D);
             protected static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0.0D, 0.109375f, 0.0D, 0.125D, 0.890625f, 1.0D);
             public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
             {

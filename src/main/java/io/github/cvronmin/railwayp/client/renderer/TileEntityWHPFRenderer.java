@@ -12,6 +12,7 @@ import com.google.common.collect.Maps;
 
 import io.github.cvronmin.railwayp.client.model.ModelPFSignL;
 import io.github.cvronmin.railwayp.client.renderer.texture.LayeredCustomColorMaskTexture;
+import io.github.cvronmin.railwayp.client.renderer.texture.UnifedBannerTextures;
 import io.github.cvronmin.railwayp.init.RPBlocks;
 import io.github.cvronmin.railwayp.tileentity.TileEntityWHPF;
 import net.minecraft.client.Minecraft;
@@ -44,8 +45,9 @@ public class TileEntityWHPFRenderer extends TileEntitySpecialRenderer{
         if (flag1)
         {
             GlStateManager.translate((float)x + 0.5F, (float)y - 0.75F * f1, (float)z + 0.5F);
-            float f2 = (float)(j * 360) / 16.0F;
-            GlStateManager.rotate(-f2, 0.0F, 1.0F, 0.0F);
+        	GlStateManager.translate(-Math.cos(Math.toRadians(entityBanner.getRotation())) /2, 0, -Math.sin(Math.toRadians(entityBanner.getRotation())) /2);
+            //float f2 = (float)(j * 360) / 16.0F;
+            GlStateManager.rotate(-entityBanner.getRotation(), 0.0F, 1.0F, 0.0F);
             this.bannerModel.rodShow(true);
         }
         else
@@ -128,7 +130,7 @@ public class TileEntityWHPFRenderer extends TileEntitySpecialRenderer{
 
     private ResourceLocation func_178463_a(TileEntityWHPF bannerObj)
     {
-        String s = bannerObj.func_175116_e();
+        /*String s = bannerObj.func_175116_e();
 
         if (s.isEmpty())
         {
@@ -182,7 +184,9 @@ public class TileEntityWHPFRenderer extends TileEntitySpecialRenderer{
 
             timedbannertexture.systemTime = System.currentTimeMillis();
             return timedbannertexture.bannerTexture;
-        }
+        }*/
+        return UnifedBannerTextures.PFSIGN_DESIGNS.getResourceLocation(bannerObj.getPatternResourceLocation(), bannerObj.getPatternList(), bannerObj.getColorList());
+
     }
 
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage)

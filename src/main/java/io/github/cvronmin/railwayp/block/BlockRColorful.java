@@ -18,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockRColorful extends Block
 {
-    public static final PropertyEnum COLOR = PropertyEnum.create("color", EnumDyeColor.class);
+    public static final PropertyEnum<EnumDyeColor> COLOR = PropertyEnum.<EnumDyeColor>create("color", EnumDyeColor.class);
 
     public BlockRColorful(Material materialIn)
     {
@@ -28,7 +28,8 @@ public class BlockRColorful extends Block
     }
 
     /**
-     * Get the damage value that this Block should drop
+     * Gets the metadata of the item this Block can drop. This method is called when the block gets destroyed. It
+     * returns the metadata of the dropped item based on the old metadata of the block.
      */
     public int damageDropped(IBlockState state)
     {
@@ -39,14 +40,10 @@ public class BlockRColorful extends Block
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List list)
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list)
     {
-        EnumDyeColor[] aenumdyecolor = EnumDyeColor.values();
-        int i = aenumdyecolor.length;
-
-        for (int j = 0; j < i; ++j)
+        for (EnumDyeColor enumdyecolor : EnumDyeColor.values())
         {
-            EnumDyeColor enumdyecolor = aenumdyecolor[j];
             list.add(new ItemStack(itemIn, 1, enumdyecolor.getMetadata()));
         }
     }

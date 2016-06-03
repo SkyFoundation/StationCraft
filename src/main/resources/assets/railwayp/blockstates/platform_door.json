@@ -15,14 +15,6 @@
         "extended=true,facing=north,powered=false": { "model": "railwayp:pfdoor" },
         "extended=true,facing=south,powered=false": { "model": "railwayp:pfdoor", "y": 180 },
         "extended=true,facing=west,powered=false": { "model": "railwayp:pfdoor", "y": 270 },
-        "extended=true,facing=east,powered=false": { "model": "railwayp:pfdoor", "y": 90 },
-		"extended=false,facing=down,powered=true": {"model":""},
-        "extended=false,facing=up,powered=true": {"model":""},
-        "extended=true,facing=down,powered=false": {"model":""},
-        "extended=true,facing=up,powered=false": {"model":""},
-		"extended=true,facing=down,powered=true": {"model":""},
-        "extended=true,facing=up,powered=true": {"model":""},
-        "extended=false,facing=down,powered=false": {"model":""},
-        "extended=false,facing=up,powered=false": {"model":""}
+        "extended=true,facing=east,powered=false": { "model": "railwayp:pfdoor", "y": 90 }
     }
 }

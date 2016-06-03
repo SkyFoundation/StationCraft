@@ -41,13 +41,13 @@ public class GuiPen extends Gui {
 	    }
 	}
     }
-    public static void setNext(String s){
+    public void setNext(String s){
 	nextStation = s;
     }
-    public static void setThis(String s){
+    public void setThis(String s){
 	thisStation = s;
     }
-    public static void setInterchange(String s){
+    public void setInterchange(String s){
 	interchange = s;
     }
 }

@@ -94,6 +94,7 @@ public class ItemWHPF extends Item
                 if (tileentity instanceof TileEntityWHPF)
                 {
                     ((TileEntityWHPF)tileentity).setItemValues(stack);
+                    ((TileEntityWHPF)tileentity).setRotation((short) (playerIn.rotationYaw + 180));
                 }
 
                 return EnumActionResult.SUCCESS;

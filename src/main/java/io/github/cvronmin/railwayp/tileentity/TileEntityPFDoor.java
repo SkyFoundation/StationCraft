@@ -73,7 +73,7 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
         return this.shouldHeadBeRendered;
     }
 
-    public float func_145860_a(float p_145860_1_)
+    public float getProgress(float p_145860_1_)
     {
         if (p_145860_1_ > 1.0F)
         {
@@ -172,19 +172,19 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
     @SideOnly(Side.CLIENT)
     public float getOffsetX(float p_174929_1_)
     {
-        return this.extending ? (this.func_145860_a(p_174929_1_) - 1.0F) * (float)this.pistonFacing.getFrontOffsetX() : (1.0F - this.func_145860_a(p_174929_1_)) * (float)this.pistonFacing.getFrontOffsetX();
+        return this.extending ? (this.getProgress(p_174929_1_) - 1.0F) * (float)this.pistonFacing.getFrontOffsetX() : (1.0F - this.getProgress(p_174929_1_)) * (float)this.pistonFacing.getFrontOffsetX();
     }
 
     @SideOnly(Side.CLIENT)
     public float getOffsetY(float p_174928_1_)
     {
-        return this.extending ? (this.func_145860_a(p_174928_1_) - 1.0F) * (float)this.pistonFacing.getFrontOffsetY() : (1.0F - this.func_145860_a(p_174928_1_)) * (float)this.pistonFacing.getFrontOffsetY();
+        return this.extending ? (this.getProgress(p_174928_1_) - 1.0F) * (float)this.pistonFacing.getFrontOffsetY() : (1.0F - this.getProgress(p_174928_1_)) * (float)this.pistonFacing.getFrontOffsetY();
     }
 
     @SideOnly(Side.CLIENT)
     public float getOffsetZ(float p_174926_1_)
     {
-        return this.extending ? (this.func_145860_a(p_174926_1_) - 1.0F) * (float)this.pistonFacing.getFrontOffsetZ() : (1.0F - this.func_145860_a(p_174926_1_)) * (float)this.pistonFacing.getFrontOffsetZ();
+        return this.extending ? (this.getProgress(p_174926_1_) - 1.0F) * (float)this.pistonFacing.getFrontOffsetZ() : (1.0F - this.getProgress(p_174926_1_)) * (float)this.pistonFacing.getFrontOffsetZ();
     }
 
     /**

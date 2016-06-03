@@ -3,6 +3,7 @@ package io.github.cvronmin.railwayp.block;
 import java.util.List;
 import java.util.Random;
 
+import io.github.cvronmin.railwayp.init.RPBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.material.Material;
@@ -154,7 +155,7 @@ public class BlockPlatformGlass extends Block{
 
     public final boolean canPaneConnectToBlock(Block blockIn)
     {
-        return blockIn.getDefaultState().isFullCube() || blockIn == this || blockIn == Blocks.glass || blockIn == Blocks.stained_glass || blockIn == Blocks.stained_glass_pane || blockIn instanceof BlockPane;
+        return blockIn.getDefaultState().isFullCube() || blockIn == this || blockIn == Blocks.glass || blockIn == Blocks.stained_glass || blockIn == Blocks.stained_glass_pane || blockIn instanceof BlockPane || blockIn == RPBlocks.platform_door_base || blockIn == RPBlocks.platform_door_extension || blockIn == RPBlocks.platform_door_head;
     }
 
     @SideOnly(Side.CLIENT)

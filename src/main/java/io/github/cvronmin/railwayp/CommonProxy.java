@@ -2,6 +2,8 @@ package io.github.cvronmin.railwayp;
 
 import io.github.cvronmin.railwayp.init.RPBlocks;
 import io.github.cvronmin.railwayp.init.RPItems;
+import io.github.cvronmin.railwayp.network.CUpdateBannerByGui;
+import io.github.cvronmin.railwayp.network.MessagerFromClient;
 import io.github.cvronmin.railwayp.tileentity.TileEntityColorful;
 import io.github.cvronmin.railwayp.tileentity.TileEntityNameBanner;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPFDoor;
@@ -20,14 +22,20 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class CommonProxy {
+	public static SimpleNetworkWrapper snw; 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
     	RPBlocks.register();
     	RPItems.register();
     	registerEntity();
+    	snw = NetworkRegistry.INSTANCE.newSimpleChannel("RPchannel");
+    	snw.registerMessage(MessagerFromClient.CUpdateBannerByGuiMessager.class, CUpdateBannerByGui.class, 80, Side.SERVER);
     }
     @EventHandler
     public void init(FMLInitializationEvent event) {

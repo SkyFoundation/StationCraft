@@ -12,6 +12,7 @@ import com.google.common.collect.Maps;
 
 import io.github.cvronmin.railwayp.client.model.ModelRouteSignage;
 import io.github.cvronmin.railwayp.client.renderer.texture.LayeredCustomColorMaskTexture;
+import io.github.cvronmin.railwayp.client.renderer.texture.UnifedBannerTextures;
 import io.github.cvronmin.railwayp.tileentity.TileEntityRouteSignage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -158,7 +159,7 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer
 
     private ResourceLocation func_178463_a(TileEntityRouteSignage bannerObj)
     {
-        String s = bannerObj.func_175116_e();
+        /*String s = bannerObj.func_175116_e();
 
         if (s.isEmpty())
         {
@@ -212,7 +213,9 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer
 
             timedbannertexture.systemTime = System.currentTimeMillis();
             return timedbannertexture.bannerTexture;
-        }
+        }*/
+        return UnifedBannerTextures.ROUTESIGN_DESIGNS.getResourceLocation(bannerObj.getPatternResourceLocation(), bannerObj.getPatternList(), bannerObj.getColorList());
+
     }
 
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage)

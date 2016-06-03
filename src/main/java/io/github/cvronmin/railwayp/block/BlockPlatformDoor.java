@@ -7,6 +7,7 @@ import io.github.cvronmin.railwayp.init.RPBlocks;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPFDoor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.block.SoundType;
@@ -44,7 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockPlatformDoor {
 
 	public static class Base extends Block {
-	    public static final PropertyDirection FACING = PropertyDirection.create("facing");
+	    public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	    public static final PropertyBool EXTENDED = PropertyBool.create("extended");
 	    public static final PropertyBool POWERED = PropertyBool.create("powered");
 
@@ -493,7 +494,7 @@ public class BlockPlatformDoor {
 
 	public static class Extension extends Block {
 
-	    public static final PropertyDirection FACING = PropertyDirection.create("facing");
+	    public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	    public static final PropertyBool SHORT = PropertyBool.create("short");
 
 	    public Extension()
@@ -560,16 +561,6 @@ public class BlockPlatformDoor {
 	        }
 	    }
 
-	    public boolean isOpaqueCube()
-	    {
-	        return false;
-	    }
-
-	    public boolean isFullCube()
-	    {
-	        return false;
-	    }
-
 	    public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
 	    {
 	        return false;
@@ -599,7 +590,7 @@ public class BlockPlatformDoor {
 	        switch ((EnumFacing)state.getValue(FACING))
 	        {
 	            default:
-	            	case NORTH:
+	            case NORTH:
 	            case SOUTH:
 	                return PISTON_EXTENSION_NORTH_SOUTH_AABB;
 	            case WEST:

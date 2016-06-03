@@ -7,10 +7,6 @@
         "facing=north,short=true": { "model": "railwayp:pfdoor_head_short" },
         "facing=south,short=true": { "model": "railwayp:pfdoor_head_short", "y": 180 },
         "facing=west,short=true": { "model": "railwayp:pfdoor_head_short", "y": 270 },
-        "facing=east,short=true": { "model": "railwayp:pfdoor_head_short", "y": 90 },
-		"facing=down,short=false": {"model":""},
-        "facing=up,short=false": {"model":""},
-		"facing=down,short=true": {"model":""},
-        "facing=up,short=true": {"model":""}
+        "facing=east,short=true": { "model": "railwayp:pfdoor_head_short", "y": 90 }
     }
 }
