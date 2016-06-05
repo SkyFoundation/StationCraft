@@ -30,7 +30,7 @@ public class BlockWHPF extends BlockContainer{
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 15);
     public BlockWHPF() {
-        super(Material.wood);
+        super(Material.WOOD);
         setLightLevel(1);
     }
 
@@ -39,7 +39,7 @@ public class BlockWHPF extends BlockContainer{
 	// TODO Auto-generated method stub
 	return new TileEntityWHPF();
     }
-    public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
     {
         return NULL_AABB;
     }

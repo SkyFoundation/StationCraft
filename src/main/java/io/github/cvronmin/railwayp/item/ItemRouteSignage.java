@@ -24,7 +24,7 @@ public class ItemRouteSignage extends Item{
     {
         super();
         this.maxStackSize = 16;
-        this.setCreativeTab(CreativeTabs.tabDecorations);
+        this.setCreativeTab(CreativeTabs.DECORATIONS);
     }
     public ItemRouteSignage(Block block){
     	this();
@@ -105,7 +105,7 @@ public class ItemRouteSignage extends Item{
     @SideOnly(Side.CLIENT)
     public CreativeTabs getCreativeTab()
     {
-        return CreativeTabs.tabDecorations;
+        return CreativeTabs.DECORATIONS;
     }
 
 }

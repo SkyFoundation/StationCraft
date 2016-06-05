@@ -69,13 +69,11 @@ hs_err_pid*
 /bin/
 /eclipse/
 /gradle/
-/build.gradle
 /call CMD.bat
-/gradlew
-/gradlew.bat
 /untitled - client.bat
 
 .classpath
 .project
 /run/
 /.settings/
+*.launch

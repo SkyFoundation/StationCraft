@@ -43,7 +43,10 @@ public enum EnumUnifiedBannerPattern {
     NO8_R("no8_r", "8_2"),
     NO9_L("no9_l", "9_0"),
     NO9_M("no9_m", "9_1"),
-    NO9_R("no9_r", "9_2");
+    NO9_R("no9_r", "9_2"),
+    NAMEBANNER_BASE("nbb", "nbb"),
+    NAMEBANNER_RIBBON("nbr", "nbr"),
+    NAMEBANNER_RIBBON_ALT("nbr_a", "nbr_a");
     /** The name used to represent this pattern. */
     private String patternName;
     /** A short string used to represent the pattern. */

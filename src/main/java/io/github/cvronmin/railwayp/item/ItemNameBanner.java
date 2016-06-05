@@ -25,7 +25,7 @@ public class ItemNameBanner extends Item
     {
         super();
         this.maxStackSize = 16;
-        this.setCreativeTab(CreativeTabs.tabDecorations);
+        this.setCreativeTab(CreativeTabs.DECORATIONS);
     }
     public ItemNameBanner(Block block){
     	this();
@@ -81,7 +81,7 @@ public class ItemNameBanner extends Item
     @SideOnly(Side.CLIENT)
     public CreativeTabs getCreativeTab()
     {
-        return CreativeTabs.tabDecorations;
+        return CreativeTabs.DECORATIONS;
     }
 
 }

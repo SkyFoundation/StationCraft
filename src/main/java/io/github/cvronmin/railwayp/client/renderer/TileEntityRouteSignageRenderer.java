@@ -27,14 +27,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer
+public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<TileEntityRouteSignage>
 {
     /** An array of all the patterns that are being currently rendered. */
     private static final Map DESIGNS = Maps.newHashMap();
     private static final ResourceLocation BANNERTEXTURES = new ResourceLocation("railwayp", "textures/entity/signage_base.png");
     private ModelRouteSignage bannerModel = new ModelRouteSignage();
 
-    public void renderTileEntityBanner(TileEntityRouteSignage entityBanner, double x, double y, double z, float p_180545_8_, int p_180545_9_)
+    public void renderTileEntityAt(TileEntityRouteSignage entityBanner, double x, double y, double z, float p_180545_8_, int p_180545_9_)
     {
         boolean flag = entityBanner.getWorld() != null;
         int j = flag ? entityBanner.getBlockMetadata() : 0;
@@ -216,11 +216,6 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer
         }*/
         return UnifedBannerTextures.ROUTESIGN_DESIGNS.getResourceLocation(bannerObj.getPatternResourceLocation(), bannerObj.getPatternList(), bannerObj.getColorList());
 
-    }
-
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage)
-    {
-        this.renderTileEntityBanner((TileEntityRouteSignage)te, x, y, z, partialTicks, destroyStage);
     }
 
     @SideOnly(Side.CLIENT)

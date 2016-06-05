@@ -36,10 +36,10 @@ public class BlockPlatformBanner extends BlockContainer
     //protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D);
     protected BlockPlatformBanner()
     {
-        super(Material.wood);
+        super(Material.WOOD);
     }
 
-    public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
     {
         return NULL_AABB;
     }

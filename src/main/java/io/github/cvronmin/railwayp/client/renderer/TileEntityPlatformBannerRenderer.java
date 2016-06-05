@@ -39,11 +39,12 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer<
 	private static final ResourceLocation BANNERTEXTURES = new ResourceLocation("railwayp",
 			"textures/entity/banner_base.png");
 	private ModelPlatformBanner bannerModel = new ModelPlatformBanner();
+	private static final int TEXT1_MAX_ALLOW_LENGTH = 62;
 
 	public void renderTileEntityAt(TileEntityPlatformBanner entityBanner, double x, double y, double z,
 			float partialTicks, int destroyStages) {
 		boolean flag = entityBanner.getWorld() != null;
-        boolean flag1 = !flag || entityBanner.getBlockType() == RPBlocks.wall_platform_banner;
+		boolean flag1 = !flag || entityBanner.getBlockType() == RPBlocks.wall_platform_banner;
 		int j = flag ? entityBanner.getBlockMetadata() : 0;
 		long k = flag ? entityBanner.getWorld().getTotalWorldTime() : 0L;
 		GlStateManager.pushMatrix();
@@ -92,6 +93,10 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer<
 					String s = list != null && list.size() > 0 ? ((ITextComponent) list.get(0)).getFormattedText() : "";
 					xx = entityBanner.getDirection() == 0 ? 12
 							: (entityBanner.getDirection() == 2 ? 36 - fontrenderer.getStringWidth(s) : 0);
+					int xxx = fontrenderer.getStringWidth(s);
+					if (xxx > TEXT1_MAX_ALLOW_LENGTH) {
+						GlStateManager.scale(TEXT1_MAX_ALLOW_LENGTH / xxx, 1, 1);
+					}
 					fontrenderer.drawString(s, xx, 0 * 10 - entityBanner.signText.length * 5, 0);
 				}
 			}
@@ -120,76 +125,64 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer<
 	}
 
 	private ResourceLocation getBannerResourceLocation(TileEntityPlatformBanner bannerObj) {
-		/*String s = bannerObj.getPatternResourceLocation();
-
-        if (s.isEmpty())
-        {
-            return null;
-        }
-        else
-        {
-            TileEntityPlatformBannerRenderer.TimedBannerTexture timedbannertexture = (TileEntityPlatformBannerRenderer.TimedBannerTexture)DESIGNS.get(s);
-
-            if (timedbannertexture == null)
-            {
-                if (DESIGNS.size() >= 256)
-                {
-                    long i = System.currentTimeMillis();
-                    Iterator iterator = DESIGNS.keySet().iterator();
-
-                    while (iterator.hasNext())
-                    {
-                        String s1 = (String)iterator.next();
-                        TileEntityRouteSignageRenderer.TimedBannerTexture timedbannertexture1 = (TileEntityRouteSignageRenderer.TimedBannerTexture)DESIGNS.get(s1);
-
-                        if (i - timedbannertexture1.systemTime > 60000L)
-                        {
-                            Minecraft.getMinecraft().getTextureManager().deleteTexture(timedbannertexture1.bannerTexture);
-                            iterator.remove();
-                        }
-                    }
-
-                    if (DESIGNS.size() >= 256)
-                    {
-                        return null;
-                    }
-                }
-
-                List list1 = bannerObj.getPatternList();
-                List list = bannerObj.getColorList();
-                ArrayList arraylist = Lists.newArrayList();
-                Iterator iterator1 = list1.iterator();
-
-                while (iterator1.hasNext())
-                {
-                    EnumUnifiedBannerPattern enumbannerpattern = (EnumUnifiedBannerPattern)iterator1.next();
-                    arraylist.add("railwayp" + ":" + "textures/entity/banner/" + enumbannerpattern.getPatternName() + ".png");
-                }
-
-                timedbannertexture = new TileEntityPlatformBannerRenderer.TimedBannerTexture(null);
-                timedbannertexture.bannerTexture = new ResourceLocation("railwayp", s);
-                Minecraft.getMinecraft().getTextureManager().loadTexture(timedbannertexture.bannerTexture, new LayeredCustomColorMaskTexture(BANNERTEXTURES, arraylist, list));
-                DESIGNS.put(s, timedbannertexture);
-            }
-
-            timedbannertexture.systemTime = System.currentTimeMillis();
-            return timedbannertexture.bannerTexture;
-        }*/
-        return UnifedBannerTextures.BANNER_DESIGNS.getResourceLocation(bannerObj.getPatternResourceLocation(), bannerObj.getPatternList(), bannerObj.getColorList());
-        }
-    @SideOnly(Side.CLIENT)
-    static class TimedBannerTexture
-        {
-            /** The current system time, in milliseconds. */
-            public long systemTime;
-            /** The layered texture for the banner to render out. */
-            public ResourceLocation bannerTexture;
-
-            private TimedBannerTexture() {}
-
-            TimedBannerTexture(Object p_i46209_1_)
-            {
-                this();
-            }
-        }
+		/*
+		 * String s = bannerObj.getPatternResourceLocation();
+		 * 
+		 * if (s.isEmpty()) { return null; } else {
+		 * TileEntityPlatformBannerRenderer.TimedBannerTexture
+		 * timedbannertexture =
+		 * (TileEntityPlatformBannerRenderer.TimedBannerTexture)DESIGNS.get(s);
+		 * 
+		 * if (timedbannertexture == null) { if (DESIGNS.size() >= 256) { long i
+		 * = System.currentTimeMillis(); Iterator iterator =
+		 * DESIGNS.keySet().iterator();
+		 * 
+		 * while (iterator.hasNext()) { String s1 = (String)iterator.next();
+		 * TileEntityRouteSignageRenderer.TimedBannerTexture timedbannertexture1
+		 * = (TileEntityRouteSignageRenderer.TimedBannerTexture)DESIGNS.get(s1);
+		 * 
+		 * if (i - timedbannertexture1.systemTime > 60000L) {
+		 * Minecraft.getMinecraft().getTextureManager().deleteTexture(
+		 * timedbannertexture1.bannerTexture); iterator.remove(); } }
+		 * 
+		 * if (DESIGNS.size() >= 256) { return null; } }
+		 * 
+		 * List list1 = bannerObj.getPatternList(); List list =
+		 * bannerObj.getColorList(); ArrayList arraylist = Lists.newArrayList();
+		 * Iterator iterator1 = list1.iterator();
+		 * 
+		 * while (iterator1.hasNext()) { EnumUnifiedBannerPattern
+		 * enumbannerpattern = (EnumUnifiedBannerPattern)iterator1.next();
+		 * arraylist.add("railwayp" + ":" + "textures/entity/banner/" +
+		 * enumbannerpattern.getPatternName() + ".png"); }
+		 * 
+		 * timedbannertexture = new
+		 * TileEntityPlatformBannerRenderer.TimedBannerTexture(null);
+		 * timedbannertexture.bannerTexture = new ResourceLocation("railwayp",
+		 * s); Minecraft.getMinecraft().getTextureManager().loadTexture(
+		 * timedbannertexture.bannerTexture, new
+		 * LayeredCustomColorMaskTexture(BANNERTEXTURES, arraylist, list));
+		 * DESIGNS.put(s, timedbannertexture); }
+		 * 
+		 * timedbannertexture.systemTime = System.currentTimeMillis(); return
+		 * timedbannertexture.bannerTexture; }
+		 */
+		return UnifedBannerTextures.BANNER_DESIGNS.getResourceLocation(bannerObj.getPatternResourceLocation(),
+				bannerObj.getPatternList(), bannerObj.getColorList());
 	}
+
+	@SideOnly(Side.CLIENT)
+	static class TimedBannerTexture {
+		/** The current system time, in milliseconds. */
+		public long systemTime;
+		/** The layered texture for the banner to render out. */
+		public ResourceLocation bannerTexture;
+
+		private TimedBannerTexture() {
+		}
+
+		TimedBannerTexture(Object p_i46209_1_) {
+			this();
+		}
+	}
+}

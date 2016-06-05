@@ -25,7 +25,7 @@ public class ItemPlatformBanner extends Item
     {
         super();
         this.maxStackSize = 16;
-        this.setCreativeTab(CreativeTabs.tabDecorations);
+        this.setCreativeTab(CreativeTabs.DECORATIONS);
     }
     public ItemPlatformBanner(Block block){
     	this();
@@ -106,7 +106,7 @@ public class ItemPlatformBanner extends Item
     @SideOnly(Side.CLIENT)
     public CreativeTabs getCreativeTab()
     {
-        return CreativeTabs.tabDecorations;
+        return CreativeTabs.DECORATIONS;
     }
 
 }

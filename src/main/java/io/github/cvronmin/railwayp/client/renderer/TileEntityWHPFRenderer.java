@@ -26,13 +26,13 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityWHPFRenderer extends TileEntitySpecialRenderer{
+public class TileEntityWHPFRenderer extends TileEntitySpecialRenderer<TileEntityWHPF>{
     /** An array of all the patterns that are being currently rendered. */
     private static final Map DESIGNS = Maps.newHashMap();
     private static final ResourceLocation BANNERTEXTURES = new ResourceLocation("railwayp", "textures/entity/pfsign_l.png");
     private ModelPFSignL bannerModel = new ModelPFSignL();
 
-    public void renderTileEntityBanner(TileEntityWHPF entityBanner, double x, double y, double z, float p_180545_8_, int p_180545_9_)
+    public void renderTileEntityAt(TileEntityWHPF entityBanner, double x, double y, double z, float p_180545_8_, int p_180545_9_)
     {
         boolean flag = entityBanner.getWorld() != null;
         boolean flag1 = !flag || entityBanner.getBlockType() == RPBlocks.roof_where_pf;
@@ -187,11 +187,6 @@ public class TileEntityWHPFRenderer extends TileEntitySpecialRenderer{
         }*/
         return UnifedBannerTextures.PFSIGN_DESIGNS.getResourceLocation(bannerObj.getPatternResourceLocation(), bannerObj.getPatternList(), bannerObj.getColorList());
 
-    }
-
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage)
-    {
-        this.renderTileEntityBanner((TileEntityWHPF)te, x, y, z, partialTicks, destroyStage);
     }
 
     @SideOnly(Side.CLIENT)

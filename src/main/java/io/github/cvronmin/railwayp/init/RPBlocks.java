@@ -33,10 +33,10 @@ public class RPBlocks {
 	public static final BlockWHPF roof_where_pf = (BlockWHPF) new BlockWHPF.BlockBannerStanding().setUnlocalizedName("whpf");
 	public static final BlockWHPF wall_where_pf = (BlockWHPF) new BlockWHPF.BlockBannerHanging().setUnlocalizedName("whpf");
 	//焗漆板
-	public static final BlockRColorful plate = (BlockRColorful) new BlockRColorful(Material.iron).setUnlocalizedName("plate");
+	public static final BlockRColorful plate = (BlockRColorful) new BlockRColorful(Material.IRON).setUnlocalizedName("plate");
 	//紙皮石
-	public static final BlockRColorful mosaic_tile = (BlockRColorful) new BlockRColorful(Material.rock).setUnlocalizedName("mosaic_tile");
-	public static final BlockRailNoticer noticer = (BlockRailNoticer) new BlockRailNoticer().setUnlocalizedName("noticer").setCreativeTab(CreativeTabs.tabTransport);
+	public static final BlockRColorful mosaic_tile = (BlockRColorful) new BlockRColorful(Material.ROCK).setUnlocalizedName("mosaic_tile");
+	public static final BlockRailNoticer noticer = (BlockRailNoticer) new BlockRailNoticer().setUnlocalizedName("noticer").setCreativeTab(CreativeTabs.TRANSPORTATION);
 	public static void register(){
 		registerBlock(wall_platform_banner, "wall_platform_banner");
 		registerBlock(wall_name_banner, "wall_name_banner");

@@ -33,10 +33,10 @@ public class BlockRouteSignage extends BlockContainer
 
     protected BlockRouteSignage()
     {
-        super(Material.wood);
+        super(Material.WOOD);
     }
 
-    public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
     {
         return NULL_AABB;
     }

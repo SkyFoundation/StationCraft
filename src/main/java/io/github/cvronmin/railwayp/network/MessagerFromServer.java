@@ -46,7 +46,7 @@ public class MessagerFromServer {
 				     //  for example see MinecraftServer.updateTimeLightAndEntities(), just under section 
 				     //      this.theProfiler.startSection("jobs"); 
 				     //  In this case, the task is to call messageHandlerOnServer.processMessage(message, sendingPlayer) 
-				     final WorldServer playerWorldServer = sendingPlayer.getServerForPlayer(); 
+				     final WorldServer playerWorldServer = sendingPlayer.getServerWorld(); 
 				     playerWorldServer.addScheduledTask(new Runnable() { 
 				       public void run() { 
 				         processMessage(worldClient, message); 

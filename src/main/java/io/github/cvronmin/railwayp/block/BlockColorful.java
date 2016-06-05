@@ -13,11 +13,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockColorful extends BlockContainer{
 
 	public BlockColorful(){
-		this(Material.clay);
+		this(Material.CLAY);
 	}
 	public BlockColorful(Material material) {
 		super(material);
-		setCreativeTab(CreativeTabs.tabBlock);
+		setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 	}
     public int getRenderType()
     {

@@ -101,7 +101,7 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
 
                 if (entity.getPushReaction() != EnumPushReaction.IGNORE)
                 {
-                    if (this.pistonState.getBlock() == Blocks.slime_block)
+                    if (this.pistonState.getBlock() == Blocks.SLIME_BLOCK)
                     {
                         switch (enumfacing.getAxis())
                         {

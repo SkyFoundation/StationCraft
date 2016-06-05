@@ -51,9 +51,9 @@ public class BlockPlatformGlass extends Block{
     		};
     public BlockPlatformGlass()
     {
-		super(Material.glass);
+		super(Material.GLASS);
         this.setDefaultState(this.blockState.getBaseState().withProperty(NORTH, Boolean.valueOf(false)).withProperty(EAST, Boolean.valueOf(false)).withProperty(SOUTH, Boolean.valueOf(false)).withProperty(WEST, Boolean.valueOf(false)));
-        this.setCreativeTab(CreativeTabs.tabDecorations);
+        this.setCreativeTab(CreativeTabs.DECORATIONS);
     }
 
     public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB p_185477_4_, List<AxisAlignedBB> p_185477_5_, Entity p_185477_6_)
@@ -155,7 +155,7 @@ public class BlockPlatformGlass extends Block{
 
     public final boolean canPaneConnectToBlock(Block blockIn)
     {
-        return blockIn.getDefaultState().isFullCube() || blockIn == this || blockIn == Blocks.glass || blockIn == Blocks.stained_glass || blockIn == Blocks.stained_glass_pane || blockIn instanceof BlockPane || blockIn == RPBlocks.platform_door_base || blockIn == RPBlocks.platform_door_extension || blockIn == RPBlocks.platform_door_head;
+        return blockIn.getDefaultState().isFullCube() || blockIn == this || blockIn == Blocks.GLASS || blockIn == Blocks.STAINED_GLASS || blockIn == Blocks.STAINED_GLASS_PANE || blockIn instanceof BlockPane || blockIn == RPBlocks.platform_door_base || blockIn == RPBlocks.platform_door_extension || blockIn == RPBlocks.platform_door_head;
     }
 
     @SideOnly(Side.CLIENT)

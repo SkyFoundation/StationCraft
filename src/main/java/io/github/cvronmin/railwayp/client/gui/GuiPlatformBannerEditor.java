@@ -60,7 +60,7 @@ public class GuiPlatformBannerEditor extends GuiScreen {
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
 
-		this.platformTextField = new GuiTextField(10, this.fontRendererObj, posX + (-150), posY + (-79), 75, 20);
+		this.platformTextField = new GuiTextField(10, this.fontRendererObj, posX + (-75 / 2 - 95), posY + (-80), 75, 20);
 		this.platformTextField.setMaxStringLength(1);
 		this.platformTextField.setValidator(new Predicate<String>() {
 			@Override
@@ -73,7 +73,7 @@ public class GuiPlatformBannerEditor extends GuiScreen {
 		});
 		this.platformTextField.setText(Integer.toString(te.getRoute()));
 		
-		this.directionTextField = new GuiTextField(14, this.fontRendererObj, posX + (-55), posY + (-79), 75, 20);
+		this.directionTextField = new GuiTextField(14, this.fontRendererObj, posX + (-75 / 2), posY + (-80), 75, 20);
 		this.directionTextField.setMaxStringLength(1);
 		this.directionTextField.setValidator(new Predicate<String>() {
 			@Override
@@ -86,20 +86,20 @@ public class GuiPlatformBannerEditor extends GuiScreen {
 		});
 		this.directionTextField.setText(Byte.toString(te.getDirection()));
 
-		this.colorTextField = new GuiTextField(11, this.fontRendererObj, posX + (+40), posY + (-79), 75, 20);
+		this.colorTextField = new GuiTextField(11, this.fontRendererObj, posX + (+75 / 2 + 20), posY + (-80), 75, 20);
 		this.colorTextField.setMaxStringLength(6);
 		this.colorTextField.setText(Integer.toHexString(te.getRouteColor()));
 
-		this.text1TextField = new GuiTextField(12, this.fontRendererObj, posX + (-150), posY + (-23), 300, 20);
+		this.text1TextField = new GuiTextField(12, this.fontRendererObj, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50), 75 * 3 + 20 * 2, 20);
 		this.text1TextField.setMaxStringLength(32767);
 		this.text1TextField.setText(te.getSignText()[0].getUnformattedText());
 
-		this.text2TextField = new GuiTextField(13, this.fontRendererObj, posX + (-150), posY + (3), 300, 20);
+		this.text2TextField = new GuiTextField(13, this.fontRendererObj, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20), 75 * 3 + 20 * 2, 20);
 		this.text2TextField.setMaxStringLength(32767);
 		this.text2TextField.setText(te.getSignText()[1].getUnformattedText());
 		
-		this.buttonList.add(doneBtn = new GuiButton(0, posX + (-116), this.height - 40, 74, 20, I18n.format("gui.done", new Object[0])));
-		this.buttonList.add(cancelBtn = new GuiButton(1, posX + (45), this.height - 40, 66, 20, I18n.format("gui.cancel", new Object[0])));
+		this.buttonList.add(doneBtn = new GuiButton(0, posX - 4 - 150, this.height - 40, 150, 20, I18n.format("gui.done", new Object[0])));
+		this.buttonList.add(cancelBtn = new GuiButton(1, posX + 4, this.height - 40, 150, 20, I18n.format("gui.cancel", new Object[0])));
 
 	}
     /**
@@ -126,8 +126,6 @@ public class GuiPlatformBannerEditor extends GuiScreen {
         		!colorTextField.getText().isEmpty() ? colorTextField.getText() : "191919",
         		!text1TextField.getText().isEmpty() ? text1TextField.getText() : "",
         				!text2TextField.getText().isEmpty() ? text2TextField.getText() : "");
-        //Only for init again
-        this.te.getPatternResourceLocation();
         if (keyCode != 28 && keyCode != 156)
         {
             if (keyCode == 1)
@@ -154,23 +152,29 @@ public class GuiPlatformBannerEditor extends GuiScreen {
     }
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
-		renderPreview(mouseX, mouseY, partialTicks);
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
 		this.drawCenteredString(this.fontRendererObj,"Platform Signage Editor", posX, 20, 0xffffff);
+		this.drawString(fontRendererObj, "Platform Number", posX + (-75 / 2 - 95), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRendererObj, "Direction", posX + (-75 / 2), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRendererObj, "Color", posX + (75 / 2 + 20), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRendererObj, "Text1", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRendererObj, "Text2", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRendererObj, "Preview", posX - 50, posY + 10 - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
 		this.platformTextField.drawTextBox();
 		this.directionTextField.drawTextBox();
 		this.colorTextField.drawTextBox();
 		this.text1TextField.drawTextBox();
 		this.text2TextField.drawTextBox();
+		renderPreview(mouseX, mouseY, partialTicks);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 	private void renderPreview(int mouseX, int mouseY, float partialTicks){
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.pushMatrix();
+        GlStateManager.translate((float)(this.width / 2) - 35, (float)(this.height / 2) - 50, 50f);
         float f = 93.75F * 0.75f;
         GlStateManager.scale(-f, -f, -f);
-        GlStateManager.translate((float)(this.width / 2) - 75, 0.0F, this.height - 100.0F);
         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
         int i = this.te.getBlockMetadata();
             float f2 = 0.0F;

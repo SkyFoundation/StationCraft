@@ -24,6 +24,8 @@ public class UnifedBannerTextures {
     public static final UnifedBannerTextures.Cache BANNER_DESIGNS = new UnifedBannerTextures.Cache("PB", new ResourceLocation("railwayp", "textures/entity/banner_base.png"), "railwayp:textures/entity/banner/");
     /** An array of all the route signage patterns that are being currently rendered */
     public static final UnifedBannerTextures.Cache ROUTESIGN_DESIGNS = new UnifedBannerTextures.Cache("RS", new ResourceLocation("railwayp", "textures/entity/signage_base.png"), "railwayp:textures/entity/banner/");
+    /** An array of all the name banner patterns that are being currently rendered */
+    public static final UnifedBannerTextures.Cache NAMESIGN_DESIGNS = new UnifedBannerTextures.Cache("NB", new ResourceLocation("railwayp", "textures/entity/namesign_base.png"), "railwayp:textures/entity/banner/");
     /** An array of all the platform sign patterns that are being currently rendered */
     public static final UnifedBannerTextures.Cache PFSIGN_DESIGNS = new UnifedBannerTextures.Cache("PS", new ResourceLocation("railwayp", "textures/entity/pfsign_l.png"), "railwayp:textures/entity/pfsign/");
     public static final ResourceLocation PFSIGN_BASE_TEXTURE = new ResourceLocation("railwayp", "textures/entity/pfsign/base.png");

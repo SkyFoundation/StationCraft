@@ -51,11 +51,11 @@ public class BlockPlatformDoor {
 
 	    public Base()
 	    {
-	        super(Material.glass);
+	        super(Material.GLASS);
 	        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(EXTENDED, Boolean.valueOf(false)).withProperty(POWERED, Boolean.valueOf(false)));
-	        this.setStepSound(SoundType.STONE);
+	        this.setSoundType(SoundType.STONE);
 	        this.setHardness(0.5F);
-	        this.setCreativeTab(CreativeTabs.tabRedstone);
+	        this.setCreativeTab(CreativeTabs.REDSTONE);
 	    }
 	    @SideOnly(Side.CLIENT)
 	    public BlockRenderLayer getBlockLayer()
@@ -216,7 +216,7 @@ public class BlockPlatformDoor {
 	            }
 
 	            worldIn.setBlockState(pos, state.withProperty(EXTENDED, Boolean.valueOf(true)).withProperty(POWERED, Boolean.valueOf(true)), 2);
-	            worldIn.playSound(null, pos,SoundEvents.block_piston_extend, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.25F + 0.6F);
+	            worldIn.playSound(null, pos,SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.25F + 0.6F);
 	        }
 	        else if (eventID == 1)
 	        {
@@ -230,7 +230,7 @@ public class BlockPlatformDoor {
 	            worldIn.setBlockState(pos, RPBlocks.platform_door_extension.getDefaultState().withProperty(Moving.FACING, enumfacing), 3);
 	            worldIn.setTileEntity(pos, Moving.newTileEntity(this.getStateFromMeta(eventParam), enumfacing, false, true));
 	            worldIn.setBlockToAir(pos.offset(enumfacing));
-	            worldIn.playSound((EntityPlayer)null, pos, SoundEvents.block_piston_contract, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.15F + 0.6F);
+	            worldIn.playSound((EntityPlayer)null, pos, SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.15F + 0.6F);
 	        }
 
 	        return true;
@@ -308,7 +308,7 @@ public class BlockPlatformDoor {
     {
         Block block = p_185646_0_.getBlock();
 
-        if (block == Blocks.obsidian)
+        if (block == Blocks.OBSIDIAN)
         {
             return false;
         }
@@ -499,9 +499,9 @@ public class BlockPlatformDoor {
 
 	    public Extension()
 	    {
-	        super(Material.glass);
+	        super(Material.GLASS);
 	        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(SHORT, Boolean.valueOf(false)));
-	        this.setStepSound(SoundType.STONE);
+	        this.setSoundType(SoundType.STONE);
 	        this.setHardness(0.5F);
 	    }
 	    public boolean isFullCube(IBlockState state)
@@ -665,7 +665,7 @@ public class BlockPlatformDoor {
 
 	    public Moving()
 	    {
-	        super(Material.glass);
+	        super(Material.GLASS);
 	        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	        this.setHardness(-1.0F);
 	    }
