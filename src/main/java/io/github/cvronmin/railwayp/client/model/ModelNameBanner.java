@@ -26,7 +26,7 @@ public class ModelNameBanner extends ModelBase {
      */
     public void renderBanner()
     {
-        this.bannerSlate.rotationPointY = -32.0F * 0.75f;
+        this.bannerSlate.rotationPointY = -32.0F * 0.725f;
         this.bannerSlate.render(0.0625F);
 //        this.bannerStand.render(0.0625F);
 //        this.bannerTop.render(0.0625F);

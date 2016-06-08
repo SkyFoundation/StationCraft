@@ -39,7 +39,7 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer<
 	private static final ResourceLocation BANNERTEXTURES = new ResourceLocation("railwayp",
 			"textures/entity/banner_base.png");
 	private ModelPlatformBanner bannerModel = new ModelPlatformBanner();
-	private static final int TEXT1_MAX_ALLOW_LENGTH = 62;
+	private static final int TEXT1_MAX_ALLOW_LENGTH = 60;
 
 	public void renderTileEntityAt(TileEntityPlatformBanner entityBanner, double x, double y, double z,
 			float partialTicks, int destroyStages) {
@@ -89,13 +89,20 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer<
 			if (destroyStages < 0) {
 				if (entityBanner.signText[0] != null) {
 					ITextComponent ichatcomponent = entityBanner.signText[0];
-					List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false, true);
+					List list = GuiUtilRenderComponents.splitText(ichatcomponent, 180, fontrenderer, false, true);
 					String s = list != null && list.size() > 0 ? ((ITextComponent) list.get(0)).getFormattedText() : "";
 					xx = entityBanner.getDirection() == 0 ? 12
 							: (entityBanner.getDirection() == 2 ? 36 - fontrenderer.getStringWidth(s) : 0);
 					int xxx = fontrenderer.getStringWidth(s);
 					if (xxx > TEXT1_MAX_ALLOW_LENGTH) {
-						GlStateManager.scale(TEXT1_MAX_ALLOW_LENGTH / xxx, 1, 1);
+						GlStateManager.scale(TEXT1_MAX_ALLOW_LENGTH / (float)xxx, 1, 1);
+						if(entityBanner.getDirection() == 0)
+						xx *= (float)xxx / TEXT1_MAX_ALLOW_LENGTH;
+						else{
+							xx /= (float)xxx / TEXT1_MAX_ALLOW_LENGTH;
+							//xx -= 5 / ((float)xxx / TEXT1_MAX_ALLOW_LENGTH);
+						}
+						//xx *= entityBanner.getDirection() == 0 ? (float)xxx / TEXT1_MAX_ALLOW_LENGTH : TEXT1_MAX_ALLOW_LENGTH/(float)xxx;
 					}
 					fontrenderer.drawString(s, xx, 0 * 10 - entityBanner.signText.length * 5, 0);
 				}

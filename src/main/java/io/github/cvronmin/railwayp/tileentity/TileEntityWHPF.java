@@ -252,6 +252,7 @@ public class TileEntityWHPF extends TileEntityBanner {
 						break;
 					case 3:
 						enumbannerpattern = EnumUnifiedBannerPattern.AUR;
+						break;
 					default:
 						enumbannerpattern = null;
 						break;
@@ -296,4 +297,25 @@ public class TileEntityWHPF extends TileEntityBanner {
 	public byte getDirection() {
 		return this.direction;
 	}
+
+	public int getRoute() {
+		return route;
+	}
+
+	public int getRouteColor() {
+		return routeColor;
+	}
+
+	public short getTruebearing() {
+		return truebearing;
+	}
+    public void setData(int pn, byte dir, short rotation, String color, String t1, String t2){
+    	this.route = pn;
+    	this.direction = dir;
+    	truebearing = rotation;
+    	this.routeColorEncoded = color;
+    	this.signText[0] = new TextComponentString(t1);
+    	this.signText[1] = new TextComponentString(t2);
+    	decodeColor();
+    }
 }

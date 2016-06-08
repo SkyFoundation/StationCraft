@@ -14,6 +14,7 @@ import io.github.cvronmin.railwayp.RailwayP;
 import io.github.cvronmin.railwayp.network.RPPacket;
 import io.github.cvronmin.railwayp.network.RPPacketHandler;
 import io.github.cvronmin.railwayp.network.RPPacket.EnumRPPacket;
+import io.github.cvronmin.railwayp.tileentity.TileEntityNameBanner;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
 import io.github.cvronmin.railwayp.util.NTUtil;
 import io.netty.buffer.Unpooled;
@@ -37,22 +38,22 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-public class GuiPlatformBannerEditor extends GuiScreen {
-	/** Text Field to set NBT PlatformNumber **/
-	private GuiTextField platformTextField;
-	/** Text Field to set NBT Direction **/
-	private GuiTextField directionTextField;
+public class GuiNameBannerEditor extends GuiScreen {
+	/** Text Field to set NBT SignType **/
+	private GuiTextField signTypeTextField;
+	/** Text Field to set NBT StationColor **/
+	private GuiTextField stationColorTextField;
 	/** Text Field to set NBT Color **/
 	private GuiTextField colorTextField;
 	/** Text Field to set NBT Text1 **/
 	private GuiTextField text1TextField;
 	/** Text Field to set NBT Text2 **/
 	private GuiTextField text2TextField;
-	private TileEntityPlatformBanner te;
+	private TileEntityNameBanner te;
 	private NBTTagCompound nbtbu, nbt;
 	private GuiButton doneBtn;
 	private GuiButton cancelBtn;
-	public GuiPlatformBannerEditor(TileEntityPlatformBanner te){
+	public GuiNameBannerEditor(TileEntityNameBanner te){
 		this.te = te;
 		nbtbu = new NBTTagCompound();
 		nbt = new NBTTagCompound();
@@ -65,43 +66,34 @@ public class GuiPlatformBannerEditor extends GuiScreen {
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
 
-		this.platformTextField = new GuiTextField(10, this.fontRendererObj, posX + (-75 / 2 - 95), posY + (-80), 75, 20);
-		this.platformTextField.setMaxStringLength(1);
-		this.platformTextField.setValidator(new Predicate<String>() {
+		this.signTypeTextField = new GuiTextField(10, this.fontRendererObj, posX + (-75 / 2 - 95), posY + (-80), 75, 20);
+		this.signTypeTextField.setMaxStringLength(1);
+		this.signTypeTextField.setValidator(new Predicate<String>() {
 			@Override
 			public boolean apply(String input) {
 				for(char ch : input.toCharArray()){
-					if(!Character.isDigit(ch)) return false;
+					if(ch != '0' & ch != '1' & ch != '2')return false;
 				}
 				return true;
 			}
 		});
-		this.platformTextField.setText(Integer.toString(te.getRoute()));
+		this.signTypeTextField.setText(Integer.toString(te.getSignType()));
 		
-		this.directionTextField = new GuiTextField(14, this.fontRendererObj, posX + (-75 / 2), posY + (-80), 75, 20);
-		this.directionTextField.setMaxStringLength(1);
-		this.directionTextField.setValidator(new Predicate<String>() {
-			@Override
-			public boolean apply(String input) {
-				for(char ch : input.toCharArray()){
-					if(ch != '0' & ch != '1' & ch != '2' & ch != '3')return false;
-				}
-				return true;
-			}
-		});
-		this.directionTextField.setText(Byte.toString(te.getDirection()));
+		this.stationColorTextField = new GuiTextField(14, this.fontRendererObj, posX + (-75 / 2), posY + (-80), 75, 20);
+		this.stationColorTextField.setMaxStringLength(6);
+		this.stationColorTextField.setText(Integer.toHexString(te.getStationColor()));
 
 		this.colorTextField = new GuiTextField(11, this.fontRendererObj, posX + (+75 / 2 + 20), posY + (-80), 75, 20);
 		this.colorTextField.setMaxStringLength(6);
-		this.colorTextField.setText(Integer.toHexString(te.getRouteColor()));
+		this.colorTextField.setText(Integer.toHexString(te.getColor()));
 
-		this.text1TextField = new GuiTextField(12, this.fontRendererObj, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50), 75 * 3 + 20 * 2, 20);
+		this.text1TextField = new GuiTextField(12, this.fontRendererObj, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50), 75 * 2 + 20 * 1, 20);
 		this.text1TextField.setMaxStringLength(32767);
-		this.text1TextField.setText(te.getSignText()[0].getUnformattedText());
+		this.text1TextField.setText(te.signText[0].getUnformattedText());
 
-		this.text2TextField = new GuiTextField(13, this.fontRendererObj, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20), 75 * 3 + 20 * 2, 20);
+		this.text2TextField = new GuiTextField(13, this.fontRendererObj, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20), 75 * 2 + 20 * 1, 20);
 		this.text2TextField.setMaxStringLength(32767);
-		this.text2TextField.setText(te.getSignText()[1].getUnformattedText());
+		this.text2TextField.setText(te.signText[1].getUnformattedText());
 		
 		this.buttonList.add(doneBtn = new GuiButton(0, posX - 4 - 150, this.height - 40, 150, 20, I18n.format("gui.done", new Object[0])));
 		this.buttonList.add(cancelBtn = new GuiButton(1, posX + 4, this.height - 40, 150, 20, I18n.format("gui.cancel", new Object[0])));
@@ -120,14 +112,14 @@ public class GuiPlatformBannerEditor extends GuiScreen {
      */
     protected void keyTyped(char typedChar, int keyCode) throws IOException
     {
-    	this.platformTextField.textboxKeyTyped(typedChar, keyCode);
-    	this.directionTextField.textboxKeyTyped(typedChar, keyCode);
+    	this.signTypeTextField.textboxKeyTyped(typedChar, keyCode);
+    	this.stationColorTextField.textboxKeyTyped(typedChar, keyCode);
     	this.colorTextField.textboxKeyTyped(typedChar, keyCode);
     	this.text1TextField.textboxKeyTyped(typedChar, keyCode);
     	this.text2TextField.textboxKeyTyped(typedChar, keyCode);
         this.te.setData(
-        		Integer.parseInt(!platformTextField.getText().isEmpty() ? platformTextField.getText() : "1"),
-        		Byte.parseByte(!directionTextField.getText().isEmpty() ? directionTextField.getText() : "0"),
+        		Integer.parseInt(!signTypeTextField.getText().isEmpty() ? signTypeTextField.getText() : "0"),
+        		!stationColorTextField.getText().isEmpty() ? stationColorTextField.getText() : "BBBBBB",
         		!colorTextField.getText().isEmpty() ? colorTextField.getText() : "191919",
         		!text1TextField.getText().isEmpty() ? text1TextField.getText() : "",
         				!text2TextField.getText().isEmpty() ? text2TextField.getText() : "");
@@ -151,8 +143,8 @@ public class GuiPlatformBannerEditor extends GuiScreen {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         super.mouseClicked(mouseX, mouseY, mouseButton);
-        this.platformTextField.mouseClicked(mouseX, mouseY, mouseButton);
-        this.directionTextField.mouseClicked(mouseX, mouseY, mouseButton);
+        this.signTypeTextField.mouseClicked(mouseX, mouseY, mouseButton);
+        this.stationColorTextField.mouseClicked(mouseX, mouseY, mouseButton);
         this.colorTextField.mouseClicked(mouseX, mouseY, mouseButton);
         this.text1TextField.mouseClicked(mouseX, mouseY, mouseButton);
         this.text2TextField.mouseClicked(mouseX, mouseY, mouseButton);
@@ -161,15 +153,15 @@ public class GuiPlatformBannerEditor extends GuiScreen {
 		this.drawDefaultBackground();
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
-		this.drawCenteredString(this.fontRendererObj,I18n.format("gui.editor.title.pb", new Object[0]), posX, 20, 0xffffff);
-		this.drawString(fontRendererObj, I18n.format("gui.platform", new Object[0]), posX + (-75 / 2 - 95), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.direction", new Object[0]), posX + (-75 / 2), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+		this.drawCenteredString(this.fontRendererObj,I18n.format("gui.editor.title.nb", new Object[0]), posX, 20, 0xffffff);
+		this.drawString(fontRendererObj, I18n.format("gui.signage.type", new Object[0]), posX + (-75 / 2 - 95), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRendererObj, I18n.format("gui.color.station", new Object[0]), posX + (-75 / 2), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
 		this.drawString(fontRendererObj, I18n.format("gui.color", new Object[0]), posX + (75 / 2 + 20), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
 		this.drawString(fontRendererObj, "Text1", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
 		this.drawString(fontRendererObj, "Text2", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.preview", new Object[0]), posX - 50, posY + 10 - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.platformTextField.drawTextBox();
-		this.directionTextField.drawTextBox();
+		this.drawString(fontRendererObj, I18n.format("gui.preview", new Object[0]), posX +(75 / 2 + 20), posY - 50 - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+		this.signTypeTextField.drawTextBox();
+		this.stationColorTextField.drawTextBox();
 		this.colorTextField.drawTextBox();
 		this.text1TextField.drawTextBox();
 		this.text2TextField.drawTextBox();
@@ -179,8 +171,8 @@ public class GuiPlatformBannerEditor extends GuiScreen {
 	private void renderPreview(int mouseX, int mouseY, float partialTicks){
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float)(this.width / 2) - 35, (float)(this.height / 2) - 50, 50f);
-        float f = 93.75F * 0.75f;
+        GlStateManager.translate((float)(this.width / 2) + 90, (float)(this.height / 2) - 110, 50f);
+        float f = 93.75F * 0.9f;
         GlStateManager.scale(-f, -f, -f);
         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
         int i = this.te.getBlockMetadata();
@@ -213,12 +205,12 @@ public class GuiPlatformBannerEditor extends GuiScreen {
             list.add(te.getPos().getX());
             list.add(te.getPos().getY());
             list.add(te.getPos().getZ());
-            list.add(this.platformTextField.getText());
-            list.add(directionTextField.getText());
+            list.add(this.signTypeTextField.getText());
+            list.add(stationColorTextField.getText());
             list.add(this.colorTextField.getText());
             list.add(this.text1TextField.getText());
             list.add(this.text2TextField.getText());
-            RailwayP.channelHandle.sendToAll(new RPPacket(EnumRPPacket.C_UPDATEPLATFORMBANNER, list));
+            RailwayP.channelHandle.sendToAll(new RPPacket(EnumRPPacket.C_UPDATENAME_BANNER, list));
             this.mc.displayGuiScreen(null);
 		}
 

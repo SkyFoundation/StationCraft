@@ -1,6 +1,7 @@
 package io.github.cvronmin.railwayp;
 
 import io.github.cvronmin.railwayp.init.RPBlocks;
+import io.github.cvronmin.railwayp.init.RPCraftingManager;
 import io.github.cvronmin.railwayp.init.RPItems;
 import io.github.cvronmin.railwayp.network.CUpdateBannerByGui;
 import io.github.cvronmin.railwayp.network.MessagerFromClient;
@@ -39,7 +40,7 @@ public class CommonProxy {
     }
     @EventHandler
     public void init(FMLInitializationEvent event) {
-    	
+    	RPCraftingManager.register();
     }
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {

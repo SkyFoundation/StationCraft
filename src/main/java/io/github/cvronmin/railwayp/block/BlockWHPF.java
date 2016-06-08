@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockWHPF extends BlockContainer{
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-    public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 15);
+    //public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 15);
     public BlockWHPF() {
         super(Material.WOOD);
         setLightLevel(1);
@@ -205,7 +205,7 @@ public class BlockWHPF extends BlockContainer{
         public BlockBannerStanding()
         {
         	this.disableStats();
-            this.setDefaultState(this.blockState.getBaseState().withProperty(ROTATION, Integer.valueOf(0)));
+            //this.setDefaultState(this.blockState.getBaseState().withProperty(ROTATION, Integer.valueOf(0)));
         }
         public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
         {
@@ -225,26 +225,26 @@ public class BlockWHPF extends BlockContainer{
             super.onNeighborBlockChange(worldIn, pos, state, neighborBlock);
         }
 
-        /**
-         * Convert the given metadata into a BlockState for this Block
-         */
-        public IBlockState getStateFromMeta(int meta)
-        {
-            return this.getDefaultState().withProperty(ROTATION, Integer.valueOf(meta));
-        }
-
-        /**
-         * Convert the BlockState into the correct metadata value
-         */
-        public int getMetaFromState(IBlockState state)
-        {
-            return ((Integer)state.getValue(ROTATION)).intValue();
-        }
-
-        protected BlockStateContainer createBlockState()
-        {
-            return new BlockStateContainer(this, new IProperty[] {ROTATION});
-        }
+//        /**
+//         * Convert the given metadata into a BlockState for this Block
+//         */
+//        public IBlockState getStateFromMeta(int meta)
+//        {
+//            return this.getDefaultState().withProperty(ROTATION, Integer.valueOf(meta));
+//        }
+//
+//        /**
+//         * Convert the BlockState into the correct metadata value
+//         */
+//        public int getMetaFromState(IBlockState state)
+//        {
+//            return ((Integer)state.getValue(ROTATION)).intValue();
+//        }
+//
+//        protected BlockStateContainer createBlockState()
+//        {
+//            return new BlockStateContainer(this, new IProperty[] {ROTATION});
+//        }
     }
 
 }

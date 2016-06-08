@@ -33,23 +33,27 @@ public class RPBlocks {
 	public static final BlockWHPF roof_where_pf = (BlockWHPF) new BlockWHPF.BlockBannerStanding().setUnlocalizedName("whpf");
 	public static final BlockWHPF wall_where_pf = (BlockWHPF) new BlockWHPF.BlockBannerHanging().setUnlocalizedName("whpf");
 	//焗漆板
-	public static final BlockRColorful plate = (BlockRColorful) new BlockRColorful(Material.IRON).setUnlocalizedName("plate");
+	public static final BlockColored plate = (BlockColored) new BlockColored(Material.IRON).setUnlocalizedName("plate");
 	//紙皮石
-	public static final BlockRColorful mosaic_tile = (BlockRColorful) new BlockRColorful(Material.ROCK).setUnlocalizedName("mosaic_tile");
+	public static final BlockColored mosaic_tile = (BlockColored) new BlockColored(Material.ROCK).setUnlocalizedName("mosaic_tile");
 	public static final BlockRailNoticer noticer = (BlockRailNoticer) new BlockRailNoticer().setUnlocalizedName("noticer").setCreativeTab(CreativeTabs.TRANSPORTATION);
 	public static void register(){
-		registerBlock(wall_platform_banner, "wall_platform_banner");
-		registerBlock(wall_name_banner, "wall_name_banner");
-		registerBlock(wall_route_sign, "wall_route_sign");
+		registerItemlessBlock(wall_platform_banner, "wall_platform_banner");
+		registerItemlessBlock(wall_name_banner, "wall_name_banner");
+		registerItemlessBlock(wall_route_sign, "wall_route_sign");
 		registerBlock(platform_door_base, "platform_door");
 		registerBlock(platform_door_head, "platform_door_head");
 		registerBlock(platform_door_extension, "platform_door_extension");
 		registerBlock(platform_glass, "platform_glass");
-		registerBlock(roof_where_pf, "roof_whpf");
-		registerBlock(wall_where_pf, "wall_whpf");
-		registerBlock(plate, new ItemRColorful(plate), "plate");
-		registerBlock(mosaic_tile, new ItemRColorful(mosaic_tile), "mosaic_tile");
+		registerItemlessBlock(roof_where_pf, "roof_whpf");
+		registerItemlessBlock(wall_where_pf, "wall_whpf");
+		registerBlock(plate, new ItemColored(plate, false), "plate");
+		registerBlock(mosaic_tile, new ItemColored(mosaic_tile, false), "mosaic_tile");
 		registerBlock(noticer, "rail_noticer");
+	}
+	private static void registerItemlessBlock(Block block, String name){
+		ResourceLocation rl = new ResourceLocation(Reference.MODID, name);
+		GameRegistry.register(block.setRegistryName(rl));
 	}
 	private static void registerBlock(Block block, String name){
 		registerBlock(block, new ItemBlock(block), name);

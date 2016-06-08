@@ -246,4 +246,13 @@ public class TileEntityNameBanner extends TileEntityBanner
     	boolean flag1 = stationColor >= 0x0 && stationColor < 0x1000000;
     	return flag && flag1;
     }
+	public void setData(int st, String sc, String c, String t1, String t2) {
+		bannerType = st;
+		stationColorEncoded = sc;
+		colorEncoded = c;
+		signText[0] = new TextComponentString(t1);
+		signText[1] = new TextComponentString(t2);
+		decodeColor();
+		decodeStationColor();
+	}
 }

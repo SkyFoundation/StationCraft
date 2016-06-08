@@ -32,5 +32,6 @@ public class RailwayP {
     }
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+    	proxy.postInit(event);
     }
 }

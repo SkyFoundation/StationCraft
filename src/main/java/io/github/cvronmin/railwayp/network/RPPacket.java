@@ -11,7 +11,9 @@ import com.jcraft.jogg.Packet;
 import io.github.cvronmin.railwayp.RailwayP;
 import io.github.cvronmin.railwayp.Reference;
 import io.github.cvronmin.railwayp.client.ClientProxy;
+import io.github.cvronmin.railwayp.tileentity.TileEntityNameBanner;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
+import io.github.cvronmin.railwayp.tileentity.TileEntityWHPF;
 import io.github.cvronmin.railwayp.util.NTUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -44,7 +46,32 @@ public class RPPacket extends Packet implements IRPPacket {
 		 * <br>Text1
 		 * <br>Text2
 		 * **/
-		C_UPDATEPLATFORMBANNER(Side.CLIENT, Integer.class, Integer.class, Integer.class,String.class, String.class,String.class,String.class,String.class);
+		C_UPDATEPLATFORMBANNER(Side.CLIENT, Integer.class, Integer.class, Integer.class,String.class, String.class,String.class,String.class,String.class),
+		/**Packet to update platform banner
+		 * <br>Required data (in order):
+		 * <br>TileEntity posX
+		 * <br>TileEntity posY
+		 * <br>TileEntity posZ
+		 * <br>Platform Number
+		 * <br>Direction
+		 * <br>Color
+		 * <br>Text1
+		 * <br>Text2
+		 * **/
+		C_UPDATENAME_BANNER(Side.CLIENT, Integer.class, Integer.class, Integer.class,String.class, String.class,String.class,String.class,String.class),
+		/**Packet to update platform banner
+		 * <br>Required data (in order):
+		 * <br>TileEntity posX
+		 * <br>TileEntity posY
+		 * <br>TileEntity posZ
+		 * <br>Platform Number
+		 * <br>Direction
+		 * <br>Rotation
+		 * <br>Color
+		 * <br>Text1
+		 * <br>Text2
+		 * **/
+		C_UPDATE_WHPF(Side.CLIENT, Integer.class, Integer.class, Integer.class,String.class,String.class, String.class,String.class,String.class,String.class);
 		private Side targetSide;
 		private Class<?>[] decodeAs;
 
@@ -136,6 +163,48 @@ public class RPPacket extends Packet implements IRPPacket {
                     te.setData(Integer.valueOf(pf), Byte.valueOf(dir), String.valueOf(data.get(5)), String.valueOf(data.get(6)), String.valueOf(data.get(7)));
                     te.markDirty();
                     world.notifyBlockUpdate(blockpos1, state, state, 3);
+                } catch (Exception e) {
+                	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
+				}
+				break;
+			case C_UPDATENAME_BANNER:
+				TileEntityNameBanner te1 = null;
+                BlockPos blockpos11 = new BlockPos(Integer.valueOf(String.valueOf(data.get(0))), Integer.valueOf(String.valueOf(data.get(1))), Integer.valueOf(String.valueOf(data.get(2))));
+        		MinecraftServer server1 = FMLCommonHandler.instance().getMinecraftServerInstance();
+        		World world1 = server1.worldServers[0];
+                TileEntity tileentity21 = world1.getTileEntity(blockpos11);
+                IBlockState state1 = world1.getBlockState(blockpos11);
+                if(tileentity21 instanceof TileEntityNameBanner) te1 = (TileEntityNameBanner)tileentity21;
+                if(te1 == null) break;
+                try {
+                	String signtype = String.valueOf(data.get(3));
+                	if(signtype.isEmpty())signtype = "0";
+                    te1.setData(Integer.valueOf(signtype), String.valueOf(data.get(4)), String.valueOf(data.get(5)), String.valueOf(data.get(6)), String.valueOf(data.get(7)));
+                    te1.markDirty();
+                    world1.notifyBlockUpdate(blockpos11, state1, state1, 3);
+                } catch (Exception e) {
+                	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
+				}
+				break;
+			case C_UPDATE_WHPF:
+				TileEntityWHPF te11 = null;
+                BlockPos blockpos111 = new BlockPos(Integer.valueOf(String.valueOf(data.get(0))), Integer.valueOf(String.valueOf(data.get(1))), Integer.valueOf(String.valueOf(data.get(2))));
+        		MinecraftServer server11 = FMLCommonHandler.instance().getMinecraftServerInstance();
+        		World world11 = server11.worldServers[0];
+                TileEntity tileentity211 = world11.getTileEntity(blockpos111);
+                IBlockState state11 = world11.getBlockState(blockpos111);
+                if(tileentity211 instanceof TileEntityWHPF) te11 = (TileEntityWHPF)tileentity211;
+                if(te11 == null) break;
+                try {
+                	String pf1 = String.valueOf(data.get(3));
+                	if(pf1.isEmpty())pf1 = "0";
+                	String dir = String.valueOf(data.get(4));
+                	if(dir.isEmpty())dir = "0";
+                	String r = String.valueOf(data.get(5));
+                	if(r.isEmpty())r = "0";
+                    te11.setData(Integer.valueOf(pf1), Byte.parseByte(dir), Short.parseShort(r), String.valueOf(data.get(6)), String.valueOf(data.get(7)), String.valueOf(data.get(8)));
+                    te11.markDirty();
+                    world11.notifyBlockUpdate(blockpos111, state11, state11, 3);
                 } catch (Exception e) {
                 	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
 				}

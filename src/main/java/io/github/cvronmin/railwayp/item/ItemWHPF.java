@@ -1,5 +1,6 @@
 package io.github.cvronmin.railwayp.item;
 
+import io.github.cvronmin.railwayp.block.BlockWHPF;
 import io.github.cvronmin.railwayp.init.RPBlocks;
 import io.github.cvronmin.railwayp.tileentity.TileEntityWHPF;
 import net.minecraft.block.Block;
@@ -70,7 +71,7 @@ public class ItemWHPF extends Item
             {
                 if (facing == EnumFacing.DOWN)
                 {
-                    int i = ((~(MathHelper.floor_double((double)((playerIn.rotationYaw + 180.0F) * 16.0F / 360.0F) + 0.5D))) + 1) & 15;
+                    /*int i = ((~(MathHelper.floor_double((double)((playerIn.rotationYaw + 180.0F) * 16.0F / 360.0F) + 0.5D))) + 1) & 15;
                     if(i != 0 && i != 8){
                 	i = (i - 8) & 15;
                 	if(i != 4 && i != 12){
@@ -82,11 +83,11 @@ public class ItemWHPF extends Item
                 	if(i % 2 != 0){
                 	    i = ((i + 2) & 3) + i / 4 * 4;
                 	}
-                    }
-                    worldIn.setBlockState(pos, RPBlocks.roof_where_pf.getDefaultState().withProperty(BlockStandingSign.ROTATION, Integer.valueOf(i)), 3);
+                    }*/
+                    worldIn.setBlockState(pos, RPBlocks.roof_where_pf.getDefaultState(), 3);
                 }
                 else{
-                worldIn.setBlockState(pos, RPBlocks.wall_where_pf.getDefaultState().withProperty(BlockWallSign.FACING, facing), 3);
+                worldIn.setBlockState(pos, RPBlocks.wall_where_pf.getDefaultState().withProperty(BlockWHPF.FACING, facing), 3);
                 }
                 --stack.stackSize;
                 TileEntity tileentity = worldIn.getTileEntity(pos);

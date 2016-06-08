@@ -18,6 +18,8 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -25,15 +27,11 @@ import net.minecraft.world.World;
 
 public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvider{
 
-    public static final PropertyEnum SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, new Predicate()
+    public static final PropertyEnum<BlockRailBase.EnumRailDirection> SHAPE = PropertyEnum.<BlockRailBase.EnumRailDirection>create("shape", BlockRailBase.EnumRailDirection.class, new Predicate<BlockRailBase.EnumRailDirection>()
     {
-        public boolean apply(BlockRailBase.EnumRailDirection direction)
+        public boolean apply(BlockRailBase.EnumRailDirection p_apply_1_)
         {
-            return direction != BlockRailBase.EnumRailDirection.NORTH_EAST && direction != BlockRailBase.EnumRailDirection.NORTH_WEST && direction != BlockRailBase.EnumRailDirection.SOUTH_EAST && direction != BlockRailBase.EnumRailDirection.SOUTH_WEST;
-        }
-        public boolean apply(Object p_apply_1_)
-        {
-            return this.apply((BlockRailBase.EnumRailDirection)p_apply_1_);
+            return p_apply_1_ != BlockRailBase.EnumRailDirection.NORTH_EAST && p_apply_1_ != BlockRailBase.EnumRailDirection.NORTH_WEST && p_apply_1_ != BlockRailBase.EnumRailDirection.SOUTH_EAST && p_apply_1_ != BlockRailBase.EnumRailDirection.SOUTH_WEST;
         }
     });
     public static final PropertyBool POWERED = PropertyBool.create("powered");
@@ -103,7 +101,7 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
     {
         boolean flag = ((Boolean)state.getValue(POWERED)).booleanValue();
         boolean flag1 = false;
-        List list = this.findMinecarts(worldIn, pos, EntityMinecart.class, new Predicate[0]);
+        List<EntityMinecart> list = this.<EntityMinecart>findMinecarts(worldIn, pos, EntityMinecart.class, new Predicate[0]);
 
         if (!list.isEmpty())
         {
@@ -129,7 +127,7 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
 
         if (flag1)
         {
-            worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+            worldIn.scheduleUpdate(new BlockPos(pos), this, this.tickRate(worldIn));
         }
 
 //        worldIn.updateComparatorOutputLevel(pos, this);
@@ -141,7 +139,7 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
         this.updatePoweredState(worldIn, pos, state);
     }
 
-    public IProperty getShapeProperty()
+    public IProperty<BlockRailBase.EnumRailDirection> getShapeProperty()
     {
         return SHAPE;
     }
@@ -173,7 +171,7 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
         return 0;
     }*/
 
-    protected List findMinecarts(World worldIn, BlockPos pos, Class clazz, Predicate ... filter)
+    protected <T extends EntityMinecart> List<T> findMinecarts(World worldIn, BlockPos pos, Class<T> clazz, Predicate<Entity>... filter)
     {
         AxisAlignedBB axisalignedbb = this.getDectectionBox(pos);
         return filter.length != 1 ? worldIn.getEntitiesWithinAABB(clazz, axisalignedbb) : worldIn.getEntitiesWithinAABB(clazz, axisalignedbb, filter[0]);
@@ -232,7 +230,150 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
         super.breakBlock(worldIn, pos, state);
         worldIn.removeTileEntity(pos);
     }
+    /**
+     * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
+     * blockstate.
+     */
+    @SuppressWarnings("incomplete-switch")
+    public IBlockState withRotation(IBlockState state, Rotation rot)
+    {
+        switch (rot)
+        {
+            case CLOCKWISE_180:
 
+                switch ((BlockRailBase.EnumRailDirection)state.getValue(SHAPE))
+                {
+                    case ASCENDING_EAST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_WEST);
+                    case ASCENDING_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_EAST);
+                    case ASCENDING_NORTH:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_SOUTH);
+                    case ASCENDING_SOUTH:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_NORTH);
+                    case SOUTH_EAST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_WEST);
+                    case SOUTH_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_EAST);
+                    case NORTH_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.SOUTH_EAST);
+                    case NORTH_EAST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.SOUTH_WEST);
+                }
+
+            case COUNTERCLOCKWISE_90:
+
+                switch ((BlockRailBase.EnumRailDirection)state.getValue(SHAPE))
+                {
+                    case ASCENDING_EAST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_NORTH);
+                    case ASCENDING_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_SOUTH);
+                    case ASCENDING_NORTH:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_WEST);
+                    case ASCENDING_SOUTH:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_EAST);
+                    case SOUTH_EAST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_EAST);
+                    case SOUTH_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.SOUTH_EAST);
+                    case NORTH_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.SOUTH_WEST);
+                    case NORTH_EAST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_WEST);
+                    case NORTH_SOUTH:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.EAST_WEST);
+                    case EAST_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_SOUTH);
+                }
+
+            case CLOCKWISE_90:
+
+                switch ((BlockRailBase.EnumRailDirection)state.getValue(SHAPE))
+                {
+                    case ASCENDING_EAST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_SOUTH);
+                    case ASCENDING_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_NORTH);
+                    case ASCENDING_NORTH:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_EAST);
+                    case ASCENDING_SOUTH:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_WEST);
+                    case SOUTH_EAST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.SOUTH_WEST);
+                    case SOUTH_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_WEST);
+                    case NORTH_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_EAST);
+                    case NORTH_EAST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.SOUTH_EAST);
+                    case NORTH_SOUTH:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.EAST_WEST);
+                    case EAST_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_SOUTH);
+                }
+
+            default:
+                return state;
+        }
+    }
+
+    /**
+     * Returns the blockstate with the given mirror of the passed blockstate. If inapplicable, returns the passed
+     * blockstate.
+     */
+    @SuppressWarnings("incomplete-switch")
+    public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
+    {
+        BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = (BlockRailBase.EnumRailDirection)state.getValue(SHAPE);
+
+        switch (mirrorIn)
+        {
+            case LEFT_RIGHT:
+
+                switch (blockrailbase$enumraildirection)
+                {
+                    case ASCENDING_NORTH:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_SOUTH);
+                    case ASCENDING_SOUTH:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_NORTH);
+                    case SOUTH_EAST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_EAST);
+                    case SOUTH_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_WEST);
+                    case NORTH_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.SOUTH_WEST);
+                    case NORTH_EAST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.SOUTH_EAST);
+                    default:
+                        return super.withMirror(state, mirrorIn);
+                }
+
+            case FRONT_BACK:
+
+                switch (blockrailbase$enumraildirection)
+                {
+                    case ASCENDING_EAST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_WEST);
+                    case ASCENDING_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_EAST);
+                    case ASCENDING_NORTH:
+                    case ASCENDING_SOUTH:
+                    default:
+                        break;
+                    case SOUTH_EAST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.SOUTH_WEST);
+                    case SOUTH_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.SOUTH_EAST);
+                    case NORTH_WEST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_EAST);
+                    case NORTH_EAST:
+                        return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_WEST);
+                }
+        }
+
+        return super.withMirror(state, mirrorIn);
+    }
     /**
      * Called on both Client and Server when World#addBlockEvent is called
      */

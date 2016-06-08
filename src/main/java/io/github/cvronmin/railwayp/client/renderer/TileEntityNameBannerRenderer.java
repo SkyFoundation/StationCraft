@@ -26,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<TileEntityNameBanner> {
 	private ModelNameBanner model = new ModelNameBanner();
-
+	private static final int TEXT2_MAX_ALLOW_LENGTH = 64;
 	@Override
 	public void renderTileEntityAt(TileEntityNameBanner te, double x, double y, double z, float partialTicks,
 			int destroyStage) {
@@ -53,15 +53,16 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 
 		GlStateManager.translate((float) x + 0.5F, (float) y - 0.25F * f1, (float) z + 0.5F);
 		GlStateManager.rotate(-f3, 0.0F, 1.0F, 0.0F);
-		GlStateManager.translate(-0.0175F, -0.3125F - 0.1, -0.5375F + 0.055);
+		GlStateManager.translate(-0.0175F, -0.3125F - 0.05, -0.5375F + 0.055);
 		GlStateManager.enableRescaleNormal();
-		float a = 0, b = 0;
+		float a = 0, b = 0, corr = 0.055f;
 		//System.out.println("SignType:" + te.getSignType());
 		if (te.getSignType() != 0) {
 			a= 1/16f;
-			//b = 0.5f;
+			b = 0.4f;
+			corr = 0.025f;
 			ResourceLocation resourcelocation = this.getBannerResourceLocation(te);
-			System.out.println(resourcelocation);
+			//System.out.println(resourcelocation);
 			if (resourcelocation != null) {
 				this.bindTexture(resourcelocation);
 				GlStateManager.pushMatrix();
@@ -74,7 +75,7 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 		FontRenderer fontrenderer = this.getFontRenderer();
 		f3 = 0.015625F * f1;
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0, 0.5F * f1 + 0.6 - b, 0.07F * f1);
+		GlStateManager.translate(0, 0.5F * f1 + 0.6 - b * 2.15, 0.07F * f1 - corr);
 		GlStateManager.scale(f3 * 2, -f3 * 2, f3 * 2);
 		GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
 		GlStateManager.depthMask(false);
@@ -90,7 +91,6 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 					String s1 = list != null && list.size() > 0 ? ((ITextComponent) list.get(0)).getUnformattedText() : "";
 					drawHString(fontrenderer,s1, -fontrenderer.getCharWidth(s.charAt(0)),
 							-fontrenderer.FONT_HEIGHT * s.length(), te.getColor());
-				
 				}else
 					fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, 0 * 10 - te.signText.length * 5,
 							te.getColor());
@@ -99,7 +99,7 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 		GlStateManager.depthMask(true);
 		GlStateManager.popMatrix();
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0, 0.5F * f1 + 0.6 - b, 0.07F * f1);
+		GlStateManager.translate(0, 0.5F * f1 + 0.6 - b * 0.35, 0.07F * f1 - corr);
 		GlStateManager.scale(f3, -f3, f3);
 		GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
 		GlStateManager.depthMask(false);
@@ -109,6 +109,10 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 				List<ITextComponent> list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false,
 						true);
 				String s = list != null && list.size() > 0 ? ((ITextComponent) list.get(0)).getFormattedText() : "";
+				int xxx = fontrenderer.getStringWidth(s);
+				if (xxx > TEXT2_MAX_ALLOW_LENGTH) {
+					GlStateManager.scale(TEXT2_MAX_ALLOW_LENGTH / (float)xxx, 1, 1);
+				}
 				fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, 1 * 10 - te.signText.length * 5,
 						te.getColor());
 			}
@@ -135,7 +139,7 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
                 	continue;
                 }
             }
-			fr.drawString(Character.toString(c), x - fr.getCharWidth(c) / 2, y + i*fr.FONT_HEIGHT, color);
+			fr.drawString(Character.toString(c), x - fr.getCharWidth(c) / 2, y + i*fr.getCharWidth(c), color);
 		}
 	}
 }

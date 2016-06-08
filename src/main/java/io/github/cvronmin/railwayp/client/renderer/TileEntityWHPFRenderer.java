@@ -30,6 +30,8 @@ public class TileEntityWHPFRenderer extends TileEntitySpecialRenderer<TileEntity
     /** An array of all the patterns that are being currently rendered. */
     private static final Map DESIGNS = Maps.newHashMap();
     private static final ResourceLocation BANNERTEXTURES = new ResourceLocation("railwayp", "textures/entity/pfsign_l.png");
+	private static final int TEXT1_MAX_ALLOW_LENGTH = 47;
+	private static final int TEXT2_MAX_ALLOW_LENGTH = 92;
     private ModelPFSignL bannerModel = new ModelPFSignL();
 
     public void renderTileEntityAt(TileEntityWHPF entityBanner, double x, double y, double z, float p_180545_8_, int p_180545_9_)
@@ -98,9 +100,20 @@ public class TileEntityWHPFRenderer extends TileEntitySpecialRenderer<TileEntity
                 if (entityBanner.signText[0] != null)
                 {
                     ITextComponent ichatcomponent = entityBanner.signText[0];
-                    List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false, true);
+                    List list = GuiUtilRenderComponents.splitText(ichatcomponent, 180, fontrenderer, false, true);
                     String s = list != null && list.size() > 0 ? ((ITextComponent)list.get(0)).getFormattedText() : "";
                     xx = entityBanner.getDirection() <= 1 ? 12 + 25 : (entityBanner.getDirection() >= 2 ? 36 + 16 - fontrenderer.getStringWidth(s) : 0);
+					int xxx = fontrenderer.getStringWidth(s);
+					//System.out.println("Text1:" + xxx);
+					if (xxx > TEXT1_MAX_ALLOW_LENGTH) {
+						GlStateManager.scale(TEXT1_MAX_ALLOW_LENGTH / (float)xxx, 1, 1);
+						if(entityBanner.getDirection() <= 1)
+						xx *= (float)xxx / TEXT1_MAX_ALLOW_LENGTH;
+						else{
+							xx /= (float)xxx / TEXT1_MAX_ALLOW_LENGTH * 16;
+							xx += 5 * ((float)xxx / TEXT1_MAX_ALLOW_LENGTH);
+						}
+					}
                         fontrenderer.drawString(s, xx, 0 * 10 - entityBanner.signText.length * 5, 16777215);
                 }
         }
@@ -116,9 +129,20 @@ public class TileEntityWHPFRenderer extends TileEntitySpecialRenderer<TileEntity
                 if (entityBanner.signText[1] != null)
                 {
                     ITextComponent ichatcomponent = entityBanner.signText[1];
-                    List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false, true);
+                    List list = GuiUtilRenderComponents.splitText(ichatcomponent, 180, fontrenderer, false, true);
                     String s = list != null && list.size() > 0 ? ((ITextComponent)list.get(0)).getFormattedText() : "";
                     xx = entityBanner.getDirection() <= 1 ? 24 + 50 : (entityBanner.getDirection() >= 2 ? 72 + 30 - fontrenderer.getStringWidth(s) : 0);
+					int xxx = fontrenderer.getStringWidth(s);
+					//System.out.println("Text2:"+xxx);
+					if (xxx > TEXT2_MAX_ALLOW_LENGTH) {
+						GlStateManager.scale(TEXT2_MAX_ALLOW_LENGTH / (float)xxx, 1, 1);
+						if(entityBanner.getDirection() <= 1)
+						xx *= (float)xxx / TEXT2_MAX_ALLOW_LENGTH;
+						else{
+							xx /= (float)xxx / TEXT2_MAX_ALLOW_LENGTH * 16;
+							xx += 10 * ((float)xxx / TEXT2_MAX_ALLOW_LENGTH);
+						}
+					}
                         fontrenderer.drawString(s, xx, 1 * 5 - entityBanner.signText.length * 5, 16777215);
                 }
         }
