@@ -2,6 +2,7 @@ package io.github.cvronmin.railwayp.client;
 
 import io.github.cvronmin.railwayp.CommonProxy;
 import io.github.cvronmin.railwayp.client.gui.GuiPen;
+import io.github.cvronmin.railwayp.client.renderer.TileEntityColorfulRenderer;
 import io.github.cvronmin.railwayp.client.renderer.TileEntityNameBannerRenderer;
 import io.github.cvronmin.railwayp.client.renderer.TileEntityPFDoorRenderer;
 import io.github.cvronmin.railwayp.client.renderer.TileEntityPlatformBannerRenderer;
@@ -11,6 +12,7 @@ import io.github.cvronmin.railwayp.init.RPBlocks;
 import io.github.cvronmin.railwayp.init.RPItems;
 import io.github.cvronmin.railwayp.network.MessagerFromServer;
 import io.github.cvronmin.railwayp.network.SUpdateRailNoticerGui;
+import io.github.cvronmin.railwayp.tileentity.TileEntityColorful;
 import io.github.cvronmin.railwayp.tileentity.TileEntityNameBanner;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPFDoor;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
@@ -52,6 +54,7 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRouteSignage.class, new TileEntityRouteSignageRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPFDoor.class, new TileEntityPFDoorRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWHPF.class, new TileEntityWHPFRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityColorful.class, new TileEntityColorfulRenderer());
 		statio = new GuiPen(FMLClientHandler.instance().getClient());
 		MinecraftForge.EVENT_BUS.register(statio);
 		MinecraftForge.EVENT_BUS.register(this);

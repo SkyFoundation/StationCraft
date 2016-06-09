@@ -2,8 +2,12 @@ package io.github.cvronmin.railwayp.init;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class RPCraftingManager {
@@ -31,6 +35,7 @@ public class RPCraftingManager {
 				'B',Items.DYE});
 		registerMosaticTile();
 		registerPlate();
+		registerCloningRecipe();
 	}
 	private static void registerMosaticTile(){
 		for(int i = 0;i < 16;i++){
@@ -50,6 +55,115 @@ public class RPCraftingManager {
 					"AAA",
 					'B', new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, i),
 					'A',Items.IRON_INGOT});
+		}
+	}
+	private static void registerCloningRecipe(){
+		GameRegistry.addRecipe(new CloningRecipe(RPItems.name_banner));
+		GameRegistry.addRecipe(new CloningRecipe(RPItems.platform_banner));
+		GameRegistry.addRecipe(new CloningRecipe(RPItems.whpf));
+		GameRegistry.addRecipe(new CloningRecipe(RPItems.route_sign));
+		GameRegistry.addRecipe(new CloningRecipe(Item.getItemFromBlock(RPBlocks.mosaic_tile)));
+		GameRegistry.addRecipe(new CloningRecipe(Item.getItemFromBlock(RPBlocks.plate)));
+	}
+	private static class CloningRecipe implements IRecipe{
+		Item item;
+		public CloningRecipe(Item item) {
+			this.item = item;
+		}
+		@Override
+		public boolean matches(InventoryCrafting inv, World worldIn) {
+	        int i = 0;
+	        ItemStack itemstack = null;
+
+	        for (int j = 0; j < inv.getSizeInventory(); ++j)
+	        {
+	            ItemStack itemstack1 = inv.getStackInSlot(j);
+
+	            if (itemstack1 != null)
+	            {
+	            	if(itemstack1.getItem() == item){
+	                if (itemstack1.hasTagCompound())
+	                {
+	                    if (itemstack != null)
+	                    {
+	                        return false;
+	                    }
+
+	                    itemstack = itemstack1;
+	                }
+	                else ++i;
+	            	}else return false;
+	            }
+	        }
+
+	        return itemstack != null && i > 0;
+		}
+		
+		@Override
+		public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+	        ItemStack[] aitemstack = new ItemStack[inv.getSizeInventory()];
+
+	        for (int i = 0; i < aitemstack.length; ++i)
+	        {
+	            ItemStack itemstack = inv.getStackInSlot(i);
+	            aitemstack[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack);
+	        }
+
+	        return aitemstack;
+		}
+		
+		@Override
+		public int getRecipeSize() {
+			return 9;
+		}
+		
+		@Override
+		public ItemStack getRecipeOutput() {
+			return null;
+		}
+		
+		@Override
+		public ItemStack getCraftingResult(InventoryCrafting inv) {
+	        int i = 0;
+	        ItemStack itemstack = null;
+
+	        for (int j = 0; j < inv.getSizeInventory(); ++j)
+	        {
+	            ItemStack itemstack1 = inv.getStackInSlot(j);
+
+	            if (itemstack1 != null)
+	            {
+	            	if(itemstack1.getItem() == item){
+		                if (itemstack1.hasTagCompound())
+		                {
+		                    if (itemstack != null)
+		                    {
+		                        return null;
+		                    }
+
+		                    itemstack = itemstack1;
+		                }
+		                else ++i;
+		            	}else return null;
+	            }
+	        }
+
+	        if (itemstack != null && i >= 1)
+	        {
+	            ItemStack itemstack2 = new ItemStack(item, i + 1, itemstack.getMetadata());
+
+	            if (itemstack.hasDisplayName())
+	            {
+	                itemstack2.setStackDisplayName(itemstack.getDisplayName());
+	            }
+	            itemstack2.setTagCompound(itemstack.getTagCompound());
+
+	            return itemstack2;
+	        }
+	        else
+	        {
+	            return null;
+	        }
 		}
 	}
 }

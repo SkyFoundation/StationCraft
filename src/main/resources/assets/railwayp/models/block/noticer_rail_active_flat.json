@@ -1,0 +1,6 @@
+{
+    "parent": "block/rail_flat",
+    "textures": {
+        "rail": "railwayp:blocks/rail_noticer_powered"
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "parent": "railwayp:block/plate",
+	"textures":{
+	        "all": "railwayp:blocks/plate_orange"
+	}
+}
