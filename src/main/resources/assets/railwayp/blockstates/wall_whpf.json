@@ -1,0 +1,8 @@
+{
+    "variants": {
+		"facing=north":{"model": "railwayp:wall_whpf"},
+		"facing=south":{"model": "railwayp:wall_whpf"},
+		"facing=west":{"model": "railwayp:wall_whpf"},
+		"facing=east":{"model": "railwayp:wall_whpf"}
+	}
+}

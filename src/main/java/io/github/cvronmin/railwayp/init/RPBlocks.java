@@ -33,9 +33,9 @@ public class RPBlocks {
 	public static final BlockWHPF roof_where_pf = (BlockWHPF) new BlockWHPF.BlockBannerStanding().setUnlocalizedName("whpf");
 	public static final BlockWHPF wall_where_pf = (BlockWHPF) new BlockWHPF.BlockBannerHanging().setUnlocalizedName("whpf");
 	//焗漆板
-	public static final BlockColored plate = (BlockColored) new BlockColored(Material.IRON).setUnlocalizedName("plate");
+	public static final BlockColorful plate = (BlockColorful) new BlockColorful(Material.IRON).setUnlocalizedName("plate");
 	//紙皮石
-	public static final BlockColored mosaic_tile = (BlockColored) new BlockColored(Material.ROCK).setUnlocalizedName("mosaic_tile");
+	public static final BlockColorful mosaic_tile = (BlockColorful) new BlockColorful(Material.ROCK).setUnlocalizedName("mosaic_tile");
 	public static final BlockRailNoticer noticer = (BlockRailNoticer) new BlockRailNoticer().setUnlocalizedName("noticer").setCreativeTab(CreativeTabs.TRANSPORTATION);
 	public static void register(){
 		registerItemlessBlock(wall_platform_banner, "wall_platform_banner");
@@ -47,8 +47,8 @@ public class RPBlocks {
 		registerBlock(platform_glass, "platform_glass");
 		registerItemlessBlock(roof_where_pf, "roof_whpf");
 		registerItemlessBlock(wall_where_pf, "wall_whpf");
-		registerBlock(plate, new ItemColored(plate, false), "plate");
-		registerBlock(mosaic_tile, new ItemColored(mosaic_tile, false), "mosaic_tile");
+		registerBlock(plate, "plate");
+		registerBlock(mosaic_tile, "mosaic_tile");
 		registerBlock(noticer, "rail_noticer");
 	}
 	private static void registerItemlessBlock(Block block, String name){
