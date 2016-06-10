@@ -5,9 +5,12 @@ import java.util.Locale;
 
 import org.lwjgl.opengl.GL11;
 
+import io.github.cvronmin.railwayp.block.BlockNameBanner;
 import io.github.cvronmin.railwayp.client.model.ModelNameBanner;
 import io.github.cvronmin.railwayp.client.renderer.texture.UnifedBannerTextures;
+import io.github.cvronmin.railwayp.tileentity.TileEntityColorful;
 import io.github.cvronmin.railwayp.tileentity.TileEntityNameBanner;
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,10 +21,12 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 //import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import scala.Tuple1;
 
 @SideOnly(Side.CLIENT)
 public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<TileEntityNameBanner> {
@@ -33,6 +38,7 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 		boolean flag = te.getWorld() != null;
 		int j = flag ? te.getBlockMetadata() : 0;
 		long k = flag ? te.getWorld().getTotalWorldTime() : 0L;
+		Block block = te.getBlockType();
 		GlStateManager.pushMatrix();
 		float f1 = 0.6666667F;
 		float f3;
@@ -50,9 +56,16 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 		if (j == 5) {
 			f3 = -90.0F;
 		}
-
 		GlStateManager.translate((float) x + 0.5F, (float) y - 0.25F * f1, (float) z + 0.5F);
 		GlStateManager.rotate(-f3, 0.0F, 1.0F, 0.0F);
+		if (te.getWorld() != null & te.getPos() != null) {
+	        EnumFacing enumfacing = (EnumFacing)te.getWorld().getBlockState(te.getPos()).getValue(BlockNameBanner.FACING);
+	        TileEntity te1 = te.getWorld().getTileEntity(te.getPos().offset(enumfacing.getOpposite()));
+	        if (te1 instanceof TileEntityColorful)
+	        {
+	        	GlStateManager.rotate(-((TileEntityColorful)te1).getRotation(), 0, 1, 0);
+	        }
+		}
 		GlStateManager.translate(-0.0175F, -0.3125F - 0.05, -0.5375F + 0.055);
 		GlStateManager.enableRescaleNormal();
 		float a = 0, b = 0, corr = 0.055f;

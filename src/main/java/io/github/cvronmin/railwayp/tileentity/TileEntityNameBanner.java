@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -36,6 +37,7 @@ public class TileEntityNameBanner extends TileEntityBanner
     private int bannerType;
 	private boolean patternDataSet;
 	private String patternResourceLocation;
+
     private void decodeColor(){
     	if(colorEncoded.length() <= 6)
     	if(!colorEncoded.startsWith("0x")){

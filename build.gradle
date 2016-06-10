@@ -24,7 +24,7 @@ plugins {
 */
 targetCompatibility = "1.7"
 sourceCompatibility = "1.7"
-version = "1.0"
+version = "1.9_1.1"
 group= "io.github.cvronmin.railwayp" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "railwayp"
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'

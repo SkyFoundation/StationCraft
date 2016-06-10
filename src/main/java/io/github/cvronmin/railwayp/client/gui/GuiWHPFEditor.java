@@ -52,12 +52,14 @@ public class GuiWHPFEditor extends GuiScreen {
 	private GuiTextField text1TextField;
 	/** Text Field to set NBT Text2 **/
 	private GuiTextField text2TextField;
-	private TileEntityWHPF te;
+	private TileEntityWHPF te, teedit;
 	private NBTTagCompound nbtbu, nbt;
 	private GuiButton doneBtn;
 	private GuiButton cancelBtn;
 	public GuiWHPFEditor(TileEntityWHPF te){
 		this.te = te;
+		teedit = new TileEntityWHPF();
+		teedit.readFromNBT(this.te.serializeNBT());
 		nbtbu = new NBTTagCompound();
 		nbt = new NBTTagCompound();
 		te.writeToNBT(nbtbu);
@@ -143,15 +145,15 @@ public class GuiWHPFEditor extends GuiScreen {
     	this.text1TextField.textboxKeyTyped(typedChar, keyCode);
     	this.text2TextField.textboxKeyTyped(typedChar, keyCode);
     	this.rotationTextField.textboxKeyTyped(typedChar, keyCode);
-        this.te.setData(
+        this.teedit.setData(
         		Integer.parseInt(!platformTextField.getText().isEmpty() ? platformTextField.getText() : "1"),
         		Byte.parseByte(!directionTextField.getText().isEmpty() ? directionTextField.getText() : "0"),
         		Short.parseShort(!rotationTextField.getText().isEmpty() ? rotationTextField.getText() : "0"),
         		!colorTextField.getText().isEmpty() ? colorTextField.getText() : "191919",
         		!text1TextField.getText().isEmpty() ? text1TextField.getText() : "",
         				!text2TextField.getText().isEmpty() ? text2TextField.getText() : "");
-        this.te.writeToNBT(nbt);
-        this.te.readFromNBT(nbt);
+        this.teedit.writeToNBT(nbt);
+        this.teedit.readFromNBT(nbt);
         if (keyCode != 28 && keyCode != 156)
         {
             if (keyCode == 1)
@@ -209,7 +211,7 @@ public class GuiWHPFEditor extends GuiScreen {
 
         if (block == RPBlocks.roof_where_pf)
         {
-            float f1 = (float)te.getRotation();
+            float f1 = (float)teedit.getRotation();
             GlStateManager.rotate(f1, 0.0F, 1.0F, 0.0F);
             GlStateManager.translate(0.0F, -1.0625F, 0.0F);
         }
@@ -236,7 +238,7 @@ public class GuiWHPFEditor extends GuiScreen {
             GlStateManager.rotate(f2, 0.0F, 1.0F, 0.0F);
             GlStateManager.translate(0.0F, -1.0625F, 0.0F);
         }
-        TileEntityRendererDispatcher.instance.renderTileEntityAt(this.te, -0.5D, -0.75D, -0.5D, 0.0F);
+        TileEntityRendererDispatcher.instance.renderTileEntityAt(this.teedit, -0.5D, -0.75D, -0.5D, 0.0F);
         GlStateManager.popMatrix();
 	}
 	protected void actionPerformed(GuiButton button) {
@@ -251,12 +253,12 @@ public class GuiWHPFEditor extends GuiScreen {
             list.add(this.colorTextField.getText());
             list.add(this.text1TextField.getText());
             list.add(this.text2TextField.getText());
-            RailwayP.channelHandle.sendToAll(new RPPacket(EnumRPPacket.C_UPDATE_WHPF, list));
+            RailwayP.channelHandle.sendToServer(new RPPacket(EnumRPPacket.C_UPDATE_WHPF, list));
             this.mc.displayGuiScreen(null);
 		}
 
 		if (button.id == 1) {
-			te.readFromNBT(nbtbu);
+			teedit.readFromNBT(nbtbu);
             this.mc.displayGuiScreen(null);
 		}
 

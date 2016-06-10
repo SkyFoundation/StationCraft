@@ -28,6 +28,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
+import scala.annotation.bridge;
 
 public class RPPacket extends Packet implements IRPPacket {
 
@@ -219,8 +220,86 @@ public class RPPacket extends Packet implements IRPPacket {
 
 	@Override
 	public void handleServerSide(EntityPlayer player) {
-		// TODO Auto-generated method stub
-
+		try {
+			switch (this.type) {
+			case C_UPDATETHISSTATION:
+				ClientProxy.statio.setThis(String.valueOf(this.data.get(0)));
+				break;
+			case C_UPDATENEXTSTATION:
+				ClientProxy.statio.setNext(String.valueOf(this.data.get(0)));
+				break;
+			case C_UPDATEINTERCHANGE:
+				ClientProxy.statio.setInterchange(String.valueOf(this.data.get(0)));
+				break;
+			case C_UPDATEPLATFORMBANNER:
+				TileEntityPlatformBanner te = null;
+                BlockPos blockpos1 = new BlockPos(Integer.valueOf(String.valueOf(data.get(0))), Integer.valueOf(String.valueOf(data.get(1))), Integer.valueOf(String.valueOf(data.get(2))));
+        		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        		World world = server.worldServers[0];
+                TileEntity tileentity2 = world.getTileEntity(blockpos1);
+                IBlockState state = world.getBlockState(blockpos1);
+                if(tileentity2 instanceof TileEntityPlatformBanner) te = (TileEntityPlatformBanner)tileentity2;
+                if(te == null) break;
+                try {
+                	String pf = String.valueOf(data.get(3));
+                	if(pf.isEmpty())pf = "1";
+                	String dir = String.valueOf(data.get(4));
+                	if(dir.isEmpty())dir = "0";
+                    te.setData(Integer.valueOf(pf), Byte.valueOf(dir), String.valueOf(data.get(5)), String.valueOf(data.get(6)), String.valueOf(data.get(7)));
+                    te.markDirty();
+                    world.notifyBlockUpdate(blockpos1, state, state, 3);
+                } catch (Exception e) {
+                	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
+				}
+				break;
+			case C_UPDATENAME_BANNER:
+				TileEntityNameBanner te1 = null;
+                BlockPos blockpos11 = new BlockPos(Integer.valueOf(String.valueOf(data.get(0))), Integer.valueOf(String.valueOf(data.get(1))), Integer.valueOf(String.valueOf(data.get(2))));
+        		MinecraftServer server1 = FMLCommonHandler.instance().getMinecraftServerInstance();
+        		World world1 = server1.worldServers[0];
+                TileEntity tileentity21 = world1.getTileEntity(blockpos11);
+                IBlockState state1 = world1.getBlockState(blockpos11);
+                if(tileentity21 instanceof TileEntityNameBanner) te1 = (TileEntityNameBanner)tileentity21;
+                if(te1 == null) break;
+                try {
+                	String signtype = String.valueOf(data.get(3));
+                	if(signtype.isEmpty())signtype = "0";
+                    te1.setData(Integer.valueOf(signtype), String.valueOf(data.get(4)), String.valueOf(data.get(5)), String.valueOf(data.get(6)), String.valueOf(data.get(7)));
+                    te1.markDirty();
+                    world1.notifyBlockUpdate(blockpos11, state1, state1, 3);
+                } catch (Exception e) {
+                	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
+				}
+				break;
+			case C_UPDATE_WHPF:
+				TileEntityWHPF te11 = null;
+                BlockPos blockpos111 = new BlockPos(Integer.valueOf(String.valueOf(data.get(0))), Integer.valueOf(String.valueOf(data.get(1))), Integer.valueOf(String.valueOf(data.get(2))));
+        		MinecraftServer server11 = FMLCommonHandler.instance().getMinecraftServerInstance();
+        		World world11 = server11.worldServers[0];
+                TileEntity tileentity211 = world11.getTileEntity(blockpos111);
+                IBlockState state11 = world11.getBlockState(blockpos111);
+                if(tileentity211 instanceof TileEntityWHPF) te11 = (TileEntityWHPF)tileentity211;
+                if(te11 == null) break;
+                try {
+                	String pf1 = String.valueOf(data.get(3));
+                	if(pf1.isEmpty())pf1 = "0";
+                	String dir = String.valueOf(data.get(4));
+                	if(dir.isEmpty())dir = "0";
+                	String r = String.valueOf(data.get(5));
+                	if(r.isEmpty())r = "0";
+                    te11.setData(Integer.valueOf(pf1), Byte.parseByte(dir), Short.parseShort(r), String.valueOf(data.get(6)), String.valueOf(data.get(7)), String.valueOf(data.get(8)));
+                    te11.markDirty();
+                    world11.notifyBlockUpdate(blockpos111, state11, state11, 3);
+                } catch (Exception e) {
+                	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
+				}
+				break;
+			default:
+				break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

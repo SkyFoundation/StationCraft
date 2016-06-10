@@ -49,12 +49,14 @@ public class GuiNameBannerEditor extends GuiScreen {
 	private GuiTextField text1TextField;
 	/** Text Field to set NBT Text2 **/
 	private GuiTextField text2TextField;
-	private TileEntityNameBanner te;
+	private TileEntityNameBanner te, teedit;
 	private NBTTagCompound nbtbu, nbt;
 	private GuiButton doneBtn;
 	private GuiButton cancelBtn;
 	public GuiNameBannerEditor(TileEntityNameBanner te){
 		this.te = te;
+		this.teedit = new TileEntityNameBanner();
+		teedit.readFromNBT(this.te.serializeNBT());
 		nbtbu = new NBTTagCompound();
 		nbt = new NBTTagCompound();
 		te.writeToNBT(nbtbu);
@@ -97,7 +99,6 @@ public class GuiNameBannerEditor extends GuiScreen {
 		
 		this.buttonList.add(doneBtn = new GuiButton(0, posX - 4 - 150, this.height - 40, 150, 20, I18n.format("gui.done", new Object[0])));
 		this.buttonList.add(cancelBtn = new GuiButton(1, posX + 4, this.height - 40, 150, 20, I18n.format("gui.cancel", new Object[0])));
-
 	}
     /**
      * Called when the screen is unloaded. Used to disable keyboard repeat events
@@ -117,14 +118,14 @@ public class GuiNameBannerEditor extends GuiScreen {
     	this.colorTextField.textboxKeyTyped(typedChar, keyCode);
     	this.text1TextField.textboxKeyTyped(typedChar, keyCode);
     	this.text2TextField.textboxKeyTyped(typedChar, keyCode);
-        this.te.setData(
+        this.teedit.setData(
         		Integer.parseInt(!signTypeTextField.getText().isEmpty() ? signTypeTextField.getText() : "0"),
         		!stationColorTextField.getText().isEmpty() ? stationColorTextField.getText() : "BBBBBB",
         		!colorTextField.getText().isEmpty() ? colorTextField.getText() : "191919",
         		!text1TextField.getText().isEmpty() ? text1TextField.getText() : "",
         				!text2TextField.getText().isEmpty() ? text2TextField.getText() : "");
-        this.te.writeToNBT(nbt);
-        this.te.readFromNBT(nbt);
+        this.teedit.writeToNBT(nbt);
+        this.teedit.readFromNBT(nbt);
         if (keyCode != 28 && keyCode != 156)
         {
             if (keyCode == 1)
@@ -193,10 +194,10 @@ public class GuiNameBannerEditor extends GuiScreen {
                 f2 = -90.0F;
             }
 
-            GlStateManager.rotate(f2, 0.0F, 1.0F, 0.0F);
+            //GlStateManager.rotate(-f2, 0.0F, 1.0F, 0.0F);
             GlStateManager.translate(0.0F, -1.0625F, 0.0F);
 
-        TileEntityRendererDispatcher.instance.renderTileEntityAt(this.te, -0.5D, -0.75D, -0.5D, 0.0F);
+        TileEntityRendererDispatcher.instance.renderTileEntityAt(this.teedit, -0.5D, -0.75D, -0.5D, 0.0F);
         GlStateManager.popMatrix();
 	}
 	protected void actionPerformed(GuiButton button) {
@@ -210,12 +211,12 @@ public class GuiNameBannerEditor extends GuiScreen {
             list.add(this.colorTextField.getText());
             list.add(this.text1TextField.getText());
             list.add(this.text2TextField.getText());
-            RailwayP.channelHandle.sendToAll(new RPPacket(EnumRPPacket.C_UPDATENAME_BANNER, list));
+            RailwayP.channelHandle.sendToServer(new RPPacket(EnumRPPacket.C_UPDATENAME_BANNER, list));
             this.mc.displayGuiScreen(null);
 		}
 
 		if (button.id == 1) {
-			te.readFromNBT(nbtbu);
+			teedit.readFromNBT(nbtbu);
             this.mc.displayGuiScreen(null);
 		}
 

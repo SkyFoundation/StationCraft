@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,7 +37,6 @@ public class TileEntityWHPF extends TileEntityBanner {
 	 * used for texture caching.
 	 */
 	private String patternResourceLocation;
-
 	private void decodeColor() {
 		if (routeColorEncoded.length() <= 6)
 			if (!routeColorEncoded.startsWith("0x")) {

@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.RecipeSorter.Category;
 
 public class RPCraftingManager {
 	public static void register() {
@@ -35,6 +36,7 @@ public class RPCraftingManager {
 				'B',Items.DYE});
 		registerMosaticTile();
 		registerPlate();
+		net.minecraftforge.oredict.RecipeSorter.register("railwayp:cloning", CloningRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless");
 		registerCloningRecipe();
 	}
 	private static void registerMosaticTile(){
