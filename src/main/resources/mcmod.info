@@ -1,8 +1,8 @@
 [
 {
-  "modid": "lanfasy",
-  "name": "Lanfasy",
-  "description": "A mod.",
+  "modid": "railwayp",
+  "name": "StatCraft",
+  "description": "A mod of railway station decorations and utilities",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",

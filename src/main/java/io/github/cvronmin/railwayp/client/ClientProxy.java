@@ -56,7 +56,7 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWHPF.class, new TileEntityWHPFRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityColorful.class, new TileEntityColorfulRenderer());
 		statio = new GuiPen(FMLClientHandler.instance().getClient());
-		MinecraftForge.EVENT_BUS.register(statio);
+		//MinecraftForge.EVENT_BUS.register(statio);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	@SubscribeEvent

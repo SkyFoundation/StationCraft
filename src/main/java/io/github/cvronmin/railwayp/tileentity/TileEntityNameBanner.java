@@ -214,7 +214,7 @@ public class TileEntityNameBanner extends TileEntityBanner
                 this.colorList.add(0xFFFFFF);
                 this.patternResourceLocation = "b" + 0xFFFFFF;
                 
-                if (this.checkGoodBanner() | true) {
+                if (this.checkGoodBanner()) {
                 	EnumUnifiedBannerPattern enumbannerpattern = EnumUnifiedBannerPattern.NAMEBANNER_BASE;
 
                     if (enumbannerpattern != null)
@@ -223,6 +223,9 @@ public class TileEntityNameBanner extends TileEntityBanner
                         this.colorList.add(stationColor);
                         this.patternResourceLocation = this.patternResourceLocation + enumbannerpattern.getPatternID() + stationColor;
                     }
+                    if (bannerType != 2) {
+						
+					
                     enumbannerpattern = EnumUnifiedBannerPattern.NAMEBANNER_RIBBON;
 
                     if (enumbannerpattern != null)
@@ -238,6 +241,7 @@ public class TileEntityNameBanner extends TileEntityBanner
                         this.patternList.add(enumbannerpattern);
                         this.colorList.add(0x0);
                         this.patternResourceLocation = this.patternResourceLocation + enumbannerpattern.getPatternID() + 0;
+                    }
                     }
 				}
             }

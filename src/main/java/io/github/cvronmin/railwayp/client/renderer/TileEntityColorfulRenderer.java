@@ -39,7 +39,7 @@ public class TileEntityColorfulRenderer extends TileEntitySpecialRenderer<TileEn
             GlStateManager.translate((float)x + 0.5F, (float)y +0.5f, (float)z + 0.5F);
         	//GlStateManager.translate(-Math.cos(Math.toRadians(te.getRotation())) /2, 0, -Math.sin(Math.toRadians(te.getRotation())) /2);
             //float f2 = (float)(j * 360) / 16.0F;
-            GlStateManager.rotate(-te.getRotation(), 0.0F, 1.0F, 0.0F);
+            //GlStateManager.rotate(-te.getRotation(), 0.0F, 1.0F, 0.0F);
 
         GlStateManager.enableRescaleNormal();
         ResourceLocation resourcelocation = this.func_178463_a(te);

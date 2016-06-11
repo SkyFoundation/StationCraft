@@ -32,6 +32,8 @@ import scala.Tuple1;
 public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<TileEntityNameBanner> {
 	private ModelNameBanner model = new ModelNameBanner();
 	private static final int TEXT2_MAX_ALLOW_LENGTH = 64;
+	private static final int TEXT1_VERICAL_MAX_ALLOW_LENGTH = 72;
+	private static final int TEXT1_HORIZONTAL_MAX_ALLOW_LENGTH = 48;
 	@Override
 	public void renderTileEntityAt(TileEntityNameBanner te, double x, double y, double z, float partialTicks,
 			int destroyStage) {
@@ -63,7 +65,8 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 	        TileEntity te1 = te.getWorld().getTileEntity(te.getPos().offset(enumfacing.getOpposite()));
 	        if (te1 instanceof TileEntityColorful)
 	        {
-	        	GlStateManager.rotate(-((TileEntityColorful)te1).getRotation(), 0, 1, 0);
+        		//GlStateManager.translate(-Math.cos(Math.toRadians(((TileEntityColorful)te1).getRotation())), 0, -Math.sin(Math.toRadians(((TileEntityColorful)te1).getRotation())));
+	        	//GlStateManager.rotate(-((TileEntityColorful)te1).getRotation(), 0, 1, 0);
 	        }
 		}
 		GlStateManager.translate(-0.0175F, -0.3125F - 0.05, -0.5375F + 0.055);
@@ -100,13 +103,17 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 				List<ITextComponent> list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false,
 						true);
 				String s = list != null && list.size() > 0 ? ((ITextComponent) list.get(0)).getFormattedText() : "";
+
 				if (requireHdraw){
 					String s1 = list != null && list.size() > 0 ? ((ITextComponent) list.get(0)).getUnformattedText() : "";
-					drawHString(fontrenderer,s1, -fontrenderer.getCharWidth(s.charAt(0)),
+					//System.out.println(fontrenderer.FONT_HEIGHT * s.length());
+					drawVString(fontrenderer,s1, -fontrenderer.getCharWidth(s.charAt(0)),
 							-fontrenderer.FONT_HEIGHT * s.length(), te.getColor());
-				}else
+				}else{
+					//System.out.println(fontrenderer.getStringWidth(s));
 					fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, 0 * 10 - te.signText.length * 5,
 							te.getColor());
+				}
 			}
 		}
 		GlStateManager.depthMask(true);
@@ -140,19 +147,19 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 		return UnifedBannerTextures.NAMESIGN_DESIGNS.getResourceLocation(te.getPatternResourceLocation(),
 				te.getPatternList(), te.getColorList());
 	}
-	private void drawHString(FontRenderer fr, String s, int x, int y, int color){
+	private void drawVString(FontRenderer fr, String s, int x, int y, int color){
 		char[] sa = s.toCharArray();
 		for (int i = 0; i < sa.length; i++) {
 			char c = sa[i];
-            if (c == 167 && i + 1 < s.length())
+            /*if (c == 167 && i + 1 < s.length())
             {
                 int i1 = "0123456789abcdefklmnor".indexOf(s.toLowerCase(Locale.ENGLISH).charAt(i + 1));
                 if(i1 != -1){
                 	i++;
                 	continue;
                 }
-            }
-			fr.drawString(Character.toString(c), x - fr.getCharWidth(c) / 2, y + i*fr.getCharWidth(c), color);
+            }*/
+			fr.drawString(Character.toString(c), x - fr.getCharWidth(c) / 2, y + fr.FONT_HEIGHT * i, color);
 		}
 	}
 }
