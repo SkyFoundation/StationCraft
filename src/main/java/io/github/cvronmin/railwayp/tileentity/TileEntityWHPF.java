@@ -4,22 +4,21 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityWHPF extends TileEntityBanner {
-	public final ITextComponent[] signText = new ITextComponent[] { new TextComponentString(""),
-			new TextComponentString("") };
+	public final IChatComponent[] signText = new IChatComponent[] { new ChatComponentText(""),
+			new ChatComponentText("") };
 	private int baseColor;
 	private boolean field_175119_g;
 	/** A list of all patterns stored on this banner. */
@@ -80,7 +79,7 @@ public class TileEntityWHPF extends TileEntityBanner {
 				if (nbttagcompound.hasKey("Text" + (i + 1))) {
 					String s = nbttagcompound.getString("Text" + (i + 1));
 
-					ITextComponent ichatcomponent = ITextComponent.Serializer.jsonToComponent(s);
+					IChatComponent ichatcomponent = IChatComponent.Serializer.jsonToComponent(s);
 					this.signText[i] = ichatcomponent;
 
 				}
@@ -108,7 +107,7 @@ public class TileEntityWHPF extends TileEntityBanner {
 		}
 		compound.setShort("Rotation", truebearing > 359 ? 359 : (truebearing < 0 ? 0 : truebearing));
 		for (int i = 0; i < 2; ++i) {
-			String s = ITextComponent.Serializer.componentToJson(this.signText[i]);
+			String s = IChatComponent.Serializer.componentToJson(this.signText[i]);
 			compound.setString("Text" + (i + 1), s);
 		}
 	}
@@ -127,7 +126,7 @@ public class TileEntityWHPF extends TileEntityBanner {
 		for (int i = 0; i < 2; ++i) {
 			String s = compound.getString("Text" + (i + 1));
 
-			ITextComponent ichatcomponent = ITextComponent.Serializer.jsonToComponent(s);
+			IChatComponent ichatcomponent = IChatComponent.Serializer.jsonToComponent(s);
 			this.signText[i] = ichatcomponent;
 
 		}
@@ -145,7 +144,7 @@ public class TileEntityWHPF extends TileEntityBanner {
 	public Packet getDescriptionPacket() {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		this.writeToNBT(nbttagcompound);
-		return new SPacketUpdateTileEntity(this.pos, 6, nbttagcompound);
+		return new S35PacketUpdateTileEntity(this.pos, 6, nbttagcompound);
 	}
 	public short getRotation(){
 		return truebearing > 359 ? 359 : (truebearing < 0 ? 0 : truebearing);
@@ -314,8 +313,8 @@ public class TileEntityWHPF extends TileEntityBanner {
     	this.direction = dir;
     	truebearing = rotation;
     	this.routeColorEncoded = color;
-    	this.signText[0] = new TextComponentString(t1);
-    	this.signText[1] = new TextComponentString(t2);
+    	this.signText[0] = new ChatComponentText(t1);
+    	this.signText[1] = new ChatComponentText(t2);
     	decodeColor();
     }
 }

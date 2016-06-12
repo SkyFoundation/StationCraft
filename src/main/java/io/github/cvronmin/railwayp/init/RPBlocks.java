@@ -33,10 +33,10 @@ public class RPBlocks {
 	public static final BlockWHPF roof_where_pf = (BlockWHPF) new BlockWHPF.BlockBannerStanding().setUnlocalizedName("whpf");
 	public static final BlockWHPF wall_where_pf = (BlockWHPF) new BlockWHPF.BlockBannerHanging().setUnlocalizedName("whpf");
 	//焗漆板
-	public static final BlockColorful plate = (BlockColorful) new BlockColorful(Material.IRON).setUnlocalizedName("plate");
+	public static final BlockColorful plate = (BlockColorful) new BlockColorful(Material.iron).setUnlocalizedName("plate");
 	//紙皮石
-	public static final BlockColorful mosaic_tile = (BlockColorful) new BlockColorful(Material.ROCK).setUnlocalizedName("mosaic_tile");
-	public static final BlockRailNoticer noticer = (BlockRailNoticer) new BlockRailNoticer().setUnlocalizedName("noticer").setCreativeTab(CreativeTabs.TRANSPORTATION);
+	public static final BlockColorful mosaic_tile = (BlockColorful) new BlockColorful(Material.rock).setUnlocalizedName("mosaic_tile");
+	public static final BlockRailNoticer noticer = (BlockRailNoticer) new BlockRailNoticer().setUnlocalizedName("noticer").setCreativeTab(CreativeTabs.tabTransport);
 	public static void register(){
 		registerItemlessBlock(wall_platform_banner, "wall_platform_banner");
 		registerItemlessBlock(wall_name_banner, "wall_name_banner");
@@ -53,14 +53,13 @@ public class RPBlocks {
 	}
 	private static void registerItemlessBlock(Block block, String name){
 		ResourceLocation rl = new ResourceLocation(Reference.MODID, name);
-		GameRegistry.register(block.setRegistryName(rl));
+		GameRegistry.registerBlock(block.setRegistryName(rl), (Class<? extends ItemBlock>)null);
 	}
 	private static void registerBlock(Block block, String name){
 		registerBlock(block, new ItemBlock(block), name);
 	}
 	private static void registerBlock(Block block, ItemBlock itemBlock, String name){
 		ResourceLocation rl = new ResourceLocation(Reference.MODID, name);
-		GameRegistry.register(block.setRegistryName(rl));
-		GameRegistry.register(itemBlock.setRegistryName(rl));
+		GameRegistry.registerBlock(block.setRegistryName(rl));
 	}
 }

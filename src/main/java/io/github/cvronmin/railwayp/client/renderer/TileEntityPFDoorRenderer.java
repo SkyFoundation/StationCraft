@@ -11,34 +11,34 @@ import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class TileEntityPFDoorRenderer extends TileEntitySpecialRenderer<TileEntityPFDoor>
+public class TileEntityPFDoorRenderer extends TileEntitySpecialRenderer
 {
-    private BlockRendererDispatcher blockRenderer;
+    private final BlockRendererDispatcher blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
 
-    public void renderTileEntityAt(TileEntityPFDoor te, double x, double y, double z, float partialTicks, int destroyStage)
+    public void func_178461_a(TileEntityPFDoor piston, double p_178461_2_, double p_178461_4_, double p_178461_6_, float p_178461_8_, int p_178461_9_)
     {
-        if(blockRenderer == null) blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
-        BlockPos blockpos = te.getPos();
-        IBlockState iblockstate = te.getPistonState();
+        BlockPos blockpos = piston.getPos();
+        IBlockState iblockstate = piston.getPistonState();
         Block block = iblockstate.getBlock();
 
-        if (iblockstate.getMaterial() != Material.AIR && te.getProgress(partialTicks) < 1.0F)
+        if (block.getMaterial() != Material.air && piston.getProgress(p_178461_8_) < 1.0F)
         {
             Tessellator tessellator = Tessellator.getInstance();
-            VertexBuffer vertexbuffer = tessellator.getBuffer();
-            this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+            this.bindTexture(TextureMap.locationBlocksTexture);
             RenderHelper.disableStandardItemLighting();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            GlStateManager.blendFunc(770, 771);
             GlStateManager.enableBlend();
             GlStateManager.disableCull();
 
@@ -50,37 +50,38 @@ public class TileEntityPFDoorRenderer extends TileEntitySpecialRenderer<TileEnti
             {
                 GlStateManager.shadeModel(7424);
             }
-            vertexbuffer.begin(7, DefaultVertexFormats.BLOCK);
-            vertexbuffer.setTranslation((double)((float)x - (float)blockpos.getX() + te.getOffsetX(partialTicks)), (double)((float)y - (float)blockpos.getY() + te.getOffsetY(partialTicks)), (double)((float)z - (float)blockpos.getZ() + te.getOffsetZ(partialTicks)));
+
+            worldrenderer.begin(7, DefaultVertexFormats.BLOCK);
+            worldrenderer.setTranslation((double)((float)p_178461_2_ - (float)blockpos.getX() + (piston.getOffsetX(p_178461_8_) * 0.5f)), (double)((float)p_178461_4_ - (float)blockpos.getY() + (piston.getOffsetY(p_178461_8_) * 0.5f)), (double)((float)p_178461_6_ - (float)blockpos.getZ() + (piston.getOffsetZ(p_178461_8_) * 0.5f)));
             World world = this.getWorld();
 
-            if (block == RPBlocks.platform_door_head && te.getProgress(partialTicks) < 0.5F)
+            if (block == RPBlocks.platform_door_head && piston.getProgress(p_178461_8_) < 0.5F)
             {
                 iblockstate = iblockstate.withProperty(BlockPlatformDoor.Extension.SHORT, Boolean.valueOf(true));
-                this.renderStateModel(blockpos, iblockstate, vertexbuffer, world, true);
+                this.blockRenderer.getBlockModelRenderer().renderModel(world, this.blockRenderer.getModelFromBlockState(iblockstate, world, blockpos), iblockstate, blockpos, worldrenderer, true);
             }
-            else if (te.shouldPistonHeadBeRendered() && !te.isExtending())
+            else if (piston.shouldPistonHeadBeRendered() && !piston.isExtending())
             {
                 IBlockState iblockstate1 = RPBlocks.platform_door_head.getDefaultState().withProperty(BlockPlatformDoor.Extension.FACING, iblockstate.getValue(BlockPlatformDoor.Base.FACING));
-                iblockstate1 = iblockstate1.withProperty(BlockPlatformDoor.Extension.SHORT, Boolean.valueOf(te.getProgress(partialTicks) >= 0.5F));
-                this.renderStateModel(blockpos, iblockstate, vertexbuffer, world, true);
-                vertexbuffer.setTranslation((double)((float)x - (float)blockpos.getX()), (double)((float)y - (float)blockpos.getY()), (double)((float)z - (float)blockpos.getZ()));
+                iblockstate1 = iblockstate1.withProperty(BlockPlatformDoor.Extension.SHORT, Boolean.valueOf(piston.getProgress(p_178461_8_) >= 0.5F));
+                this.blockRenderer.getBlockModelRenderer().renderModel(world, this.blockRenderer.getModelFromBlockState(iblockstate1, world, blockpos), iblockstate1, blockpos, worldrenderer, true);
+                worldrenderer.setTranslation((double)((float)p_178461_2_ - (float)blockpos.getX()), (double)((float)p_178461_4_ - (float)blockpos.getY()), (double)((float)p_178461_6_ - (float)blockpos.getZ()));
                 iblockstate.withProperty(BlockPlatformDoor.Base.EXTENDED, Boolean.valueOf(true));
-                this.renderStateModel(blockpos, iblockstate, vertexbuffer, world, true);
-                }
+                this.blockRenderer.getBlockModelRenderer().renderModel(world, this.blockRenderer.getModelFromBlockState(iblockstate, world, blockpos), iblockstate, blockpos, worldrenderer, true);
+            }
             else
             {
-                this.renderStateModel(blockpos, iblockstate, vertexbuffer, world, false);
+                this.blockRenderer.getBlockModelRenderer().renderModel(world, this.blockRenderer.getModelFromBlockState(iblockstate, world, blockpos), iblockstate, blockpos, worldrenderer, false);
             }
 
-            vertexbuffer.setTranslation(0.0D, 0.0D, 0.0D);
+            worldrenderer.setTranslation(0.0D, 0.0D, 0.0D);
             tessellator.draw();
             RenderHelper.enableStandardItemLighting();
         }
     }
 
-    private boolean renderStateModel(BlockPos p_188186_1_, IBlockState p_188186_2_, VertexBuffer p_188186_3_, World p_188186_4_, boolean p_188186_5_)
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage)
     {
-        return this.blockRenderer.getBlockModelRenderer().renderModel(p_188186_4_, this.blockRenderer.getModelForState(p_188186_2_), p_188186_2_, p_188186_1_, p_188186_3_, p_188186_5_);
+        this.func_178461_a((TileEntityPFDoor)te, x, y, z, partialTicks, destroyStage);
     }
 }

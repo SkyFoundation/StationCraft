@@ -3,7 +3,6 @@ package io.github.cvronmin.railwayp.client.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.lwjgl.input.Keyboard;
@@ -12,31 +11,15 @@ import com.google.common.base.Predicate;
 
 import io.github.cvronmin.railwayp.RailwayP;
 import io.github.cvronmin.railwayp.network.RPPacket;
-import io.github.cvronmin.railwayp.network.RPPacketHandler;
 import io.github.cvronmin.railwayp.network.RPPacket.EnumRPPacket;
 import io.github.cvronmin.railwayp.tileentity.TileEntityNameBanner;
-import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
-import io.github.cvronmin.railwayp.util.NTUtil;
-import io.netty.buffer.Unpooled;
-import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.client.CPacketCustomPayload;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class GuiNameBannerEditor extends GuiScreen {
 	/** Text Field to set NBT SignType **/
@@ -70,7 +53,7 @@ public class GuiNameBannerEditor extends GuiScreen {
 
 		this.signTypeTextField = new GuiTextField(10, this.fontRendererObj, posX + (-75 / 2 - 95), posY + (-80), 75, 20);
 		this.signTypeTextField.setMaxStringLength(1);
-		this.signTypeTextField.setValidator(new Predicate<String>() {
+		this.signTypeTextField.func_175205_a(new Predicate<String>() {
 			@Override
 			public boolean apply(String input) {
 				for(char ch : input.toCharArray()){

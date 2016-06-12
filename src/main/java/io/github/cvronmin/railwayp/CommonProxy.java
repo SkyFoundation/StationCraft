@@ -14,7 +14,7 @@ import io.github.cvronmin.railwayp.tileentity.TileEntityRouteSignage;
 import io.github.cvronmin.railwayp.tileentity.TileEntityWHPF;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.network.INetHandler;
@@ -56,18 +56,7 @@ public class CommonProxy {
     	GameRegistry.registerTileEntity(TileEntityColorful.class, "Colorful");
     	GameRegistry.registerTileEntity(TileEntityRailNoticer.class, "noticer");
     }
-	protected void blockRend(Block block, String registerName){
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0,
-                new ModelResourceLocation("railwayp:" + registerName, "inventory"));
-	}
-	protected void itemRend(Item item, String registerName){
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0,
-                new ModelResourceLocation("railwayp:" + registerName, "inventory"));
-	}
-	protected void itemRend(Item item, int damage, String ideniter){
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, damage,
-                new ModelResourceLocation("railwayp:" + ideniter, "inventory"));
-	}
+
 	public EntityPlayer getPlayerFromNetHandler(INetHandler handler)
 	{
 		if (handler instanceof NetHandlerPlayServer)

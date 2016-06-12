@@ -18,6 +18,10 @@ import io.github.cvronmin.railwayp.tileentity.TileEntityPFDoor;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
 import io.github.cvronmin.railwayp.tileentity.TileEntityRouteSignage;
 import io.github.cvronmin.railwayp.tileentity.TileEntityWHPF;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -61,6 +65,18 @@ public class ClientProxy extends CommonProxy{
 	}
 	@SubscribeEvent
 	public void onModelBake(ModelBakeEvent event){
-		event.getModelManager().getBlockModelShapes().registerBuiltInBlocks(RPBlocks.wall_where_pf, RPBlocks.roof_where_pf,RPBlocks.wall_name_banner,RPBlocks.wall_platform_banner,RPBlocks.wall_route_sign,RPBlocks.platform_door_extension);
+		event.modelManager.getBlockModelShapes().registerBuiltInBlocks(RPBlocks.wall_where_pf, RPBlocks.roof_where_pf,RPBlocks.wall_name_banner,RPBlocks.wall_platform_banner,RPBlocks.wall_route_sign,RPBlocks.platform_door_extension);
+	}
+	protected void blockRend(Block block, String registerName){
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0,
+                new ModelResourceLocation("railwayp:" + registerName, "inventory"));
+	}
+	protected void itemRend(Item item, String registerName){
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0,
+                new ModelResourceLocation("railwayp:" + registerName, "inventory"));
+	}
+	protected void itemRend(Item item, int damage, String ideniter){
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, damage,
+                new ModelResourceLocation("railwayp:" + ideniter, "inventory"));
 	}
 }

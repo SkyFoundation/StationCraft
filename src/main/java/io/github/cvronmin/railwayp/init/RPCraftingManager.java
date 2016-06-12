@@ -16,24 +16,24 @@ public class RPCraftingManager {
 		GameRegistry.addRecipe(new ItemStack(RPItems.platform_banner, 2), new Object[]{
 				"AAA",
 				"BBB",
-				'A', new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,EnumDyeColor.WHITE.getMetadata()),
-				'B',Blocks.PLANKS});
+				'A', new ItemStack(Blocks.stained_hardened_clay,1,EnumDyeColor.WHITE.getMetadata()),
+				'B',Blocks.planks});
 		GameRegistry.addRecipe(new ItemStack(RPItems.whpf, 2), new Object[]{
 				"AAA",
 				"BBB",
-				'A', new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,EnumDyeColor.BLACK.getMetadata()),
-				'B',Blocks.PLANKS});
+				'A', new ItemStack(Blocks.stained_hardened_clay,1,EnumDyeColor.BLACK.getMetadata()),
+				'B',Blocks.planks});
 		GameRegistry.addRecipe(new ItemStack(RPItems.name_banner, 4), new Object[]{
 				" A ",
 				"BBB",
-				'A', Items.SIGN,
-				'B',Blocks.STAINED_HARDENED_CLAY});
+				'A', Items.sign,
+				'B',Blocks.stained_hardened_clay});
 		GameRegistry.addRecipe(new ItemStack(RPItems.EDITOR, 1), new Object[]{
 				"  A",
 				" A ",
 				"B  ",
-				'A', Items.STICK,
-				'B',Items.DYE});
+				'A', Items.stick,
+				'B',Items.dye});
 		registerMosaticTile();
 		registerPlate();
 		net.minecraftforge.oredict.RecipeSorter.register("railwayp:cloning", CloningRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless");
@@ -45,8 +45,8 @@ public class RPCraftingManager {
 					"ABA",
 					"BBB",
 					"ABA",
-					'A', new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, i),
-					'B',Items.QUARTZ});
+					'A', new ItemStack(Blocks.stained_hardened_clay, 1, i),
+					'B',Items.quartz});
 		}
 	}
 	private static void registerPlate(){
@@ -55,8 +55,8 @@ public class RPCraftingManager {
 					"AAA",
 					"ABA",
 					"AAA",
-					'B', new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, i),
-					'A',Items.IRON_INGOT});
+					'B', new ItemStack(Blocks.stained_hardened_clay, 1, i),
+					'A',Items.iron_ingot});
 		}
 	}
 	private static void registerCloningRecipe(){

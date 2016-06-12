@@ -1,8 +1,6 @@
 package io.github.cvronmin.railwayp.block;
 
-import io.github.cvronmin.railwayp.init.RPItems;
 import io.github.cvronmin.railwayp.tileentity.TileEntityColorful;
-import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -11,9 +9,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,28 +19,28 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockColorful extends BlockContainer{
 
 	public BlockColorful(){
-		this(Material.CLAY);
+		this(Material.clay);
 	}
 	public BlockColorful(Material material) {
 		super(material);
-		setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
+		setCreativeTab(CreativeTabs.tabBlock);
 	}
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer()
+    public EnumWorldBlockLayer getBlockLayer()
     {
-        return BlockRenderLayer.CUTOUT_MIPPED;
+        return EnumWorldBlockLayer.CUTOUT_MIPPED;
     }
     /**
      * The type of render function called. 3 for standard block models, 2 for TESR's, 1 for liquids, -1 is no render
      */
-    public EnumBlockRenderType getRenderType(IBlockState state)
+    public int getRenderType()
     {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+        return 2;
     }
     /**
      * Used to determine ambient occlusion and culling when rebuilding chunks for render
      */
-    public boolean isOpaqueCube(IBlockState state)
+    public boolean isOpaqueCube()
     {
         return false;
     }
@@ -78,7 +75,7 @@ public class BlockColorful extends BlockContainer{
         ItemStack itemstack = this.getTileDataItemStack(worldIn, pos, state);
         return itemstack != null ? itemstack : new ItemStack(this);
     }
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack)
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te)
     {
         if (te instanceof TileEntityColorful)
         {
@@ -94,7 +91,7 @@ public class BlockColorful extends BlockContainer{
         }
         else
         {
-            super.harvestBlock(worldIn, player, pos, state, (TileEntity)null, stack);
+            super.harvestBlock(worldIn, player, pos, state, (TileEntity)null);
         }
     }
     @Override

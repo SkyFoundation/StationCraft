@@ -9,17 +9,16 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,18 +27,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockNameBanner extends BlockContainer{
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 15);
-    //protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D);
-
 	public BlockNameBanner() {
-		super(Material.WOOD);
+		super(Material.wood);
     	this.disableStats();
+        float f = 0.25F;
+        float f1 = 1.0F;
+        this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f1, 0.5F + f);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
+    public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state)
     {
-        return NULL_AABB;
+        return null;
     }
-    public boolean isFullCube(IBlockState state)
+
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos)
+    {
+        this.setBlockBoundsBasedOnState(worldIn, pos);
+        return super.getSelectedBoundingBox(worldIn, pos);
+    }
+    public boolean isFullCube()
     {
         return false;
     }
@@ -48,26 +55,10 @@ public class BlockNameBanner extends BlockContainer{
     {
         return true;
     }
-    /**
-     * The type of render function called. 3 for standard block models, 2 for TESR's, 1 for liquids, -1 is no render
-     */
-    public EnumBlockRenderType getRenderType(IBlockState state)
-    {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
-    }
-    /**
-     * Used to determine ambient occlusion and culling when rebuilding chunks for render
-     */
-    public boolean isOpaqueCube(IBlockState state)
+
+    public boolean isOpaqueCube()
     {
         return false;
-    }
-    /**
-     * Return true if an entity can be spawned inside the block (used to get the player's bed spawn location)
-     */
-    public boolean canSpawnInBlock()
-    {
-        return true;
     }
     public TileEntity createNewTileEntity(World worldIn, int meta)
     {
@@ -111,7 +102,7 @@ public class BlockNameBanner extends BlockContainer{
         }
     }
 
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack)
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te)
     {
         if (te instanceof TileEntityNameBanner)
         {
@@ -127,7 +118,7 @@ public class BlockNameBanner extends BlockContainer{
         }
         else
         {
-            super.harvestBlock(worldIn, player, pos, state, (TileEntity)null, stack);
+            super.harvestBlock(worldIn, player, pos, state, (TileEntity)null);
         }
     }
     @SideOnly(Side.CLIENT)
@@ -135,24 +126,32 @@ public class BlockNameBanner extends BlockContainer{
     {
         return RPItems.name_banner;
     }
-
-    protected static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.875D, 1D, 0.78125, 1.0D);
-    protected static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1D, 0.78125D, 0.125);
-    protected static final AxisAlignedBB WEST_AABB = new AxisAlignedBB(0.875D, 0.0D, 0.0D, 1.0D, 0.78125D, 1.0D);
-    protected static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.125D, 0.78125D, 1.0D);
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos)
     {
-        switch ((EnumFacing)state.getValue(FACING))
+        EnumFacing enumfacing = (EnumFacing)worldIn.getBlockState(pos).getValue(FACING);
+        float f = 0.0F;
+        f=0.109375f;
+        float f1 = 0.78125F;
+        f1=0.890625f;
+        float f2 = 0.0F;
+        float f3 = 1.0F;
+        float f4 = 0.125F;
+        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+
+        switch (BlockNameBanner.SwitchEnumFacing.FACING_LOOKUP[enumfacing.ordinal()])
         {
-            case NORTH:
+            case 1:
             default:
-                return NORTH_AABB;
-            case SOUTH:
-                return SOUTH_AABB;
-            case WEST:
-                return WEST_AABB;
-            case EAST:
-                return EAST_AABB;
+                this.setBlockBounds(f2, f, 1.0F - f4, f3, f1, 1.0F);
+                break;
+            case 2:
+                this.setBlockBounds(f2, f, 0.0F, f3, f1, f4);
+                break;
+            case 3:
+                this.setBlockBounds(1.0F - f4, f, f2, 1.0F, f1, f3);
+                break;
+            case 4:
+                this.setBlockBounds(0.0F, f, f2, f4, f1, f3);
         }
     }
     /**
@@ -178,9 +177,52 @@ public class BlockNameBanner extends BlockContainer{
         return ((EnumFacing)state.getValue(FACING)).getIndex();
     }
 
-    protected BlockStateContainer createBlockState()
+    protected BlockState createBlockState()
     {
-        return new BlockStateContainer(this, new IProperty[] {FACING});
+        return new BlockState(this, new IProperty[] {FACING});
+    }
+    static final class SwitchEnumFacing
+    {
+        static final int[] FACING_LOOKUP = new int[EnumFacing.values().length];
+
+        static
+        {
+            try
+            {
+                FACING_LOOKUP[EnumFacing.NORTH.ordinal()] = 1;
+            }
+            catch (NoSuchFieldError var4)
+            {
+                ;
+            }
+
+            try
+            {
+                FACING_LOOKUP[EnumFacing.SOUTH.ordinal()] = 2;
+            }
+            catch (NoSuchFieldError var3)
+            {
+                ;
+            }
+
+            try
+            {
+                FACING_LOOKUP[EnumFacing.WEST.ordinal()] = 3;
+            }
+            catch (NoSuchFieldError var2)
+            {
+                ;
+            }
+
+            try
+            {
+                FACING_LOOKUP[EnumFacing.EAST.ordinal()] = 4;
+            }
+            catch (NoSuchFieldError var1)
+            {
+                ;
+            }
+        }
     }
 
 }

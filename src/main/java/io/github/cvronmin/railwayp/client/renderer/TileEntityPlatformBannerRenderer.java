@@ -1,34 +1,22 @@
 package io.github.cvronmin.railwayp.client.renderer;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import io.github.cvronmin.railwayp.client.model.ModelPlatformBanner;
-import io.github.cvronmin.railwayp.client.renderer.texture.LayeredCustomColorMaskTexture;
 import io.github.cvronmin.railwayp.client.renderer.texture.UnifedBannerTextures;
 import io.github.cvronmin.railwayp.init.RPBlocks;
-import io.github.cvronmin.railwayp.init.RPItems;
-import io.github.cvronmin.railwayp.tileentity.EnumUnifiedBannerPattern;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
-import io.github.cvronmin.railwayp.tileentity.TileEntityRouteSignage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
-import net.minecraft.client.renderer.BannerTextures;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.init.Blocks;
-//import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -88,9 +76,9 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer<
 			int xx;
 			if (destroyStages < 0) {
 				if (entityBanner.signText[0] != null) {
-					ITextComponent ichatcomponent = entityBanner.signText[0];
-					List list = GuiUtilRenderComponents.splitText(ichatcomponent, 180, fontrenderer, false, true);
-					String s = list != null && list.size() > 0 ? ((ITextComponent) list.get(0)).getFormattedText() : "";
+					IChatComponent ichatcomponent = entityBanner.signText[0];
+					List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 180, fontrenderer, false, true);
+					String s = list != null && list.size() > 0 ? ((IChatComponent) list.get(0)).getFormattedText() : "";
 					xx = entityBanner.getDirection() == 0 ? 12
 							: (entityBanner.getDirection() == 2 ? 36 - fontrenderer.getStringWidth(s) : 0);
 					int xxx = fontrenderer.getStringWidth(s);
@@ -116,9 +104,9 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer<
 			GlStateManager.depthMask(false);
 			if (destroyStages < 0) {
 				if (entityBanner.signText[1] != null) {
-					ITextComponent ichatcomponent = entityBanner.signText[1];
-					List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false, true);
-					String s = list != null && list.size() > 0 ? ((ITextComponent) list.get(0)).getFormattedText() : "";
+					IChatComponent ichatcomponent = entityBanner.signText[1];
+					List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false, true);
+					String s = list != null && list.size() > 0 ? ((IChatComponent) list.get(0)).getFormattedText() : "";
 					xx = entityBanner.getDirection() == 0 ? 24
 							: (entityBanner.getDirection() == 2 ? 72 - fontrenderer.getStringWidth(s) : 0);
 					fontrenderer.drawString(s, xx, 1 * 10 - entityBanner.signText.length * 5, 0);

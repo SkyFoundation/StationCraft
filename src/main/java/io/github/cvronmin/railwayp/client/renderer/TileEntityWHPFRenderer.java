@@ -1,28 +1,22 @@
 package io.github.cvronmin.railwayp.client.renderer;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import io.github.cvronmin.railwayp.client.model.ModelPFSignL;
-import io.github.cvronmin.railwayp.client.renderer.texture.LayeredCustomColorMaskTexture;
 import io.github.cvronmin.railwayp.client.renderer.texture.UnifedBannerTextures;
 import io.github.cvronmin.railwayp.init.RPBlocks;
 import io.github.cvronmin.railwayp.tileentity.TileEntityWHPF;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -99,9 +93,9 @@ public class TileEntityWHPFRenderer extends TileEntitySpecialRenderer<TileEntity
         		{
         			if (entityBanner.signText[0] != null)
         			{
-        				ITextComponent ichatcomponent = entityBanner.signText[0];
-        				List list = GuiUtilRenderComponents.splitText(ichatcomponent, 180, fontrenderer, false, true);
-        				String s = list != null && list.size() > 0 ? ((ITextComponent)list.get(0)).getFormattedText() : "";
+        				IChatComponent ichatcomponent = entityBanner.signText[0];
+        				List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 180, fontrenderer, false, true);
+        				String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
         				xx = entityBanner.getDirection() <= 1 ? 12 + 25 : (entityBanner.getDirection() >= 2 ? 36 + 16 - fontrenderer.getStringWidth(s) : 0);
         				int xxx = fontrenderer.getStringWidth(s);
         				//System.out.println("Text1:" + xxx);
@@ -128,9 +122,9 @@ public class TileEntityWHPFRenderer extends TileEntitySpecialRenderer<TileEntity
         		{
         			if (entityBanner.signText[1] != null)
         			{
-        				ITextComponent ichatcomponent = entityBanner.signText[1];
-        				List list = GuiUtilRenderComponents.splitText(ichatcomponent, 180, fontrenderer, false, true);
-        				String s = list != null && list.size() > 0 ? ((ITextComponent)list.get(0)).getFormattedText() : "";
+        				IChatComponent ichatcomponent = entityBanner.signText[1];
+        				List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 180, fontrenderer, false, true);
+        				String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
         				xx = entityBanner.getDirection() <= 1 ? 24 + 50 : (entityBanner.getDirection() >= 2 ? 72 + 30 - fontrenderer.getStringWidth(s) : 0);
         				int xxx = fontrenderer.getStringWidth(s);
         				//System.out.println("Text2:"+xxx);
@@ -209,7 +203,7 @@ public class TileEntityWHPFRenderer extends TileEntitySpecialRenderer<TileEntity
             timedbannertexture.systemTime = System.currentTimeMillis();
             return timedbannertexture.bannerTexture;
         }*/
-        return UnifedBannerTextures.PFSIGN_DESIGNS.getResourceLocation(bannerObj.getPatternResourceLocation(), bannerObj.getPatternList(), bannerObj.getColorList());
+        return UnifedBannerTextures.PFSIGN_DESIGNS.getResourceLocation(bannerObj.func_175116_e(), bannerObj.getPatternList(), bannerObj.getColorList());
 
     }
 

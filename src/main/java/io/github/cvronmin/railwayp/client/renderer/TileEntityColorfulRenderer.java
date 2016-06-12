@@ -95,7 +95,7 @@ public class TileEntityColorfulRenderer extends TileEntitySpecialRenderer<TileEn
 
                 timedbannertexture = new TileEntityColorfulRenderer.TimedBannerTexture(null);
                 timedbannertexture.bannerTexture = new ResourceLocation("railwayp", s);
-                Minecraft.getMinecraft().getTextureManager().loadTexture(timedbannertexture.bannerTexture, new LayeredCustomColorMaskTexture(bannerObj.getBlockType().getMaterial(bannerObj.getBlockType().getDefaultState()) == Material.ROCK ? MOSAIC_TEXTURES : PLATE_TEXTURES, arraylist, list));
+                Minecraft.getMinecraft().getTextureManager().loadTexture(timedbannertexture.bannerTexture, new LayeredCustomColorMaskTexture(bannerObj.getBlockType().getMaterial() == Material.rock ? MOSAIC_TEXTURES : PLATE_TEXTURES, arraylist, list));
                 DESIGNS.put(s, timedbannertexture);
             }
 

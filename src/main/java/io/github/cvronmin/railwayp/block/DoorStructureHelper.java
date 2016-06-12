@@ -3,14 +3,13 @@ package io.github.cvronmin.railwayp.block;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.material.EnumPushReaction;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import com.google.common.collect.Lists;
 
 public class DoorStructureHelper {
 
@@ -44,11 +43,11 @@ public class DoorStructureHelper {
     {
         this.toMove.clear();
         this.toDestroy.clear();
-        IBlockState state = this.world.getBlockState(this.blockToMove);
+        Block block = this.world.getBlockState(this.blockToMove).getBlock();
 
-        if (!BlockPlatformDoor.Base.func_185646_a(state, this.world, this.blockToMove, this.moveDirection, false))
+        if (!BlockPlatformDoor.Base.canPush(block, this.world, this.blockToMove, this.moveDirection, false))
         {
-            if (state.getMobilityFlag() != EnumPushReaction.DESTROY)
+            if (block.getMobilityFlag() != 1)
             {
                 return false;
             }
@@ -80,14 +79,13 @@ public class DoorStructureHelper {
 
     private boolean func_177251_a(BlockPos origin)
     {
-    	IBlockState state = this.world.getBlockState(origin);
-        Block block = state.getBlock();
+        Block block = this.world.getBlockState(origin).getBlock();
 
-        if (block.isAir(state, world, origin))
+        if (block.isAir(world, origin))
         {
             return true;
         }
-        else if (!BlockPlatformDoor.Base.func_185646_a(state, this.world, origin, this.moveDirection, false))
+        else if (!BlockPlatformDoor.Base.canPush(block, this.world, origin, this.moveDirection, false))
         {
             return true;
         }
@@ -141,20 +139,20 @@ public class DoorStructureHelper {
 
                         return true;
                     }
-                    state = this.world.getBlockState(blockpos2);
-                    block = state.getBlock();
 
-                    if (block.isAir(state, world, blockpos2))
+                    block = this.world.getBlockState(blockpos2).getBlock();
+
+                    if (block.isAir(world, blockpos2))
                     {
                         return true;
                     }
 
-                    if (!BlockPlatformDoor.Base.func_185646_a(state, this.world, blockpos2, this.moveDirection, true) || blockpos2.equals(this.pistonPos))
+                    if (!BlockPlatformDoor.Base.canPush(block, this.world, blockpos2, this.moveDirection, true) || blockpos2.equals(this.pistonPos))
                     {
                         return false;
                     }
 
-                    if (block.getMobilityFlag(state) == EnumPushReaction.DESTROY)
+                    if (block.getMobilityFlag() == 1)
                     {
                         this.toDestroy.add(blockpos2);
                         return true;

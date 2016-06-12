@@ -1,26 +1,21 @@
 package io.github.cvronmin.railwayp.block;
 
 import java.util.List;
-import java.util.Random;
 
-import io.github.cvronmin.railwayp.init.RPBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -31,99 +26,24 @@ public class BlockPlatformGlass extends Block{
     public static final PropertyBool EAST = PropertyBool.create("east");
     public static final PropertyBool SOUTH = PropertyBool.create("south");
     public static final PropertyBool WEST = PropertyBool.create("west");
-    protected static final AxisAlignedBB[] field_185730_f = new AxisAlignedBB[] {
-    		new AxisAlignedBB(0.4D, 0.0D, 0.4D, 0.6D, 1.0D, 0.6D),
-    		new AxisAlignedBB(0.4D, 0.0D, 0.4D, 0.6D, 1.0D, 1.0D),
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D, 0.6D, 1.0D, 0.6D),
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D, 0.6D, 1.0D, 1.0D),
-    		new AxisAlignedBB(0.4D, 0.0D, 0.0D, 0.6D, 1.0D, 0.6D),
-    		new AxisAlignedBB(0.4D, 0.0D, 0.0D, 0.6D, 1.0D, 1.0D),
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D, 1.0D, 0.6D),
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D, 1.0D, 1.0D),
-    		new AxisAlignedBB(0.4D, 0.0D, 0.4D, 1.0D, 1.0D, 0.6D),
-    		new AxisAlignedBB(0.4D, 0.0D, 0.4D, 1.0D, 1.0D, 1.0D),
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D, 1.0D, 1.0D, 0.6D),
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D, 1.0D, 1.0D, 1.0D),
-    		new AxisAlignedBB(0.4D, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D),
-    		new AxisAlignedBB(0.4D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D),
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)
-    		};
-    public BlockPlatformGlass()
-    {
-		super(Material.GLASS);
+//	private boolean neighborDoor;
+	public BlockPlatformGlass() {
+		super(Material.glass);
         this.setDefaultState(this.blockState.getBaseState().withProperty(NORTH, Boolean.valueOf(false)).withProperty(EAST, Boolean.valueOf(false)).withProperty(SOUTH, Boolean.valueOf(false)).withProperty(WEST, Boolean.valueOf(false)));
-        this.setCreativeTab(CreativeTabs.DECORATIONS);
-    }
-
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB p_185477_4_, List<AxisAlignedBB> p_185477_5_, Entity p_185477_6_)
+        this.setCreativeTab(CreativeTabs.tabDecorations);
+	}
+/*    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
     {
-        state = this.getActualState(state, worldIn, pos);
-        addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[0]);
-
-        if (((Boolean)state.getValue(NORTH)).booleanValue())
+        if (!worldIn.isRemote)
         {
-            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.NORTH)]);
+        	if(neighborBlock == RPBlocks.platform_door_base){
+        		neighborDoor = true;
+        	}
+        	if(neighborDoor && neighborBlock != RPBlocks.platform_door_base){
+        		neighborDoor = true;
+        	}
         }
-
-        if (((Boolean)state.getValue(SOUTH)).booleanValue())
-        {
-            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.SOUTH)]);
-        }
-
-        if (((Boolean)state.getValue(EAST)).booleanValue())
-        {
-            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.EAST)]);
-        }
-
-        if (((Boolean)state.getValue(WEST)).booleanValue())
-        {
-            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.WEST)]);
-        }
-    }
-
-    private static int getBoundingBoxIndex(EnumFacing p_185729_0_)
-    {
-        return 1 << p_185729_0_.getHorizontalIndex();
-    }
-
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
-        state = this.getActualState(state, source, pos);
-        return field_185730_f[getBoundingBoxIndex(state)];
-    }
-
-    private static int getBoundingBoxIndex(IBlockState p_185728_0_)
-    {
-        int i = 0;
-
-        if (((Boolean)p_185728_0_.getValue(NORTH)).booleanValue())
-        {
-            i |= getBoundingBoxIndex(EnumFacing.NORTH);
-        }
-
-        if (((Boolean)p_185728_0_.getValue(EAST)).booleanValue())
-        {
-            i |= getBoundingBoxIndex(EnumFacing.EAST);
-        }
-
-        if (((Boolean)p_185728_0_.getValue(SOUTH)).booleanValue())
-        {
-            i |= getBoundingBoxIndex(EnumFacing.SOUTH);
-        }
-
-        if (((Boolean)p_185728_0_.getValue(WEST)).booleanValue())
-        {
-            i |= getBoundingBoxIndex(EnumFacing.WEST);
-        }
-
-        return i;
-    }
-
-    /**
-     * Get the actual Block state of this Block at the given position. This applies properties not visible in the
-     * metadata, such as fence connections.
-     */
+    }*/
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
     {
         return state.withProperty(NORTH, canPaneConnectTo(worldIn, pos, EnumFacing.NORTH))
@@ -131,48 +51,135 @@ public class BlockPlatformGlass extends Block{
                 .withProperty(WEST, canPaneConnectTo(worldIn, pos, EnumFacing.WEST))
                 .withProperty(EAST, canPaneConnectTo(worldIn, pos, EnumFacing.EAST));
     }
-
-    /**
-     * Get the Item that this Block should drop when harvested.
-     */
-    public Item getItemDropped(IBlockState state, Random rand, int fortune)
-    {
-        return super.getItemDropped(state, rand, fortune);
-    }
-
-    /**
-     * Used to determine ambient occlusion and culling when rebuilding chunks for render
-     */
-    public boolean isOpaqueCube(IBlockState state)
+    public boolean isOpaqueCube()
     {
         return false;
     }
 
-    public boolean isFullCube(IBlockState state)
+    public boolean isFullCube()
     {
         return false;
     }
 
-    public final boolean canPaneConnectToBlock(Block blockIn)
+    public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List list, Entity collidingEntity)
     {
-        return blockIn.getDefaultState().isFullCube() || blockIn == this || blockIn == Blocks.GLASS || blockIn == Blocks.STAINED_GLASS || blockIn == Blocks.STAINED_GLASS_PANE || blockIn instanceof BlockPane || blockIn == RPBlocks.platform_door_base || blockIn == RPBlocks.platform_door_extension || blockIn == RPBlocks.platform_door_head;
+        boolean flag = this.canPaneConnectTo(worldIn, pos, EnumFacing.NORTH);
+        boolean flag1 = this.canPaneConnectTo(worldIn, pos, EnumFacing.SOUTH);
+        boolean flag2 = this.canPaneConnectTo(worldIn, pos, EnumFacing.WEST);
+        boolean flag3 = this.canPaneConnectTo(worldIn, pos, EnumFacing.EAST);
+
+        if ((!flag2 || !flag3) && (flag2 || flag3 || flag || flag1))
+        {
+            if (flag2)
+            {
+                this.setBlockBounds(0.0F, 0.0F, 0.4f, 0.5F, 1.0F, 0.6f);
+                super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+            }
+            else if (flag3)
+            {
+                this.setBlockBounds(0.5F, 0.0F, 0.4f, 1.0F, 1.0F, 0.6f);
+                super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+            }
+        }
+        else
+        {
+            this.setBlockBounds(0.0F, 0.0F, 0.4F, 1.0F, 1.0F, 0.6F);
+            super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+        }
+
+        if ((!flag || !flag1) && (flag2 || flag3 || flag || flag1))
+        {
+            if (flag)
+            {
+                this.setBlockBounds(0.4F, 0.0F, 0.0F, 0.6F, 1.0F, 0.5F);
+                super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+            }
+            else if (flag1)
+            {
+                this.setBlockBounds(0.4F, 0.0F, 0.5F, 0.6F, 1.0F, 1.0F);
+                super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+            }
+        }
+        else
+        {
+            this.setBlockBounds(0.4F, 0.0F, 0.0F, 0.6F, 1.0F, 1.0F);
+            super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+        }
+    }
+
+    public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos)
+    {
+        float f = 0.4F;
+        float f1 = 0.6F;
+        float f2 = 0.4F;
+        float f3 = 0.6F;
+        boolean flag = this.canConnectToBlock(worldIn.getBlockState(pos.north()).getBlock());
+        boolean flag1 = this.canConnectToBlock(worldIn.getBlockState(pos.south()).getBlock());
+        boolean flag2 = this.canConnectToBlock(worldIn.getBlockState(pos.west()).getBlock());
+        boolean flag3 = this.canConnectToBlock(worldIn.getBlockState(pos.east()).getBlock());
+
+        if ((!flag2 || !flag3) && (flag2 || flag3 || flag || flag1))
+        {
+            if (flag2)
+            {
+                f = 0.0F;
+            }
+            else if (flag3)
+            {
+                f1 = 1.0F;
+            }
+        }
+        else
+        {
+            f = 0.0F;
+            f1 = 1.0F;
+        }
+
+        if ((!flag || !flag1) && (flag2 || flag3 || flag || flag1))
+        {
+            if (flag)
+            {
+                f2 = 0.0F;
+            }
+            else if (flag1)
+            {
+                f3 = 1.0F;
+            }
+        }
+        else
+        {
+            f2 = 0.0F;
+            f3 = 1.0F;
+        }
+
+        this.setBlockBounds(f, 0.0F, f2, f1, 1.0F, f3);
     }
 
     @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
+    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
     {
-        return blockAccess.getBlockState(pos.offset(side)).getBlock() == this ? false : super.shouldSideBeRendered(blockState, blockAccess, pos, side);
+        return worldIn.getBlockState(pos).getBlock() == this ? false : (worldIn.getBlockState(pos).getBlock() instanceof BlockPlatformDoor.Base ? false : super.shouldSideBeRendered(worldIn, pos, side));
     }
 
+    public boolean canPaneConnectTo(IBlockAccess world, BlockPos pos, EnumFacing dir)
+    {
+        BlockPos off = pos.offset(dir);
+        Block block = world.getBlockState(off).getBlock();
+        return canConnectToBlock(block) || block.isSideSolid(world, off, dir.getOpposite());
+    }
+    public final boolean canConnectToBlock(Block blockIn)
+    {
+        return blockIn.isFullBlock() || blockIn == this || blockIn == Blocks.glass || blockIn == Blocks.stained_glass || blockIn == Blocks.stained_glass_pane || blockIn instanceof BlockPane || blockIn instanceof BlockPlatformDoor.Base;
+    }
     protected boolean canSilkHarvest()
     {
         return true;
     }
 
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer()
+    public EnumWorldBlockLayer getBlockLayer()
     {
-        return BlockRenderLayer.CUTOUT_MIPPED;
+        return EnumWorldBlockLayer.CUTOUT_MIPPED;
     }
 
     /**
@@ -182,52 +189,9 @@ public class BlockPlatformGlass extends Block{
     {
         return 0;
     }
-
-    /**
-     * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
-     * blockstate.
-     */
-    public IBlockState withRotation(IBlockState state, Rotation rot)
+    
+    protected BlockState createBlockState()
     {
-        switch (rot)
-        {
-            case CLOCKWISE_180:
-                return state.withProperty(NORTH, state.getValue(SOUTH)).withProperty(EAST, state.getValue(WEST)).withProperty(SOUTH, state.getValue(NORTH)).withProperty(WEST, state.getValue(EAST));
-            case COUNTERCLOCKWISE_90:
-                return state.withProperty(NORTH, state.getValue(EAST)).withProperty(EAST, state.getValue(SOUTH)).withProperty(SOUTH, state.getValue(WEST)).withProperty(WEST, state.getValue(NORTH));
-            case CLOCKWISE_90:
-                return state.withProperty(NORTH, state.getValue(WEST)).withProperty(EAST, state.getValue(NORTH)).withProperty(SOUTH, state.getValue(EAST)).withProperty(WEST, state.getValue(SOUTH));
-            default:
-                return state;
-        }
-    }
-
-    /**
-     * Returns the blockstate with the given mirror of the passed blockstate. If inapplicable, returns the passed
-     * blockstate.
-     */
-    public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
-    {
-        switch (mirrorIn)
-        {
-            case LEFT_RIGHT:
-                return state.withProperty(NORTH, state.getValue(SOUTH)).withProperty(SOUTH, state.getValue(NORTH));
-            case FRONT_BACK:
-                return state.withProperty(EAST, state.getValue(WEST)).withProperty(WEST, state.getValue(EAST));
-            default:
-                return super.withMirror(state, mirrorIn);
-        }
-    }
-
-    protected BlockStateContainer createBlockState()
-    {
-        return new BlockStateContainer(this, new IProperty[] {NORTH, EAST, WEST, SOUTH});
-    }
-
-    public boolean canPaneConnectTo(IBlockAccess world, BlockPos pos, EnumFacing dir)
-    {
-        BlockPos off = pos.offset(dir);
-        IBlockState state = world.getBlockState(off);
-        return canPaneConnectToBlock(state.getBlock()) || state.isSideSolid(world, off, dir.getOpposite());
+        return new BlockState(this, new IProperty[] {NORTH, EAST, WEST, SOUTH});
     }
 }

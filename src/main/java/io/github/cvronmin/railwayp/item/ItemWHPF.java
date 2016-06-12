@@ -4,19 +4,14 @@ import io.github.cvronmin.railwayp.block.BlockWHPF;
 import io.github.cvronmin.railwayp.init.RPBlocks;
 import io.github.cvronmin.railwayp.tileentity.TileEntityWHPF;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockStandingSign;
-import net.minecraft.block.BlockWallSign;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -28,7 +23,7 @@ public class ItemWHPF extends Item
     {
         super();
         this.maxStackSize = 16;
-        this.setCreativeTab(CreativeTabs.DECORATIONS);
+        this.setCreativeTab(CreativeTabs.tabDecorations);
     }
     public ItemWHPF(Block block){
     	this();
@@ -40,16 +35,16 @@ public class ItemWHPF extends Item
      * @param pos The block being right-clicked
      * @param side The side being right-clicked
      */
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
     	IBlockState state = worldIn.getBlockState(pos);
         if (facing == EnumFacing.UP)
         {
-            return EnumActionResult.FAIL;
+            return false;
         }
-        else if (!state.getBlock().getMaterial(state).isSolid())
+        else if (!state.getBlock().getMaterial().isSolid())
         {
-            return EnumActionResult.FAIL;
+            return false;
         }
         else
         {
@@ -57,15 +52,15 @@ public class ItemWHPF extends Item
 
             if (!playerIn.canPlayerEdit(pos, facing, stack))
             {
-                return EnumActionResult.FAIL;
+                return false;
             }
             else if (worldIn.isRemote)
             {
-                return EnumActionResult.PASS;
+                return true;
             }
             else if (!RPBlocks.roof_where_pf.canPlaceBlockAt(worldIn, pos))
             {
-                return EnumActionResult.FAIL;
+                return false;
             }
             else
             {
@@ -98,7 +93,7 @@ public class ItemWHPF extends Item
                     ((TileEntityWHPF)tileentity).setRotation((short) (playerIn.rotationYaw + 180));
                 }
 
-                return EnumActionResult.SUCCESS;
+                return true;
             }
         }
     }
@@ -133,7 +128,7 @@ public class ItemWHPF extends Item
     @SideOnly(Side.CLIENT)
     public CreativeTabs getCreativeTab()
     {
-        return CreativeTabs.DECORATIONS;
+        return CreativeTabs.tabDecorations;
     }
 
 }

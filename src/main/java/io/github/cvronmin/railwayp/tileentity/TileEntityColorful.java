@@ -2,8 +2,7 @@ package io.github.cvronmin.railwayp.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
 
 public class TileEntityColorful extends TileEntityBanner {
@@ -71,6 +70,6 @@ public class TileEntityColorful extends TileEntityBanner {
 	public Packet<?> getDescriptionPacket() {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		this.writeToNBT(nbttagcompound);
-		return new SPacketUpdateTileEntity(this.pos, 6, nbttagcompound);
+		return new S35PacketUpdateTileEntity(this.pos, 6, nbttagcompound);
 	}
 }

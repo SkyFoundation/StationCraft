@@ -4,22 +4,21 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityRouteSignage extends TileEntityBanner{
-	public final ITextComponent[] stationText = new ITextComponent[] {new TextComponentString(""), new TextComponentString("")};
-	public final ITextComponent[] nextText = new ITextComponent[] {new TextComponentString(""), new TextComponentString("")};
+	public final IChatComponent[] stationText = new IChatComponent[] {new ChatComponentText(""), new ChatComponentText("")};
+	public final IChatComponent[] nextText = new IChatComponent[] {new ChatComponentText(""), new ChatComponentText("")};
 //    private NBTTagList stations;
     private int baseColor;
     private boolean field_175119_g;
@@ -76,7 +75,7 @@ public class TileEntityRouteSignage extends TileEntityBanner{
                 String s = nbttagcompound.getString("StationText" + (i + 1));
 
 
-                    ITextComponent ichatcomponent = ITextComponent.Serializer.jsonToComponent(s);
+                    IChatComponent ichatcomponent = IChatComponent.Serializer.jsonToComponent(s);
                     this.stationText[i] = ichatcomponent;
 
             	}
@@ -87,7 +86,7 @@ public class TileEntityRouteSignage extends TileEntityBanner{
                 String s = nbttagcompound.getString("NextText" + (i + 1));
 
 
-                    ITextComponent ichatcomponent = ITextComponent.Serializer.jsonToComponent(s);
+                    IChatComponent ichatcomponent = IChatComponent.Serializer.jsonToComponent(s);
                     this.nextText[i] = ichatcomponent;
 
             	}
@@ -111,12 +110,12 @@ public class TileEntityRouteSignage extends TileEntityBanner{
         }
         for (int i = 0; i < 2; ++i)
         {
-            String s = ITextComponent.Serializer.componentToJson(this.stationText[i]);
+            String s = IChatComponent.Serializer.componentToJson(this.stationText[i]);
             compound.setString("StationText" + (i + 1), s);
         }
         for (int i = 0; i < 2; ++i)
         {
-            String s = ITextComponent.Serializer.componentToJson(this.nextText[i]);
+            String s = IChatComponent.Serializer.componentToJson(this.nextText[i]);
             compound.setString("NextText" + (i + 1), s);
         }
     }
@@ -130,13 +129,13 @@ public class TileEntityRouteSignage extends TileEntityBanner{
         for (int i = 0; i < 2; ++i)
         {
             String s = compound.getString("StationText" + (i + 1));
-                ITextComponent ichatcomponent = ITextComponent.Serializer.jsonToComponent(s);
+                IChatComponent ichatcomponent = IChatComponent.Serializer.jsonToComponent(s);
                 this.stationText[i] = ichatcomponent;
         }
         for (int i = 0; i < 2; ++i)
         {
             String s = compound.getString("NextText" + (i + 1));
-                ITextComponent ichatcomponent = ITextComponent.Serializer.jsonToComponent(s);
+                IChatComponent ichatcomponent = IChatComponent.Serializer.jsonToComponent(s);
                 this.nextText[i] = ichatcomponent;
         }
         this.patternList = null;
@@ -153,7 +152,7 @@ public class TileEntityRouteSignage extends TileEntityBanner{
     {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         this.writeToNBT(nbttagcompound);
-        return new SPacketUpdateTileEntity(this.pos, 6, nbttagcompound);
+        return new S35PacketUpdateTileEntity(this.pos, 6, nbttagcompound);
     }
 
     /**

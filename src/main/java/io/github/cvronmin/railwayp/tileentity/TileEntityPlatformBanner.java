@@ -3,25 +3,22 @@ package io.github.cvronmin.railwayp.tileentity;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.google.gson.JsonParseException;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityPlatformBanner extends TileEntityBanner
 {
-	public final ITextComponent[] signText = new ITextComponent[] {new TextComponentString(""), new TextComponentString("")};
+	public final IChatComponent[] signText = new IChatComponent[] {new ChatComponentText(""), new ChatComponentText("")};
     public boolean shouldExtend;
     private boolean patternDataSet;
     /** A list of all patterns stored on this banner. */
@@ -84,7 +81,7 @@ public class TileEntityPlatformBanner extends TileEntityBanner
                 String s = nbttagcompound.getString("Text" + (i + 1));
 
 
-                    ITextComponent ichatcomponent = ITextComponent.Serializer.jsonToComponent(s);
+                    IChatComponent ichatcomponent = IChatComponent.Serializer.jsonToComponent(s);
                     this.signText[i] = ichatcomponent;
 
             	}
@@ -113,7 +110,7 @@ public class TileEntityPlatformBanner extends TileEntityBanner
         compound.setBoolean("ShouldExtend", shouldExtend);
         for (int i = 0; i < 2; ++i)
         {
-            String s = ITextComponent.Serializer.componentToJson(this.signText[i]);
+            String s = IChatComponent.Serializer.componentToJson(this.signText[i]);
             compound.setString("Text" + (i + 1), s);
         }
     }
@@ -142,7 +139,7 @@ public class TileEntityPlatformBanner extends TileEntityBanner
         {
             String s = compound.getString("Text" + (i + 1));
 
-                ITextComponent ichatcomponent = ITextComponent.Serializer.jsonToComponent(s);
+                IChatComponent ichatcomponent = IChatComponent.Serializer.jsonToComponent(s);
                 this.signText[i] = ichatcomponent;
         }
         this.patternList = null;
@@ -159,7 +156,7 @@ public class TileEntityPlatformBanner extends TileEntityBanner
     {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         this.writeToNBT(nbttagcompound);
-        return new SPacketUpdateTileEntity(this.pos, 6, nbttagcompound);
+        return new S35PacketUpdateTileEntity(this.pos, 6, nbttagcompound);
     }
 
     public static int getBaseColor(ItemStack stack)
@@ -197,7 +194,7 @@ public class TileEntityPlatformBanner extends TileEntityBanner
         return this.colorList;
     }
 
-    public ITextComponent[] getSignText() {
+    public IChatComponent[] getSignText() {
 		return signText;
 	}
 
@@ -314,8 +311,8 @@ public class TileEntityPlatformBanner extends TileEntityBanner
     	this.route = pn;
     	this.direction = dir;
     	this.routeColorEncoded = color;
-    	this.signText[0] = new TextComponentString(t1);
-    	this.signText[1] = new TextComponentString(t2);
+    	this.signText[0] = new ChatComponentText(t1);
+    	this.signText[1] = new ChatComponentText(t2);
     	decodeColor();
     }
 }

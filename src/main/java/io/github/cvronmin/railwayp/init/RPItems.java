@@ -24,6 +24,6 @@ public class RPItems {
 		registerItem(EDITOR, "editor");
 	}
 	private static void registerItem(Item item, String name){
-		GameRegistry.register(item.setRegistryName(new ResourceLocation(Reference.MODID, name)));
+		GameRegistry.registerItem(item.setRegistryName(new ResourceLocation(Reference.MODID, name)));
 	}
 }

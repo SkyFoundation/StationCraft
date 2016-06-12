@@ -7,7 +7,7 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumDyeColor;
@@ -18,18 +18,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockRColorful extends Block
 {
-    public static final PropertyEnum<EnumDyeColor> COLOR = PropertyEnum.<EnumDyeColor>create("color", EnumDyeColor.class);
+    public static final PropertyEnum COLOR = PropertyEnum.create("color", EnumDyeColor.class);
 
     public BlockRColorful(Material materialIn)
     {
         super(materialIn);
         this.setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumDyeColor.WHITE));
-        this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
+        this.setCreativeTab(CreativeTabs.tabBlock);
     }
 
     /**
-     * Gets the metadata of the item this Block can drop. This method is called when the block gets destroyed. It
-     * returns the metadata of the dropped item based on the old metadata of the block.
+     * Get the damage value that this Block should drop
      */
     public int damageDropped(IBlockState state)
     {
@@ -40,10 +39,14 @@ public class BlockRColorful extends Block
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list)
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, List list)
     {
-        for (EnumDyeColor enumdyecolor : EnumDyeColor.values())
+        EnumDyeColor[] aenumdyecolor = EnumDyeColor.values();
+        int i = aenumdyecolor.length;
+
+        for (int j = 0; j < i; ++j)
         {
+            EnumDyeColor enumdyecolor = aenumdyecolor[j];
             list.add(new ItemStack(itemIn, 1, enumdyecolor.getMetadata()));
         }
     }
@@ -72,8 +75,8 @@ public class BlockRColorful extends Block
         return ((EnumDyeColor)state.getValue(COLOR)).getMetadata();
     }
 
-    protected BlockStateContainer createBlockState()
+    protected BlockState createBlockState()
     {
-        return new BlockStateContainer(this, new IProperty[] {COLOR});
+        return new BlockState(this, new IProperty[] {COLOR});
     }
 }

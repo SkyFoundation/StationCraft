@@ -1,6 +1,5 @@
 package io.github.cvronmin.railwayp.network;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,7 +7,6 @@ import org.apache.logging.log4j.Level;
 
 import com.jcraft.jogg.Packet;
 
-import io.github.cvronmin.railwayp.RailwayP;
 import io.github.cvronmin.railwayp.Reference;
 import io.github.cvronmin.railwayp.client.ClientProxy;
 import io.github.cvronmin.railwayp.tileentity.TileEntityNameBanner;
@@ -19,16 +17,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
-import scala.annotation.bridge;
 
 public class RPPacket extends Packet implements IRPPacket {
 
@@ -163,7 +158,7 @@ public class RPPacket extends Packet implements IRPPacket {
                 	if(dir.isEmpty())dir = "0";
                     te.setData(Integer.valueOf(pf), Byte.valueOf(dir), String.valueOf(data.get(5)), String.valueOf(data.get(6)), String.valueOf(data.get(7)));
                     te.markDirty();
-                    world.notifyBlockUpdate(blockpos1, state, state, 3);
+                    world.markBlockForUpdate(blockpos1);
                 } catch (Exception e) {
                 	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
 				}
@@ -182,7 +177,7 @@ public class RPPacket extends Packet implements IRPPacket {
                 	if(signtype.isEmpty())signtype = "0";
                     te1.setData(Integer.valueOf(signtype), String.valueOf(data.get(4)), String.valueOf(data.get(5)), String.valueOf(data.get(6)), String.valueOf(data.get(7)));
                     te1.markDirty();
-                    world1.notifyBlockUpdate(blockpos11, state1, state1, 3);
+                    world1.markBlockForUpdate(blockpos11);
                 } catch (Exception e) {
                 	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
 				}
@@ -205,7 +200,7 @@ public class RPPacket extends Packet implements IRPPacket {
                 	if(r.isEmpty())r = "0";
                     te11.setData(Integer.valueOf(pf1), Byte.parseByte(dir), Short.parseShort(r), String.valueOf(data.get(6)), String.valueOf(data.get(7)), String.valueOf(data.get(8)));
                     te11.markDirty();
-                    world11.notifyBlockUpdate(blockpos111, state11, state11, 3);
+                    world11.markBlockForUpdate(blockpos111);
                 } catch (Exception e) {
                 	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
 				}
@@ -247,7 +242,7 @@ public class RPPacket extends Packet implements IRPPacket {
                 	if(dir.isEmpty())dir = "0";
                     te.setData(Integer.valueOf(pf), Byte.valueOf(dir), String.valueOf(data.get(5)), String.valueOf(data.get(6)), String.valueOf(data.get(7)));
                     te.markDirty();
-                    world.notifyBlockUpdate(blockpos1, state, state, 3);
+                    world.markBlockForUpdate(blockpos1);
                 } catch (Exception e) {
                 	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
 				}
@@ -266,7 +261,7 @@ public class RPPacket extends Packet implements IRPPacket {
                 	if(signtype.isEmpty())signtype = "0";
                     te1.setData(Integer.valueOf(signtype), String.valueOf(data.get(4)), String.valueOf(data.get(5)), String.valueOf(data.get(6)), String.valueOf(data.get(7)));
                     te1.markDirty();
-                    world1.notifyBlockUpdate(blockpos11, state1, state1, 3);
+                    world1.markBlockForUpdate(blockpos11);
                 } catch (Exception e) {
                 	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
 				}
@@ -289,7 +284,7 @@ public class RPPacket extends Packet implements IRPPacket {
                 	if(r.isEmpty())r = "0";
                     te11.setData(Integer.valueOf(pf1), Byte.parseByte(dir), Short.parseShort(r), String.valueOf(data.get(6)), String.valueOf(data.get(7)), String.valueOf(data.get(8)));
                     te11.markDirty();
-                    world11.notifyBlockUpdate(blockpos111, state11, state11, 3);
+                    world11.markBlockForUpdate(blockpos111);
                 } catch (Exception e) {
                 	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
 				}

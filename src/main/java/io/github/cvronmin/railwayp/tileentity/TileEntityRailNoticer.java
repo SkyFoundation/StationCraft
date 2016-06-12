@@ -5,7 +5,7 @@ import io.github.cvronmin.railwayp.network.RPPacket;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityRailNoticer extends TileEntity {
@@ -38,7 +38,7 @@ public class TileEntityRailNoticer extends TileEntity {
     {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         this.writeToNBT(nbttagcompound);
-        return new SPacketUpdateTileEntity(this.pos, 6, nbttagcompound);
+        return new S35PacketUpdateTileEntity(this.pos, 6, nbttagcompound);
     }
     public boolean sendNotice(EntityPlayerMP player){
     	sendNotice(player, thisStat, RPPacket.EnumRPPacket.C_UPDATETHISSTATION);

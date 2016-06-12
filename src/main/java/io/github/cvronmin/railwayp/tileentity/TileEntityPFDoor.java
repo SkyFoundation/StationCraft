@@ -7,18 +7,14 @@ import com.google.common.collect.Lists;
 
 import io.github.cvronmin.railwayp.init.RPBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 //import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -82,89 +78,36 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
 
         return this.lastProgress + (this.progress - this.lastProgress) * p_145860_1_;
     }
-    private float func_184320_e(float p_184320_1_)
-    {
-        return this.extending ? p_184320_1_ - 1.0F : 1.0F - p_184320_1_;
-    }
-    private void func_184322_i()
-    {
-        AxisAlignedBB axisalignedbb = this.func_184321_a(this.worldObj, this.pos).offset(this.pos);
-        List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity((Entity)null, axisalignedbb);
 
-        if (!list.isEmpty())
+    private void func_145863_a(float p_145863_1_, float p_145863_2_)
+    {
+        if (this.extending)
         {
-            EnumFacing enumfacing = this.extending ? this.pistonFacing : this.pistonFacing.getOpposite();
+            p_145863_1_ = 1.0F - p_145863_1_;
+        }
+        else
+        {
+            --p_145863_1_;
+        }
 
-            for (int i = 0; i < list.size(); ++i)
+        AxisAlignedBB axisalignedbb = RPBlocks.platform_door_extension.getBoundingBox(this.worldObj, this.pos, this.pistonState, p_145863_1_, this.pistonFacing);
+
+        if (axisalignedbb != null)
+        {
+            List list = this.worldObj.getEntitiesWithinAABBExcludingEntity((Entity)null, axisalignedbb);
+
+            if (!list.isEmpty())
             {
-                Entity entity = (Entity)list.get(i);
+                this.field_174933_k.addAll(list);
+                Iterator iterator = this.field_174933_k.iterator();
 
-                if (entity.getPushReaction() != EnumPushReaction.IGNORE)
+                while (iterator.hasNext())
                 {
-                    if (this.pistonState.getBlock() == Blocks.SLIME_BLOCK)
-                    {
-                        switch (enumfacing.getAxis())
-                        {
-                            case X:
-                                entity.motionX = (double)enumfacing.getFrontOffsetX();
-                                break;
-                            case Y:
-                                entity.motionY = (double)enumfacing.getFrontOffsetY();
-                                break;
-                            case Z:
-                                entity.motionZ = (double)enumfacing.getFrontOffsetZ();
-                        }
-                    }
-
-                    double d0 = 0.0D;
-                    double d1 = 0.0D;
-                    double d2 = 0.0D;
-                    AxisAlignedBB axisalignedbb1 = entity.getEntityBoundingBox();
-
-                    switch (enumfacing.getAxis())
-                    {
-                        case X:
-
-                            if (enumfacing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE)
-                            {
-                                d0 = axisalignedbb.maxX - axisalignedbb1.minX;
-                            }
-                            else
-                            {
-                                d0 = axisalignedbb1.maxX - axisalignedbb.minX;
-                            }
-
-                            d0 = d0 + 0.01D;
-                            break;
-                        case Y:
-
-                            if (enumfacing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE)
-                            {
-                                d1 = axisalignedbb.maxY - axisalignedbb1.minY;
-                            }
-                            else
-                            {
-                                d1 = axisalignedbb1.maxY - axisalignedbb.minY;
-                            }
-
-                            d1 = d1 + 0.01D;
-                            break;
-                        case Z:
-
-                            if (enumfacing.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE)
-                            {
-                                d2 = axisalignedbb.maxZ - axisalignedbb1.minZ;
-                            }
-                            else
-                            {
-                                d2 = axisalignedbb1.maxZ - axisalignedbb.minZ;
-                            }
-
-                            d2 = d2 + 0.01D;
-                    }
-
-                    entity.moveEntity(d0 * (double)enumfacing.getFrontOffsetX(), d1 * (double)enumfacing.getFrontOffsetY(), d2 * (double)enumfacing.getFrontOffsetZ());
+                    Entity entity = (Entity)iterator.next();
+                    entity.moveEntity((double)(p_145863_2_ * (float)this.pistonFacing.getFrontOffsetX()), (double)(p_145863_2_ * (float)this.pistonFacing.getFrontOffsetY()), (double)(p_145863_2_ * (float)this.pistonFacing.getFrontOffsetZ()));
                 }
+
+                this.field_174933_k.clear();
             }
         }
     }
@@ -216,7 +159,7 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
 
         if (this.lastProgress >= 1.0F)
         {
-            this.func_184322_i();
+            this.func_145863_a(1.0F, 0.25F);
             this.worldObj.removeTileEntity(this.pos);
             this.invalidate();
 
@@ -238,7 +181,7 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
 
             if (this.extending)
             {
-                this.func_184322_i();
+                this.func_145863_a(this.progress, this.progress - this.lastProgress + 0.0625F);
             }
         }
     }
@@ -261,16 +204,7 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
         compound.setFloat("progress", this.lastProgress);
         compound.setBoolean("extending", this.extending);
     }
-    public AxisAlignedBB func_184321_a(IBlockAccess p_184321_1_, BlockPos p_184321_2_)
-    {
-        return this.func_184319_a(p_184321_1_, p_184321_2_, this.progress).union(this.func_184319_a(p_184321_1_, p_184321_2_, this.lastProgress));
-    }
 
-    public AxisAlignedBB func_184319_a(IBlockAccess p_184319_1_, BlockPos p_184319_2_, float p_184319_3_)
-    {
-        p_184319_3_ = this.func_184320_e(p_184319_3_);
-        return this.pistonState.getBoundingBox(p_184319_1_, p_184319_2_).offset((double)(p_184319_3_ * (float)this.pistonFacing.getFrontOffsetX()), (double)(p_184319_3_ * (float)this.pistonFacing.getFrontOffsetY()), (double)(p_184319_3_ * (float)this.pistonFacing.getFrontOffsetZ()));
-    }
     static final class SwitchAxis
         {
             static final int[] field_177248_a = new int[EnumFacing.Axis.values().length];

@@ -1,20 +1,10 @@
 package io.github.cvronmin.railwayp.network;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.logging.log4j.Level;
-
-import io.github.cvronmin.railwayp.Reference;
 import io.github.cvronmin.railwayp.client.ClientProxy;
-import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -46,7 +36,7 @@ public class MessagerFromServer {
 				     //  for example see MinecraftServer.updateTimeLightAndEntities(), just under section 
 				     //      this.theProfiler.startSection("jobs"); 
 				     //  In this case, the task is to call messageHandlerOnServer.processMessage(message, sendingPlayer) 
-				     final WorldServer playerWorldServer = sendingPlayer.getServerWorld(); 
+				     final WorldServer playerWorldServer = sendingPlayer.getServerForPlayer(); 
 				     playerWorldServer.addScheduledTask(new Runnable() { 
 				       public void run() { 
 				         processMessage(worldClient, message); 

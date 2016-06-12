@@ -1,7 +1,6 @@
 package io.github.cvronmin.railwayp.client.renderer;
 
 import java.util.List;
-import java.util.Locale;
 
 import org.lwjgl.opengl.GL11;
 
@@ -14,19 +13,14 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
 //import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import scala.Tuple1;
 
 @SideOnly(Side.CLIENT)
 public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<TileEntityNameBanner> {
@@ -40,7 +34,7 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 		boolean flag = te.getWorld() != null;
 		int j = flag ? te.getBlockMetadata() : 0;
 		long k = flag ? te.getWorld().getTotalWorldTime() : 0L;
-		Block block = te.getBlockType();
+		//Block block = te.getBlockType();
 		GlStateManager.pushMatrix();
 		float f1 = 0.6666667F;
 		float f3;
@@ -99,13 +93,13 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 		boolean requireHdraw = te.getSignType() == 1 ? true : (te.getSignType() == 2 ? true : false);
 		if (destroyStage < 0) {
 			if (te.signText[0] != null) {
-				ITextComponent ichatcomponent = te.signText[0];
-				List<ITextComponent> list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false,
+				IChatComponent ichatcomponent = te.signText[0];
+				List<IChatComponent> list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false,
 						true);
-				String s = list != null && list.size() > 0 ? ((ITextComponent) list.get(0)).getFormattedText() : "";
+				String s = list != null && list.size() > 0 ? ((IChatComponent) list.get(0)).getFormattedText() : "";
 
 				if (requireHdraw){
-					String s1 = list != null && list.size() > 0 ? ((ITextComponent) list.get(0)).getUnformattedText() : "";
+					String s1 = list != null && list.size() > 0 ? ((IChatComponent) list.get(0)).getUnformattedText() : "";
 					//System.out.println(fontrenderer.FONT_HEIGHT * s.length());
 					drawVString(fontrenderer,s1, -fontrenderer.getCharWidth(s.charAt(0)),
 							-fontrenderer.FONT_HEIGHT * s.length(), te.getColor());
@@ -125,10 +119,10 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 		GlStateManager.depthMask(false);
 		if (destroyStage < 0) {
 			if (te.signText[1] != null) {
-				ITextComponent ichatcomponent = te.signText[1];
-				List<ITextComponent> list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false,
+				IChatComponent ichatcomponent = te.signText[1];
+				List<IChatComponent> list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false,
 						true);
-				String s = list != null && list.size() > 0 ? ((ITextComponent) list.get(0)).getFormattedText() : "";
+				String s = list != null && list.size() > 0 ? ((IChatComponent) list.get(0)).getFormattedText() : "";
 				int xxx = fontrenderer.getStringWidth(s);
 				if (xxx > TEXT2_MAX_ALLOW_LENGTH) {
 					GlStateManager.scale(TEXT2_MAX_ALLOW_LENGTH / (float)xxx, 1, 1);

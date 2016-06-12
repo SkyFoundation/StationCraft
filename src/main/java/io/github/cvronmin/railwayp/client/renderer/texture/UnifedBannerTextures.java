@@ -7,13 +7,8 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import io.github.cvronmin.railwayp.RailwayP;
 import io.github.cvronmin.railwayp.tileentity.EnumUnifiedBannerPattern;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BannerTextures;
-import net.minecraft.client.renderer.texture.LayeredColorMaskTexture;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

@@ -1,28 +1,21 @@
 package io.github.cvronmin.railwayp.client.renderer;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import io.github.cvronmin.railwayp.client.model.ModelRouteSignage;
-import io.github.cvronmin.railwayp.client.renderer.texture.LayeredCustomColorMaskTexture;
 import io.github.cvronmin.railwayp.client.renderer.texture.UnifedBannerTextures;
 import io.github.cvronmin.railwayp.tileentity.TileEntityRouteSignage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-//import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -87,9 +80,9 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
         {
                 if (entityBanner.stationText[0] != null)
                 {
-                    ITextComponent ichatcomponent = entityBanner.stationText[0];
-                    List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false, true);
-                    String s = list != null && list.size() > 0 ? ((ITextComponent)list.get(0)).getFormattedText() : "";
+                    IChatComponent ichatcomponent = entityBanner.stationText[0];
+                    List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false, true);
+                    String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
                         fontrenderer.drawString(s, (float)(-fontrenderer.getStringWidth(s) / 2)/* + 33.333333333f*/ + 2, 0 * 10 - entityBanner.stationText.length * 5, 0, false);
                 }
         }
@@ -104,9 +97,9 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
         {
                 if (entityBanner.stationText[1] != null)
                 {
-                    ITextComponent ichatcomponent = entityBanner.stationText[1];
-                    List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false, true);
-                    String s = list != null && list.size() > 0 ? ((ITextComponent)list.get(0)).getFormattedText() : "";
+                    IChatComponent ichatcomponent = entityBanner.stationText[1];
+                    List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false, true);
+                    String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
                         fontrenderer.drawString(s, (float)(-fontrenderer.getStringWidth(s) / 2)/* + 50*/ + (2 * 1.5f), (float)(1 * 10 - entityBanner.stationText.length * 5), 0, false);
                 }
         }
@@ -126,9 +119,9 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
         {
                 if (entityBanner.nextText[0] != null)
                 {
-                    ITextComponent ichatcomponent = entityBanner.nextText[0];
-                    List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false, true);
-                    String s = list != null && list.size() > 0 ? ((ITextComponent)list.get(0)).getFormattedText() : "";
+                    IChatComponent ichatcomponent = entityBanner.nextText[0];
+                    List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false, true);
+                    String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
                         fontrenderer.drawString(s, (-fontrenderer.getStringWidth(s) / 2) + xx * 0.6666667f, 0 * 10 - entityBanner.nextText.length * 5 + 20 * 0.6666667f, 0, false);
                 }
         }
@@ -143,9 +136,9 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
         {
                 if (entityBanner.nextText[1] != null)
                 {
-                    ITextComponent ichatcomponent = entityBanner.nextText[1];
-                    List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false, true);
-                    String s = list != null && list.size() > 0 ? ((ITextComponent)list.get(0)).getFormattedText() : "";
+                    IChatComponent ichatcomponent = entityBanner.nextText[1];
+                    List list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false, true);
+                    String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
                         fontrenderer.drawString(s, (-fontrenderer.getStringWidth(s) / 2) + xx, 1 * 10 - entityBanner.nextText.length * 5 + 20, 0, false);
                 }
         }
@@ -214,7 +207,7 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
             timedbannertexture.systemTime = System.currentTimeMillis();
             return timedbannertexture.bannerTexture;
         }*/
-        return UnifedBannerTextures.ROUTESIGN_DESIGNS.getResourceLocation(bannerObj.getPatternResourceLocation(), bannerObj.getPatternList(), bannerObj.getColorList());
+        return UnifedBannerTextures.ROUTESIGN_DESIGNS.getResourceLocation(bannerObj.func_175116_e(), bannerObj.getPatternList(), bannerObj.getColorList());
 
     }
 

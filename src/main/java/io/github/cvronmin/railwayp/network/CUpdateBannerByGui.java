@@ -1,8 +1,6 @@
 package io.github.cvronmin.railwayp.network;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -10,7 +8,7 @@ import org.apache.logging.log4j.Level;
 
 import io.github.cvronmin.railwayp.Reference;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 

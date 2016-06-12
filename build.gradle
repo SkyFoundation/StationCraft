@@ -24,12 +24,12 @@ plugins {
 */
 targetCompatibility = "1.7"
 sourceCompatibility = "1.7"
-version = "1.1-mc1.9"
+version = "1.1-mc1.8.9"
 group= "io.github.cvronmin.railwayp" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "railwayp"
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 minecraft {
-    version = "1.9-12.16.1.1887"
+    version = "1.8.9-11.15.1.1722"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -37,7 +37,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "stable_24"
+    mappings = "stable_20"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
