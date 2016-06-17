@@ -1,10 +1,13 @@
 package io.github.cvronmin.railwayp.util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
+import java.util.zip.GZIPOutputStream;
 
 import org.apache.logging.log4j.Level;
 
@@ -295,7 +298,7 @@ public class NTUtil {
 
 	public static NBTTagCompound readNBTTagCompound(ByteBuf buffer) throws IOException
 	{
-		short dataLength = buffer.readShort();
+		/*short dataLength = buffer.readShort();
 
 		if (dataLength < 0)
 		{
@@ -305,21 +308,39 @@ public class NTUtil {
 		{
 			byte[] compressedNBT = new byte[dataLength];
 			buffer.readBytes(compressedNBT);
-			return CompressedStreamTools.readCompressed(new ByteBufInputStream(buffer));
-		}
+			return CompressedStreamTools.readCompressed(new ByteBufInputStream(buffer));*/
+			return ByteBufUtils.readTag(buffer);
+		//}
 	}
 
 	public static void writeNBTTagCompound(NBTTagCompound nbt, ByteBuf buffer) throws IOException
 	{
-		if (nbt == null)
+		/*if (nbt == null)
 		{
 			buffer.writeShort(-1);
 		}
 		else
 		{
-/*			byte[] compressedNBT =*/ CompressedStreamTools.writeCompressed(nbt, new ByteBufOutputStream(buffer));
-//			buffer.writeShort((short) compressedNBT.length);
-//			buffer.writeBytes(compressedNBT);
-		}
+			byte[] compressedNBT = compress(nbt);
+			buffer.writeShort((short) compressedNBT.length);
+			buffer.writeBytes(compressedNBT);
+		}*/
+		ByteBufUtils.writeTag(buffer, nbt);
 	}
+    public static byte[] compress(NBTTagCompound compound) throws IOException
+    {
+        ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
+        DataOutputStream dataoutputstream = new DataOutputStream(new GZIPOutputStream(bytearrayoutputstream));
+
+        try
+        {
+            CompressedStreamTools.write(compound, dataoutputstream);
+        }
+        finally
+        {
+            dataoutputstream.close();
+        }
+
+        return bytearrayoutputstream.toByteArray();
+    }
 }

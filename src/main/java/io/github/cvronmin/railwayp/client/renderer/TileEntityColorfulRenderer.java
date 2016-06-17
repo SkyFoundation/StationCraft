@@ -17,6 +17,7 @@ import io.github.cvronmin.railwayp.tileentity.TileEntityWHPF;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -35,7 +36,19 @@ public class TileEntityColorfulRenderer extends TileEntitySpecialRenderer<TileEn
         GlStateManager.pushMatrix();
         float f1 = 0.6666667F;
         float f3;
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableBlend();
+        GlStateManager.disableCull();
 
+        if (Minecraft.isAmbientOcclusionEnabled())
+        {
+            GlStateManager.shadeModel(7425);
+        }
+        else
+        {
+            GlStateManager.shadeModel(7424);
+        }
             GlStateManager.translate((float)x + 0.5F, (float)y +0.5f, (float)z + 0.5F);
         	//GlStateManager.translate(-Math.cos(Math.toRadians(te.getRotation())) /2, 0, -Math.sin(Math.toRadians(te.getRotation())) /2);
             //float f2 = (float)(j * 360) / 16.0F;

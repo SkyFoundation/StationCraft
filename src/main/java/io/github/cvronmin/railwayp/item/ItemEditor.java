@@ -2,9 +2,11 @@ package io.github.cvronmin.railwayp.item;
 
 import io.github.cvronmin.railwayp.client.gui.GuiNameBannerEditor;
 import io.github.cvronmin.railwayp.client.gui.GuiPlatformBannerEditor;
+import io.github.cvronmin.railwayp.client.gui.GuiRouteSignageEditor;
 import io.github.cvronmin.railwayp.client.gui.GuiWHPFEditor;
 import io.github.cvronmin.railwayp.tileentity.TileEntityNameBanner;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
+import io.github.cvronmin.railwayp.tileentity.TileEntityRouteSignage;
 import io.github.cvronmin.railwayp.tileentity.TileEntityWHPF;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -43,6 +45,10 @@ public class ItemEditor extends Item {
 		}
     	if (te instanceof TileEntityWHPF) {
 			FMLClientHandler.instance().getClient().displayGuiScreen(new GuiWHPFEditor((TileEntityWHPF) te));
+			return EnumActionResult.SUCCESS;
+		}
+    	if (te instanceof TileEntityRouteSignage) {
+			FMLClientHandler.instance().getClient().displayGuiScreen(new GuiRouteSignageEditor((TileEntityRouteSignage) te));
 			return EnumActionResult.SUCCESS;
 		}
         return EnumActionResult.PASS;

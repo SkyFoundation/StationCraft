@@ -1,10 +1,14 @@
 package io.github.cvronmin.railwayp.tileentity;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
+import net.minecraft.util.text.ITextComponent;
 
 public class TileEntityColorful extends TileEntityBanner {
 	private int color;
@@ -28,6 +32,22 @@ public class TileEntityColorful extends TileEntityBanner {
 				}
 			}
 	}
+	@Override
+    public void setItemValues(ItemStack stack)
+    {
+
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag", 10))
+        {
+            NBTTagCompound nbttagcompound = stack.getTagCompound().getCompoundTag("BlockEntityTag");
+            if(nbttagcompound.hasKey("Color", 8)){
+            	colorEncoded = nbttagcompound.getString("Color");
+            	decodeColor();
+            }
+            if(nbttagcompound.hasKey("Rotation", 2)){
+        		rotation = nbttagcompound.getShort("Rotation");
+            }
+        }
+    }
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);

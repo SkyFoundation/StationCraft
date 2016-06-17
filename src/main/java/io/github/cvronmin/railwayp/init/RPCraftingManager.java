@@ -7,6 +7,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.RecipeSorter.Category;
@@ -18,6 +19,13 @@ public class RPCraftingManager {
 				"BBB",
 				'A', new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,EnumDyeColor.WHITE.getMetadata()),
 				'B',Blocks.PLANKS});
+		GameRegistry.addRecipe(new ItemStack(RPItems.platform_banner, 4), new Object[]{
+				"CCC",
+				"AAA",
+				"BBB",
+				'A', new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,EnumDyeColor.WHITE.getMetadata()),
+				'B',Blocks.PLANKS,
+				'C',Items.SIGN});
 		GameRegistry.addRecipe(new ItemStack(RPItems.whpf, 2), new Object[]{
 				"AAA",
 				"BBB",
@@ -41,7 +49,11 @@ public class RPCraftingManager {
 	}
 	private static void registerMosaticTile(){
 		for(int i = 0;i < 16;i++){
-			GameRegistry.addRecipe(new ItemStack(RPBlocks.mosaic_tile, 8, i), new Object[]{
+			ItemStack itemstack = new ItemStack(RPBlocks.mosaic_tile, 8);
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            nbttagcompound.setString("Color", Integer.toHexString(EnumDyeColor.byMetadata(i).getMapColor().colorValue));
+            itemstack.setTagInfo("BlockEntityTag", nbttagcompound);
+			GameRegistry.addRecipe(itemstack, new Object[]{
 					"ABA",
 					"BBB",
 					"ABA",
@@ -51,7 +63,11 @@ public class RPCraftingManager {
 	}
 	private static void registerPlate(){
 		for(int i = 0;i < 16;i++){
-			GameRegistry.addRecipe(new ItemStack(RPBlocks.plate, 8, i), new Object[]{
+			ItemStack itemstack = new ItemStack(RPBlocks.plate, 8);
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            nbttagcompound.setString("Color", Integer.toHexString(EnumDyeColor.byMetadata(i).getMapColor().colorValue));
+            itemstack.setTagInfo("BlockEntityTag", nbttagcompound);
+			GameRegistry.addRecipe(itemstack, new Object[]{
 					"AAA",
 					"ABA",
 					"AAA",

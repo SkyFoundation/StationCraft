@@ -13,12 +13,16 @@ import io.github.cvronmin.railwayp.Reference;
 import io.github.cvronmin.railwayp.client.ClientProxy;
 import io.github.cvronmin.railwayp.tileentity.TileEntityNameBanner;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
+import io.github.cvronmin.railwayp.tileentity.TileEntityRouteSignage;
 import io.github.cvronmin.railwayp.tileentity.TileEntityWHPF;
+import io.github.cvronmin.railwayp.tileentity.TileEntityRouteSignage.Station;
 import io.github.cvronmin.railwayp.util.NTUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
@@ -72,7 +76,8 @@ public class RPPacket extends Packet implements IRPPacket {
 		 * <br>Text1
 		 * <br>Text2
 		 * **/
-		C_UPDATE_WHPF(Side.CLIENT, Integer.class, Integer.class, Integer.class,String.class,String.class, String.class,String.class,String.class,String.class);
+		C_UPDATE_WHPF(Side.CLIENT, Integer.class, Integer.class, Integer.class,String.class,String.class, String.class,String.class,String.class,String.class),
+		C_UPDATE_ROUTE_SIGN(Side.CLIENT,Integer.class,Integer.class,Integer.class,String.class,String.class, NBTTagCompound.class);
 		private Side targetSide;
 		private Class<?>[] decodeAs;
 
@@ -218,6 +223,7 @@ public class RPPacket extends Packet implements IRPPacket {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void handleServerSide(EntityPlayer player) {
 		try {
@@ -290,6 +296,23 @@ public class RPPacket extends Packet implements IRPPacket {
                     te11.setData(Integer.valueOf(pf1), Byte.parseByte(dir), Short.parseShort(r), String.valueOf(data.get(6)), String.valueOf(data.get(7)), String.valueOf(data.get(8)));
                     te11.markDirty();
                     world11.notifyBlockUpdate(blockpos111, state11, state11, 3);
+                } catch (Exception e) {
+                	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
+				}
+				break;
+			case C_UPDATE_ROUTE_SIGN:
+				TileEntityRouteSignage ters = null;
+                BlockPos bp = new BlockPos(Integer.valueOf(String.valueOf(data.get(0))), Integer.valueOf(String.valueOf(data.get(1))), Integer.valueOf(String.valueOf(data.get(2))));
+        		MinecraftServer server2 = FMLCommonHandler.instance().getMinecraftServerInstance();
+        		World world2 = server2.worldServers[0];
+                TileEntity tileEntity = world2.getTileEntity(bp);
+                IBlockState state2 = world2.getBlockState(bp);
+                if(tileEntity instanceof TileEntityRouteSignage) ters = (TileEntityRouteSignage)tileEntity;
+                if(ters == null) break;
+                try {
+                    ters.setData(Byte.parseByte((String) data.get(3)), (String) data.get(4), Station.readStationsFromTagList(((NBTTagCompound) data.get(5)).getTagList("Stations", 10)));
+                    ters.markDirty();
+                    world2.notifyBlockUpdate(bp, state2, state2, 3);
                 } catch (Exception e) {
                 	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
 				}
