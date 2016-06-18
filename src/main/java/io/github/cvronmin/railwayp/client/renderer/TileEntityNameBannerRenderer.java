@@ -11,6 +11,7 @@ import io.github.cvronmin.railwayp.client.renderer.texture.UnifedBannerTextures;
 import io.github.cvronmin.railwayp.tileentity.TileEntityColorful;
 import io.github.cvronmin.railwayp.tileentity.TileEntityNameBanner;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
 import net.minecraft.client.renderer.GlStateManager;
@@ -65,7 +66,7 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 	        TileEntity te1 = te.getWorld().getTileEntity(te.getPos().offset(enumfacing.getOpposite()));
 	        if (te1 instanceof TileEntityColorful)
 	        {
-        		//GlStateManager.translate(-Math.cos(Math.toRadians(((TileEntityColorful)te1).getRotation())), 0, -Math.sin(Math.toRadians(((TileEntityColorful)te1).getRotation())));
+        		//GlStateManager.translate(-Math.cos(Math.toRadians(((TileEntityColorful)te1).getRotation())) * 1.25f, 0, Math.sin(Math.toRadians(((TileEntityColorful)te1).getRotation())) * 1.95f);
 	        	//GlStateManager.rotate(-((TileEntityColorful)te1).getRotation(), 0, 1, 0);
 	        }
 		}
@@ -94,7 +95,7 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 		GlStateManager.translate(0, 0.5F * f1 + 0.6 - b * 2.15, 0.07F * f1 - corr);
 		GlStateManager.scale(f3 * 2, -f3 * 2, f3 * 2);
 		GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
-		GlStateManager.depthMask(false);
+		//GlStateManager.depthMask(false);
 		int xx;
 		boolean requireHdraw = te.getSignType() == 1 ? true : (te.getSignType() == 2 ? true : false);
 		if (destroyStage < 0) {
@@ -116,13 +117,13 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 				}
 			}
 		}
-		GlStateManager.depthMask(true);
+		//GlStateManager.depthMask(true);
 		GlStateManager.popMatrix();
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, 0.5F * f1 + 0.6 - b * 0.35, 0.07F * f1 - corr);
 		GlStateManager.scale(f3, -f3, f3);
 		GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
-		GlStateManager.depthMask(false);
+		//GlStateManager.depthMask(false);
 		if (destroyStage < 0) {
 			if (te.signText[1] != null) {
 				ITextComponent ichatcomponent = te.signText[1];
@@ -137,7 +138,7 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 						te.getColor());
 			}
 		}
-		GlStateManager.depthMask(true);
+		//GlStateManager.depthMask(true);
 		GlStateManager.popMatrix();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.popMatrix();
