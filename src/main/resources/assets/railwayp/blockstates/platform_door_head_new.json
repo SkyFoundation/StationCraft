@@ -6,7 +6,7 @@
 				"model":"railwayp:pfdoor_head_short"
 			},
 			"false":{
-				"model":"railrayp:pfdoor_head"
+				"model":"railwayp:pfdoor_head"
 			}
 		},
 		"facing":{

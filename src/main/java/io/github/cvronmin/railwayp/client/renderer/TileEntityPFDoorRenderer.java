@@ -1,5 +1,7 @@
 package io.github.cvronmin.railwayp.client.renderer;
 
+import org.lwjgl.opengl.GL11;
+
 import io.github.cvronmin.railwayp.block.BlockPlatformDoor;
 import io.github.cvronmin.railwayp.init.RPBlocks;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPFDoor;
@@ -44,11 +46,11 @@ public class TileEntityPFDoorRenderer extends TileEntitySpecialRenderer<TileEnti
 
             if (Minecraft.isAmbientOcclusionEnabled())
             {
-                GlStateManager.shadeModel(7425);
+                GlStateManager.shadeModel(GL11.GL_SMOOTH);
             }
             else
             {
-                GlStateManager.shadeModel(7424);
+                GlStateManager.shadeModel(GL11.GL_FLAT);
             }
             vertexbuffer.begin(7, DefaultVertexFormats.BLOCK);
             vertexbuffer.setTranslation((double)((float)x - (float)blockpos.getX() + te.getOffsetX(partialTicks)), (double)((float)y - (float)blockpos.getY() + te.getOffsetY(partialTicks)), (double)((float)z - (float)blockpos.getZ() + te.getOffsetZ(partialTicks)));
@@ -63,11 +65,11 @@ public class TileEntityPFDoorRenderer extends TileEntitySpecialRenderer<TileEnti
             {
                 IBlockState iblockstate1 = RPBlocks.platform_door_head.getDefaultState().withProperty(BlockPlatformDoor.Extension.FACING, iblockstate.getValue(BlockPlatformDoor.Base.FACING));
                 iblockstate1 = iblockstate1.withProperty(BlockPlatformDoor.Extension.SHORT, Boolean.valueOf(te.getProgress(partialTicks) >= 0.5F));
-                this.renderStateModel(blockpos, iblockstate, vertexbuffer, world, true);
+                this.renderStateModel(blockpos, iblockstate1, vertexbuffer, world, true);
                 vertexbuffer.setTranslation((double)((float)x - (float)blockpos.getX()), (double)((float)y - (float)blockpos.getY()), (double)((float)z - (float)blockpos.getZ()));
-                iblockstate.withProperty(BlockPlatformDoor.Base.EXTENDED, Boolean.valueOf(true));
+                iblockstate = iblockstate.withProperty(BlockPlatformDoor.Base.EXTENDED, Boolean.valueOf(true));
                 this.renderStateModel(blockpos, iblockstate, vertexbuffer, world, true);
-                }
+            }
             else
             {
                 this.renderStateModel(blockpos, iblockstate, vertexbuffer, world, false);

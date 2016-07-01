@@ -13,10 +13,14 @@ import net.minecraft.util.text.ITextComponent;
 public class TileEntityColorful extends TileEntityBanner {
 	private int color;
 	private String colorEncoded;
+	public void setColorEncoded(String colorEncoded) {
+		this.colorEncoded = colorEncoded;
+	}
+
 	private short rotation;
 
 	// private String pattern;
-	private void decodeColor() {
+	public void decodeColor() {
 		if (colorEncoded.length() <= 6)
 			if (!colorEncoded.startsWith("0x")) {
 				try {

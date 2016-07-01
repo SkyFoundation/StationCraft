@@ -11,6 +11,7 @@ import com.jcraft.jogg.Packet;
 import io.github.cvronmin.railwayp.RailwayP;
 import io.github.cvronmin.railwayp.Reference;
 import io.github.cvronmin.railwayp.client.ClientProxy;
+import io.github.cvronmin.railwayp.tileentity.TileEntityColorful;
 import io.github.cvronmin.railwayp.tileentity.TileEntityNameBanner;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
 import io.github.cvronmin.railwayp.tileentity.TileEntityRouteSignage;
@@ -77,7 +78,8 @@ public class RPPacket extends Packet implements IRPPacket {
 		 * <br>Text2
 		 * **/
 		C_UPDATE_WHPF(Side.CLIENT, Integer.class, Integer.class, Integer.class,String.class,String.class, String.class,String.class,String.class,String.class),
-		C_UPDATE_ROUTE_SIGN(Side.CLIENT,Integer.class,Integer.class,Integer.class,String.class,String.class, NBTTagCompound.class);
+		C_UPDATE_ROUTE_SIGN(Side.CLIENT,Integer.class,Integer.class,Integer.class,String.class,String.class, NBTTagCompound.class),
+		C_UPDATE_COLORFUL(Side.CLIENT,Integer.class,Integer.class,Integer.class,String.class);
 		private Side targetSide;
 		private Class<?>[] decodeAs;
 
@@ -313,6 +315,24 @@ public class RPPacket extends Packet implements IRPPacket {
                     ters.setData(Byte.parseByte((String) data.get(3)), (String) data.get(4), Station.readStationsFromTagList(((NBTTagCompound) data.get(5)).getTagList("Stations", 10)));
                     ters.markDirty();
                     world2.notifyBlockUpdate(bp, state2, state2, 3);
+                } catch (Exception e) {
+                	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
+				}
+				break;
+			case C_UPDATE_COLORFUL:
+				TileEntityColorful tec = null;
+                BlockPos bpc = new BlockPos(Integer.valueOf(String.valueOf(data.get(0))), Integer.valueOf(String.valueOf(data.get(1))), Integer.valueOf(String.valueOf(data.get(2))));
+        		MinecraftServer serverc = FMLCommonHandler.instance().getMinecraftServerInstance();
+        		World worldc = serverc.worldServers[0];
+                TileEntity tet = worldc.getTileEntity(bpc);
+                IBlockState statec = worldc.getBlockState(bpc);
+                if(tet instanceof TileEntityColorful) tec = (TileEntityColorful)tet;
+                if(tec == null) break;
+                try {
+                    tec.setColorEncoded(String.valueOf(data.get(3)));
+                    tec.decodeColor();
+                    tec.markDirty();
+                    worldc.notifyBlockUpdate(bpc, statec, statec, 3);
                 } catch (Exception e) {
                 	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
 				}

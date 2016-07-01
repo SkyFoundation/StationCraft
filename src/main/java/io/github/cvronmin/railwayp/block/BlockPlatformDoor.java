@@ -237,7 +237,7 @@ public class BlockPlatformDoor {
 	    }
 
 	    protected static final AxisAlignedBB PISTON_BASE_EAST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.4D, 1.0D, 1.0D, 0.6D);
-	    protected static final AxisAlignedBB PISTON_BASE_WEST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.4D, 1.0D, 1.0D, 1.0D);
+	    protected static final AxisAlignedBB PISTON_BASE_WEST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.4D, 1.0D, 1.0D, .6D);
 	    protected static final AxisAlignedBB PISTON_BASE_SOUTH_AABB = new AxisAlignedBB(0.4D, 0.0D, 0.0D, .6D, 1.0D, 1.0D);
 	    protected static final AxisAlignedBB PISTON_BASE_NORTH_AABB = new AxisAlignedBB(0.4D, 0.0D, 0.0D, .6D, 1.0D, 1.0D);
 	    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)

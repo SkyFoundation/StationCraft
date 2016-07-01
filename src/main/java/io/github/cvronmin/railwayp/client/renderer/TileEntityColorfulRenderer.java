@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.opengl.GL11;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -43,11 +45,11 @@ public class TileEntityColorfulRenderer extends TileEntitySpecialRenderer<TileEn
 
         if (Minecraft.isAmbientOcclusionEnabled())
         {
-            GlStateManager.shadeModel(7425);
+            GlStateManager.shadeModel(GL11.GL_SMOOTH);
         }
         else
         {
-            GlStateManager.shadeModel(7424);
+            GlStateManager.shadeModel(GL11.GL_FLAT);
         }
             GlStateManager.translate((float)x + 0.5F, (float)y +0.5f, (float)z + 0.5F);
         	//GlStateManager.translate(-Math.cos(Math.toRadians(te.getRotation())) /2, 0, -Math.sin(Math.toRadians(te.getRotation())) /2);

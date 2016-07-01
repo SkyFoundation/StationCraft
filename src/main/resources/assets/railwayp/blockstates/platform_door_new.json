@@ -10,7 +10,7 @@
 				"model":"railwayp:pfdoor"
 			},
 			"false":{
-				"model":"railrayp:pfdoor"
+				"model":"railwayp:pfdoor"
 			}
 		},
 		"facing":{
