@@ -1,6 +1,7 @@
 package io.github.cvronmin.railwayp.client;
 
 import io.github.cvronmin.railwayp.CommonProxy;
+import io.github.cvronmin.railwayp.block.BlockPlatformDoor;
 import io.github.cvronmin.railwayp.client.gui.GuiPen;
 import io.github.cvronmin.railwayp.client.renderer.TileEntityColorfulRenderer;
 import io.github.cvronmin.railwayp.client.renderer.TileEntityNameBannerRenderer;
@@ -18,7 +19,9 @@ import io.github.cvronmin.railwayp.tileentity.TileEntityPFDoor;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
 import io.github.cvronmin.railwayp.tileentity.TileEntityRouteSignage;
 import io.github.cvronmin.railwayp.tileentity.TileEntityWHPF;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -33,6 +36,7 @@ public class ClientProxy extends CommonProxy{
     public void preInit(FMLPreInitializationEvent event) {
     	super.preInit(event);
     	snw.registerMessage(MessagerFromServer.SUpdateRailNoticerGuiMessager.class, SUpdateRailNoticerGui.class, 81, Side.CLIENT);
+		ModelLoader.setCustomStateMapper(RPBlocks.platform_door_base, new StateMap.Builder().ignore(BlockPlatformDoor.Base.EXTENDED).ignore(BlockPlatformDoor.Base.POWERED).build());
     }
 	@Override
 	public void init(FMLInitializationEvent event) {

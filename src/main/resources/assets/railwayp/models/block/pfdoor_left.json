@@ -1,0 +1,22 @@
+{
+    "parent": "block/block",
+    "textures": {
+		"edge": "railwayp:blocks/pfdoor_edge",
+        "side": "railwayp:blocks/pfdoor_side",
+        "edge_m": "railwayp:blocks/pfdoor_edge_m",
+        "particle": "#side"
+    },
+    "elements": [
+        {   "from": [ 12.8, 0, 0 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "down":  { "uv": [ 6.4, 0, 9.6, 16 ], "texture": "#edge", "cullface": "false" },
+                "up":    { "uv": [ 6.4, 0, 9.6, 16 ], "texture": "#edge", "cullface": "false" },
+                "north": { "uv": [ 6.4, 0, 9.6, 16 ], "texture": "#edge_m", "cullface": "false" },
+                "south": { "uv": [ 6.4, 0, 9.6, 16 ], "texture": "#edge", "cullface": "false" },
+                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#side", "cullface": "false" },
+                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#side", "cullface": "false" }
+            }
+        }
+    ]
+}

@@ -63,7 +63,7 @@ public class TileEntityPFDoorRenderer extends TileEntitySpecialRenderer<TileEnti
             }
             else if (te.shouldPistonHeadBeRendered() && !te.isExtending())
             {
-                IBlockState iblockstate1 = RPBlocks.platform_door_head.getDefaultState().withProperty(BlockPlatformDoor.Extension.FACING, iblockstate.getValue(BlockPlatformDoor.Base.FACING));
+                IBlockState iblockstate1 = RPBlocks.platform_door_head.getDefaultState().withProperty(BlockPlatformDoor.Extension.FACING, iblockstate.getValue(BlockPlatformDoor.Extension.FACING)).withProperty(BlockPlatformDoor.Base.LEFTY, iblockstate.getValue(BlockPlatformDoor.Base.LEFTY));
                 iblockstate1 = iblockstate1.withProperty(BlockPlatformDoor.Extension.SHORT, Boolean.valueOf(te.getProgress(partialTicks) >= 0.5F));
                 this.renderStateModel(blockpos, iblockstate1, vertexbuffer, world, true);
                 vertexbuffer.setTranslation((double)((float)x - (float)blockpos.getX()), (double)((float)y - (float)blockpos.getY()), (double)((float)z - (float)blockpos.getZ()));

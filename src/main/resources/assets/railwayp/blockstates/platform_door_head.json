@@ -1,12 +1,20 @@
 {
     "variants": {
-        "facing=north,short=false": { "model": "railwayp:pfdoor_head" },
-        "facing=south,short=false": { "model": "railwayp:pfdoor_head", "y": 180 },
-        "facing=west,short=false": { "model": "railwayp:pfdoor_head", "y": 270 },
-        "facing=east,short=false": { "model": "railwayp:pfdoor_head", "y": 90 },
-        "facing=north,short=true": { "model": "railwayp:pfdoor_head_short" },
-        "facing=south,short=true": { "model": "railwayp:pfdoor_head_short", "y": 180 },
-        "facing=west,short=true": { "model": "railwayp:pfdoor_head_short", "y": 270 },
-        "facing=east,short=true": { "model": "railwayp:pfdoor_head_short", "y": 90 }
+        "facing=north,lefty=false,short=false": { "model": "railwayp:pfdoor_head_right" },
+        "facing=south,lefty=false,short=false": { "model": "railwayp:pfdoor_head_right", "y": 180 },
+        "facing=west,lefty=false,short=false": { "model": "railwayp:pfdoor_head_right", "y": 270 },
+        "facing=east,lefty=false,short=false": { "model": "railwayp:pfdoor_head_right", "y": 90 },
+        "facing=north,lefty=false,short=true": { "model": "railwayp:pfdoor_head_short_right" },
+        "facing=south,lefty=false,short=true": { "model": "railwayp:pfdoor_head_short_right", "y": 180 },
+        "facing=west,lefty=false,short=true": { "model": "railwayp:pfdoor_head_short_right", "y": 270 },
+        "facing=east,lefty=false,short=true": { "model": "railwayp:pfdoor_head_short_right", "y": 90 },
+		"facing=north,lefty=true,short=false": { "model": "railwayp:pfdoor_head_left" },
+        "facing=south,lefty=true,short=false": { "model": "railwayp:pfdoor_head_left", "y": 180 },
+        "facing=west,lefty=true,short=false": { "model": "railwayp:pfdoor_head_left", "y": 270 },
+        "facing=east,lefty=true,short=false": { "model": "railwayp:pfdoor_head_left", "y": 90 },
+        "facing=north,lefty=true,short=true": { "model": "railwayp:pfdoor_head_short_left" },
+        "facing=south,lefty=true,short=true": { "model": "railwayp:pfdoor_head_short_left", "y": 180 },
+        "facing=west,lefty=true,short=true": { "model": "railwayp:pfdoor_head_short_left", "y": 270 },
+        "facing=east,lefty=true,short=true": { "model": "railwayp:pfdoor_head_short_left", "y": 90 }
     }
 }

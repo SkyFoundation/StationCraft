@@ -30,6 +30,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityPiston;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.util.EnumFacing.AxisDirection;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -46,13 +48,14 @@ public class BlockPlatformDoor {
 
 	public static class Base extends Block {
 	    public static final PropertyDirection FACING = BlockHorizontal.FACING;
+	    public static final PropertyBool LEFTY = PropertyBool.create("lefty");
 	    public static final PropertyBool EXTENDED = PropertyBool.create("extended");
 	    public static final PropertyBool POWERED = PropertyBool.create("powered");
 
 	    public Base()
 	    {
 	        super(Material.GLASS);
-	        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(EXTENDED, Boolean.valueOf(false)).withProperty(POWERED, Boolean.valueOf(false)));
+	        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(LEFTY, false).withProperty(EXTENDED, Boolean.valueOf(false)).withProperty(POWERED, Boolean.valueOf(false)));
 	        this.setSoundType(SoundType.STONE);
 	        this.setHardness(0.5F);
 	        this.setCreativeTab(CreativeTabs.REDSTONE);
@@ -84,7 +87,7 @@ public class BlockPlatformDoor {
 
 	    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	    {
-	        worldIn.setBlockState(pos, state.withProperty(FACING, getFacingFromEntity(worldIn, pos, placer)), 2);
+	        worldIn.setBlockState(pos, state.withProperty(FACING, getFacingFromEntity(worldIn, pos, placer)).withProperty(LEFTY, shouldBlockPlacedAsLefty(worldIn, pos, placer)), 2);
 
 	        if (!worldIn.isRemote)
 	        {
@@ -113,10 +116,45 @@ public class BlockPlatformDoor {
 
 	    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
 	    {
-	        return this.getDefaultState().withProperty(FACING, getFacingFromEntity(worldIn, pos, placer)).withProperty(EXTENDED, Boolean.valueOf(false)).withProperty(POWERED, Boolean.valueOf(false));
+	        return this.getDefaultState().withProperty(FACING, getFacingFromEntity(worldIn, pos, placer)).withProperty(LEFTY, shouldBlockPlacedAsLefty(worldIn,pos,placer)).withProperty(EXTENDED, Boolean.valueOf(false)).withProperty(POWERED, Boolean.valueOf(false));
 	    }
 
-	    private void checkForMove(World worldIn, BlockPos pos, IBlockState state)
+	    private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, EntityLivingBase entityIn) {
+	    	EnumFacing sf = getFacingFromEntity(worldIn, clickedBlock, entityIn);
+	    	if(sf.getAxisDirection() == AxisDirection.POSITIVE){
+	    		if(sf.getAxis() == Axis.Z)
+	    			return entityIn.posX > clickedBlock.getX();
+		    	if(sf.getAxis() == Axis.X)
+	    			return entityIn.posZ < clickedBlock.getZ();
+	    	}
+	    	else {
+	    		if(sf.getAxis() == Axis.Z)
+	    			return entityIn.posX < clickedBlock.getX();
+		    	if(sf.getAxis() == Axis.X)
+	    			return entityIn.posZ > clickedBlock.getZ();
+	    	}
+			return false;
+		}
+	    public static EnumFacing getFacingFromEntity(World worldIn, BlockPos clickedBlock, EntityLivingBase entityIn)
+	    {
+	        if (MathHelper.abs((float)entityIn.posX - (float)clickedBlock.getX()) < 2.0F && MathHelper.abs((float)entityIn.posZ - (float)clickedBlock.getZ()) < 2.0F)
+	        {
+	            double d0 = entityIn.posY + (double)entityIn.getEyeHeight();
+
+/*	            if (d0 - (double)clickedBlock.getY() > 2.0D)
+	            {
+	                return EnumFacing.UP;
+	            }
+
+	            if ((double)clickedBlock.getY() - d0 > 0.0D)
+	            {
+	                return EnumFacing.DOWN;
+	            }*/
+	        }
+
+	        return entityIn.getHorizontalFacing().getOpposite();
+	    }
+		private void checkForMove(World worldIn, BlockPos pos, IBlockState state)
 	    {
 	        EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
 	        boolean flag = this.shouldBeExtended(worldIn, pos, enumfacing);
@@ -131,7 +169,7 @@ public class BlockPlatformDoor {
 	        else if (!flag && ((Boolean)state.getValue(EXTENDED)).booleanValue())
 	        {
 	            worldIn.setBlockState(pos, state.withProperty(EXTENDED, Boolean.valueOf(false)).withProperty(POWERED, Boolean.valueOf(false)), 2);
-	            worldIn.addBlockEvent(pos, this, 1, enumfacing.getIndex());
+	            worldIn.addBlockEvent(pos, this, 1, enumfacing.getHorizontalIndex());
 	        }
 	    }
 
@@ -227,8 +265,8 @@ public class BlockPlatformDoor {
 	                ((TileEntityPFDoor)tileentity1).clearPistonTileEntity();
 	            }
 
-	            worldIn.setBlockState(pos, RPBlocks.platform_door_extension.getDefaultState().withProperty(Moving.FACING, enumfacing), 3);
-	            worldIn.setTileEntity(pos, Moving.newTileEntity(this.getStateFromMeta(eventParam), enumfacing, false, true));
+	            worldIn.setBlockState(pos, RPBlocks.platform_door_extension.getDefaultState().withProperty(Moving.FACING, enumfacing).withProperty(LEFTY, state.getValue(LEFTY)), 3);
+	            worldIn.setTileEntity(pos, Moving.newTileEntity(this.getStateFromMeta(eventParam | (state.getValue(LEFTY) ? 4 : 0)), enumfacing, false, true));
 	            worldIn.setBlockToAir(pos.offset(enumfacing));
 	            worldIn.playSound((EntityPlayer)null, pos, SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.15F + 0.6F);
 	        }
@@ -236,10 +274,10 @@ public class BlockPlatformDoor {
 	        return true;
 	    }
 
-	    protected static final AxisAlignedBB PISTON_BASE_EAST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.4D, 1.0D, 1.0D, 0.6D);
-	    protected static final AxisAlignedBB PISTON_BASE_WEST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.4D, 1.0D, 1.0D, .6D);
-	    protected static final AxisAlignedBB PISTON_BASE_SOUTH_AABB = new AxisAlignedBB(0.4D, 0.0D, 0.0D, .6D, 1.0D, 1.0D);
-	    protected static final AxisAlignedBB PISTON_BASE_NORTH_AABB = new AxisAlignedBB(0.4D, 0.0D, 0.0D, .6D, 1.0D, 1.0D);
+	    protected static final AxisAlignedBB PISTON_BASE_EW_LEFT_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.8D, 1.0D, 1.0D, 1.0D);
+	    protected static final AxisAlignedBB PISTON_BASE_EW_RIGHT_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.2D);
+	    protected static final AxisAlignedBB PISTON_BASE_NS_LEFT_AABB = new AxisAlignedBB(0.8D, 0.0D, 0.0D, 1D, 1.0D, 1.0D);
+	    protected static final AxisAlignedBB PISTON_BASE_NS_RIGHT_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, .2D, 1.0D, 1.0D);
 	    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	    {
 	        /*if (((Boolean)state.getValue(EXTENDED)).booleanValue())
@@ -248,13 +286,21 @@ public class BlockPlatformDoor {
 	            {
 	                default:
 	                case NORTH:
-	                    return PISTON_BASE_NORTH_AABB;
+	                	if(state.getValue(LEFTY))
+	                		return PISTON_BASE_NS_LEFT_AABB;
+	                    return PISTON_BASE_NS_RIGHT_AABB;
 	                case SOUTH:
-	                    return PISTON_BASE_SOUTH_AABB;
+	                	if(!state.getValue(LEFTY))
+	                		return PISTON_BASE_NS_LEFT_AABB;
+	                    return PISTON_BASE_NS_RIGHT_AABB;
 	                case WEST:
-	                    return PISTON_BASE_WEST_AABB;
+	                	if(!state.getValue(LEFTY))
+	                		return PISTON_BASE_EW_LEFT_AABB;
+	                    return PISTON_BASE_EW_RIGHT_AABB;
 	                case EAST:
-	                    return PISTON_BASE_EAST_AABB;
+	                	if(state.getValue(LEFTY))
+	                		return PISTON_BASE_EW_LEFT_AABB;
+	                    return PISTON_BASE_EW_RIGHT_AABB;
 	            }
 	        /*}
 	        else
@@ -280,28 +326,8 @@ public class BlockPlatformDoor {
 
 	    public static EnumFacing getFacing(int meta)
 	    {
-	        int j = meta & 7;
-	        return j > 5 ? null : EnumFacing.getFront(j);
-	    }
-
-	    public static EnumFacing getFacingFromEntity(World worldIn, BlockPos clickedBlock, EntityLivingBase entityIn)
-	    {
-	        if (MathHelper.abs((float)entityIn.posX - (float)clickedBlock.getX()) < 2.0F && MathHelper.abs((float)entityIn.posZ - (float)clickedBlock.getZ()) < 2.0F)
-	        {
-	            double d0 = entityIn.posY + (double)entityIn.getEyeHeight();
-
-/*	            if (d0 - (double)clickedBlock.getY() > 2.0D)
-	            {
-	                return EnumFacing.UP;
-	            }
-
-	            if ((double)clickedBlock.getY() - d0 > 0.0D)
-	            {
-	                return EnumFacing.DOWN;
-	            }*/
-	        }
-
-	        return entityIn.getHorizontalFacing().getOpposite();
+	        int j = meta & 3;
+	        return j > 3 ? null : EnumFacing.getHorizontal(j);
 	    }
 
     public static boolean func_185646_a(IBlockState p_185646_0_, World worldIn, BlockPos pos, EnumFacing facing, boolean p_185646_4_)
@@ -361,7 +387,7 @@ public class BlockPlatformDoor {
 	        {
 	            worldIn.setBlockToAir(pos.offset(direction));
 	        }
-
+	        IBlockState thisstate = worldIn.getBlockState(pos);
 	        DoorStructureHelper blockpistonstructurehelper = new DoorStructureHelper(worldIn, pos, direction, extending);
 	        List list = blockpistonstructurehelper.getBlocksToMove();
 	        List list1 = blockpistonstructurehelper.getBlocksToDestroy();
@@ -400,7 +426,7 @@ public class BlockPlatformDoor {
 	                block1.getMetaFromState(iblockstate);
 	                worldIn.setBlockToAir(blockpos1);
 	                blockpos1 = blockpos1.offset(enumfacing1);
-	                worldIn.setBlockState(blockpos1, RPBlocks.platform_door_extension.getDefaultState().withProperty(FACING, direction), 4);
+	                worldIn.setBlockState(blockpos1, RPBlocks.platform_door_extension.getDefaultState().withProperty(FACING, direction).withProperty(LEFTY, thisstate.getValue(LEFTY)), 4);
 	                worldIn.setTileEntity(blockpos1, Moving.newTileEntity(iblockstate, direction, extending, false));
 	                --i;
 	                ablock[i] = block1;
@@ -410,8 +436,8 @@ public class BlockPlatformDoor {
 
 	            if (extending)
 	            {
-	                iblockstate = RPBlocks.platform_door_head.getDefaultState().withProperty(Extension.FACING, direction);
-	                IBlockState iblockstate1 = RPBlocks.platform_door_extension.getDefaultState().withProperty(Moving.FACING, direction);
+	                iblockstate = RPBlocks.platform_door_head.getDefaultState().withProperty(Extension.FACING, direction).withProperty(LEFTY, thisstate.getValue(LEFTY));
+	                IBlockState iblockstate1 = RPBlocks.platform_door_extension.getDefaultState().withProperty(Moving.FACING, direction).withProperty(LEFTY, thisstate.getValue(LEFTY));
 	                worldIn.setBlockState(blockpos2, iblockstate1, 4);
 	                worldIn.setTileEntity(blockpos2, Moving.newTileEntity(iblockstate, direction, true, false));
 	            }
@@ -443,7 +469,7 @@ public class BlockPlatformDoor {
 	     */
 	    public IBlockState getStateFromMeta(int meta)
 	    {
-	        return this.getDefaultState().withProperty(FACING, getFacing(meta)).withProperty(EXTENDED, Boolean.valueOf((meta & 8) > 0)).withProperty(POWERED, Boolean.valueOf((meta & 16) > 0));
+	        return this.getDefaultState().withProperty(FACING, getFacing(meta)).withProperty(LEFTY, Boolean.valueOf((meta & 4) > 0)).withProperty(EXTENDED, Boolean.valueOf((meta & 8) > 0)).withProperty(POWERED, Boolean.valueOf((meta & 16) > 0));
 	    }
 
 	    /**
@@ -452,7 +478,7 @@ public class BlockPlatformDoor {
 	    @SideOnly(Side.CLIENT)
 	    public IBlockState getStateForEntityRender(IBlockState state)
 	    {
-	        return this.getDefaultState().withProperty(FACING, EnumFacing.NORTH);
+	        return this.getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(LEFTY, false);
 	    }
 
 	    /**
@@ -461,8 +487,11 @@ public class BlockPlatformDoor {
 	    public int getMetaFromState(IBlockState state)
 	    {
 	        byte b0 = 0;
-	        int i = b0 | ((EnumFacing)state.getValue(FACING)).getIndex();
-
+	        int i = b0 | ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
+	        
+	        if(((Boolean)state.getValue(LEFTY)).booleanValue()) {
+	        	i |= 4;
+	        }
 	        if (((Boolean)state.getValue(EXTENDED)).booleanValue())
 	        {
 	            i |= 8;
@@ -476,7 +505,7 @@ public class BlockPlatformDoor {
 
 	    protected BlockStateContainer createBlockState()
 	    {
-	        return new BlockStateContainer(this, new IProperty[] {FACING, EXTENDED, POWERED});
+	        return new BlockStateContainer(this, new IProperty[] {FACING, EXTENDED, POWERED, LEFTY});
 	    }
 	    public boolean isFullCube(IBlockState state)
 	    {
@@ -500,7 +529,7 @@ public class BlockPlatformDoor {
 	    public Extension()
 	    {
 	        super(Material.GLASS);
-	        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(SHORT, Boolean.valueOf(false)));
+	        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(Base.LEFTY, false).withProperty(SHORT, Boolean.valueOf(false)));
 	        this.setSoundType(SoundType.STONE);
 	        this.setHardness(0.5F);
 	    }
@@ -582,20 +611,32 @@ public class BlockPlatformDoor {
 	        return 0;
 	    }
 
-	    protected static final AxisAlignedBB PISTON_EXTENSION_EAST_WEST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.45D, 1.0D, 1.0D, 0.55D);
-	    protected static final AxisAlignedBB PISTON_EXTENSION_NORTH_SOUTH_AABB = new AxisAlignedBB(0.45D, 0.0D, 0.0D, 0.55D, 1.0D, 1.0D);
-
+	    protected static final AxisAlignedBB PISTON_EXTENSION_EW_LEFT_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.9D, 1.0D, 1.0D, 1D);
+	    protected static final AxisAlignedBB PISTON_EXTENSION_NS_LEFT_AABB = new AxisAlignedBB(0.9D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
+	    protected static final AxisAlignedBB PISTON_EXTENSION_EW_RIGHT_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.1D);
+	    protected static final AxisAlignedBB PISTON_EXTENSION_NS_RIGHT_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.1D, 1.0D, 1.0D);
+	    
 	    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	    {
 	        switch ((EnumFacing)state.getValue(FACING))
 	        {
 	            default:
 	            case NORTH:
+                	if(state.getValue(Base.LEFTY))
+                		return PISTON_EXTENSION_NS_LEFT_AABB;
+	                return PISTON_EXTENSION_NS_RIGHT_AABB;
 	            case SOUTH:
-	                return PISTON_EXTENSION_NORTH_SOUTH_AABB;
+                	if(!state.getValue(Base.LEFTY))
+                		return PISTON_EXTENSION_NS_LEFT_AABB;
+	                return PISTON_EXTENSION_NS_RIGHT_AABB;
 	            case WEST:
+                	if(!state.getValue(Base.LEFTY))
+                		return PISTON_EXTENSION_EW_LEFT_AABB;
+	                return PISTON_EXTENSION_EW_RIGHT_AABB;
 	            case EAST:
-	                return PISTON_EXTENSION_EAST_WEST_AABB;
+                	if(state.getValue(Base.LEFTY))
+                		return PISTON_EXTENSION_EW_LEFT_AABB;
+	                return PISTON_EXTENSION_EW_RIGHT_AABB;
 	        }
 	    }
 
@@ -625,8 +666,8 @@ public class BlockPlatformDoor {
 
 	    public static EnumFacing getFacing(int meta)
 	    {
-	        int j = meta & 7;
-	        return j > 5 ? null : EnumFacing.getFront(j);
+	        int j = meta & 3;
+	        return j > 3 ? null : EnumFacing.getHorizontal(j);
 	    }
 
 	    @SideOnly(Side.CLIENT)
@@ -640,7 +681,7 @@ public class BlockPlatformDoor {
 	     */
 	    public IBlockState getStateFromMeta(int meta)
 	    {
-	        return this.getDefaultState().withProperty(FACING, getFacing(meta));
+	        return this.getDefaultState().withProperty(FACING, getFacing(meta)).withProperty(Base.LEFTY, Boolean.valueOf((meta & 4) > 0));
 	    }
 
 	    /**
@@ -649,13 +690,17 @@ public class BlockPlatformDoor {
 	    public int getMetaFromState(IBlockState state)
 	    {
 	        byte b0 = 0;
-	        int i = b0 | ((EnumFacing)state.getValue(FACING)).getIndex();
+	        int i = b0 | ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
+	        
+	        if(state.getValue(Base.LEFTY)){
+	        	i |= 4;
+	        }
 	        return i;
 	    }
 
 	    protected BlockStateContainer createBlockState()
 	    {
-	        return new BlockStateContainer(this, new IProperty[] {FACING, SHORT});
+	        return new BlockStateContainer(this, new IProperty[] {FACING, SHORT, Base.LEFTY});
 	    }
 	}
 
@@ -666,7 +711,7 @@ public class BlockPlatformDoor {
 	    public Moving()
 	    {
 	        super(Material.GLASS);
-	        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+	        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(Base.LEFTY, false));
 	        this.setHardness(-1.0F);
 	    }
 	    public boolean isFullCube(IBlockState state)
@@ -840,7 +885,7 @@ public class BlockPlatformDoor {
 	     */
 	    public IBlockState getStateFromMeta(int meta)
 	    {
-	        return this.getDefaultState().withProperty(FACING, Extension.getFacing(meta));
+	        return this.getDefaultState().withProperty(FACING, Extension.getFacing(meta)).withProperty(Base.LEFTY, Boolean.valueOf((meta & 4) > 0));
 	    }
 
 	    /**
@@ -849,13 +894,17 @@ public class BlockPlatformDoor {
 	    public int getMetaFromState(IBlockState state)
 	    {
 	        byte b0 = 0;
-	        int i = b0 | ((EnumFacing)state.getValue(FACING)).getIndex();
+	        int i = b0 | ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
+	        
+	        if(state.getValue(Base.LEFTY)){
+	        	i |= 4;
+	        }
 	        return i;
 	    }
 
 	    protected BlockStateContainer createBlockState()
 	    {
-	        return new BlockStateContainer(this, new IProperty[] {FACING});
+	        return new BlockStateContainer(this, new IProperty[] {FACING, Base.LEFTY});
 	    }
 
 	    @Override

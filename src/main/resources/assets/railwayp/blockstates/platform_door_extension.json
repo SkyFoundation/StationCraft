@@ -1,8 +1,12 @@
 {
     "variants": {
-        "facing=north": { "model": "railwayp:pfdoor_head" },
-        "facing=south": { "model": "railwayp:pfdoor_head", "y": 180 },
-        "facing=west": { "model": "railwayp:pfdoor_head", "y": 270 },
-        "facing=east": { "model": "railwayp:pfdoor_head", "y": 90 }
+        "facing=north,lefty=false": { "model": "railwayp:pfdoor_head_right" },
+        "facing=south,lefty=false": { "model": "railwayp:pfdoor_head_right", "y": 180 },
+        "facing=west,lefty=false": { "model": "railwayp:pfdoor_head_right", "y": 270 },
+        "facing=east,lefty=false": { "model": "railwayp:pfdoor_head_right", "y": 90 },
+		"facing=north,lefty=true": { "model": "railwayp:pfdoor_head_left" },
+        "facing=south,lefty=true": { "model": "railwayp:pfdoor_head_left", "y": 180 },
+        "facing=west,lefty=true": { "model": "railwayp:pfdoor_head_left", "y": 270 },
+        "facing=east,lefty=true": { "model": "railwayp:pfdoor_head_left", "y": 90 }
     }
 }
