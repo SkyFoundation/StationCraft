@@ -13,14 +13,18 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.util.EnumFacing.AxisDirection;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -31,54 +35,172 @@ public class BlockPlatformGlass extends Block{
     public static final PropertyBool EAST = PropertyBool.create("east");
     public static final PropertyBool SOUTH = PropertyBool.create("south");
     public static final PropertyBool WEST = PropertyBool.create("west");
+    public static final PropertyBool X_MINUS = PropertyBool.create("lefty");
+    public static final PropertyBool Z_MINUS = PropertyBool.create("forwardly");
     protected static final AxisAlignedBB[] field_185730_f = new AxisAlignedBB[] {
-    		new AxisAlignedBB(0.4D, 0.0D, 0.4D, 0.6D, 1.0D, 0.6D),
-    		new AxisAlignedBB(0.4D, 0.0D, 0.4D, 0.6D, 1.0D, 1.0D),
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D, 0.6D, 1.0D, 0.6D),
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D, 0.6D, 1.0D, 1.0D),
-    		new AxisAlignedBB(0.4D, 0.0D, 0.0D, 0.6D, 1.0D, 0.6D),
-    		new AxisAlignedBB(0.4D, 0.0D, 0.0D, 0.6D, 1.0D, 1.0D),
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D, 1.0D, 0.6D),
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D, 1.0D, 1.0D),
-    		new AxisAlignedBB(0.4D, 0.0D, 0.4D, 1.0D, 1.0D, 0.6D),
-    		new AxisAlignedBB(0.4D, 0.0D, 0.4D, 1.0D, 1.0D, 1.0D),
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D, 1.0D, 1.0D, 0.6D),
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D, 1.0D, 1.0D, 1.0D),
-    		new AxisAlignedBB(0.4D, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D),
-    		new AxisAlignedBB(0.4D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D),
+    		//CENTER 0b0000
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D + 4, 0.6D + 4, 1.0D, 0.6D + 4),
+    		//SOUTH 0b0001
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D + 4, 0.6D + 4, 1.0D, 1.0D    ),
+    		//WEST 0b0010
+    		new AxisAlignedBB(0.0D    , 0.0D, 0.4D + 4, 0.6D + 4, 1.0D, 0.6D + 4),
+    		//SOUTH+WEST 0b0011
+    		new AxisAlignedBB(0.0D    , 0.0D, 0.4D + 4, 0.6D + 4, 1.0D, 1.0D    ),
+    		//NORTH 0b0100
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D    , 0.6D + 4, 1.0D, 0.6D + 4),
+    		//NORTH+SOUTH 0b0101
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D    , 0.6D + 4, 1.0D, 1.0D    ),
+    		//NORTH+WEST 0b0110
+    		new AxisAlignedBB(0.0D    , 0.0D, 0.0D    , 0.6D + 4, 1.0D, 0.6D + 4),
+    		//NORTH+SOUTH+WEST 0b0111
+    		new AxisAlignedBB(0.0D    , 0.0D, 0.0D    , 0.6D + 4, 1.0D, 1.0D    ),
+    		//EAST 0b1000
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D + 4, 1.0D    , 1.0D, 0.6D + 4),
+    		//EAST + SOUTH 0b1001
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D + 4, 1.0D    , 1.0D, 1.0D    ),
+    		//EAST + WEST 0b1010
+    		new AxisAlignedBB(0.0D    , 0.0D, 0.4D + 4, 1.0D    , 1.0D, 0.6D + 4),
+    		//EAST + SOUTH + WEST 0b1011
+    		new AxisAlignedBB(0.0D    , 0.0D, 0.4D + 4, 1.0D    , 1.0D, 1.0D    ),
+    		//EAST + NORTH 0b1100
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D    , 1.0D    , 1.0D, 0.6D + 4),
+    		//EAST + NORTH + SOUTH 0b1101
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D    , 1.0D    , 1.0D, 1.0D    ),
+    		//east + NORTH + WEST 0b1110
+    		new AxisAlignedBB(0.0D    , 0.0D, 0.0D    , 1.0D    , 1.0D, 0.6D + 4),
+    		//FULL 0b1111
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
+    		//TODO X-MINUS (lefty)
+    		//CENTER 0b0000
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D + 4, 0.6D - 4, 1.0D, 0.6D + 4),
+    		//SOUTH 0b0001
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D + 4, 0.6D - 4, 1.0D, 1.0D),
+    		//WEST 0b0010
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D + 4, 0.6D - 4, 1.0D, 0.6D + 4),
+    		//SOUTH+WEST 0b0011
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D + 4, 0.6D - 4, 1.0D, 1.0D),
+    		//NORTH 0b0100
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 0.6D - 4, 1.0D, 0.6D + 4),
+    		//NORTH+SOUTH 0b0101
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 0.6D - 4, 1.0D, 1.0D),
+    		//NORTH+WEST 0b0110
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D - 4, 1.0D, 0.6D + 4),
+    		//NORTH+SOUTH+WEST 0b0111
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D - 4, 1.0D, 1.0D),
+    		//EAST 0b1000
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D + 4, 1.0D, 1.0D, 0.6D + 4),
+    		//EAST + SOUTH 0b1001
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D + 4, 1.0D, 1.0D, 1.0D),
+    		//EAST + WEST 0b1010
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D + 4, 1.0D, 1.0D, 0.6D + 4),
+    		//EAST + SOUTH + WEST 0b1011
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D + 4, 1.0D, 1.0D, 1.0D),
+    		//EAST + NORTH 0b1100
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D + 4),
+    		//EAST + NORTH + SOUTH 0b1101
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
+    		//east + NORTH + WEST 0b1110
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D + 4),
+    		//FULL 0b1111
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
+    		//TODO Z-MINUS (forwardly)
+    		//CENTER 0b0000
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D - 4, 0.6D + 4, 1.0D, 0.6D - 4),
+    		//SOUTH 0b0001
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D - 4, 0.6D + 4, 1.0D, 1.0D),
+    		//WEST 0b0010
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 0.6D + 4, 1.0D, 0.6D - 4),
+    		//SOUTH+WEST 0b0011
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 0.6D + 4, 1.0D, 1.0D),
+    		//NORTH 0b0100
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D, 0.6D + 4, 1.0D, 0.6D - 4),
+    		//NORTH+SOUTH 0b0101
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D, 0.6D + 4, 1.0D, 1.0D),
+    		//NORTH+WEST 0b0110
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D + 4, 1.0D, 0.6D - 4),
+    		//NORTH+SOUTH+WEST 0b0111
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D + 4, 1.0D, 1.0D),
+    		//EAST 0b1000
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D - 4, 1.0D, 1.0D, 0.6D - 4),
+    		//EAST + SOUTH 0b1001
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D - 4, 1.0D, 1.0D, 1.0D),
+    		//EAST + WEST 0b1010
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 1.0D, 1.0D, 0.6D - 4),
+    		//EAST + SOUTH + WEST 0b1011
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 1.0D, 1.0D, 1.0D),
+    		//EAST + NORTH 0b1100
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D - 4),
+    		//EAST + NORTH + SOUTH 0b1101
+    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
+    		//east + NORTH + WEST 0b1110
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D - 4),
+    		//FULL 0b1111
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
+    		//TODO X-MINUS (lefty) & Z-MINUS (forwardly)
+    		//CENTER 0b0000
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D - 4, 0.6D - 4, 1.0D, 0.6D - 4),
+    		//SOUTH 0b0001
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D - 4, 0.6D - 4, 1.0D, 1.0D),
+    		//WEST 0b0010
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 0.6D - 4, 1.0D, 0.6D - 4),
+    		//SOUTH+WEST 0b0011
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 0.6D - 4, 1.0D, 1.0D),
+    		//NORTH 0b0100
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 0.6D - 4, 1.0D, 0.6D - 4),
+    		//NORTH+SOUTH 0b0101
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 0.6D - 4, 1.0D, 1.0D),
+    		//NORTH+WEST 0b0110
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D - 4, 1.0D, 0.6D - 4),
+    		//NORTH+SOUTH+WEST 0b0111
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D - 4, 1.0D, 1.0D),
+    		//EAST 0b1000
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D - 4, 1.0D, 1.0D, 0.6D - 4),
+    		//EAST + SOUTH 0b1001
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D - 4, 1.0D, 1.0D, 1.0D),
+    		//EAST + WEST 0b1010
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 1.0D, 1.0D, 0.6D - 4),
+    		//EAST + SOUTH + WEST 0b1011
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 1.0D, 1.0D, 1.0D),
+    		//EAST + NORTH 0b1100
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D - 4),
+    		//EAST + NORTH + SOUTH 0b1101
+    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
+    		//east + NORTH + WEST 0b1110
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D - 4),
+    		//FULL 0b1111
     		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)
     		};
     public BlockPlatformGlass()
     {
 		super(Material.GLASS);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(NORTH, Boolean.valueOf(false)).withProperty(EAST, Boolean.valueOf(false)).withProperty(SOUTH, Boolean.valueOf(false)).withProperty(WEST, Boolean.valueOf(false)));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(X_MINUS, false).withProperty(Z_MINUS, false).withProperty(NORTH, Boolean.valueOf(false)).withProperty(EAST, Boolean.valueOf(false)).withProperty(SOUTH, Boolean.valueOf(false)).withProperty(WEST, Boolean.valueOf(false)));
         this.setCreativeTab(CreativeTabs.DECORATIONS);
     }
 
     public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB p_185477_4_, List<AxisAlignedBB> p_185477_5_, Entity p_185477_6_)
     {
         state = this.getActualState(state, worldIn, pos);
-        addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[0]);
+        int mask = (state.getValue(X_MINUS) ? 0b10000 : 0) | (state.getValue(Z_MINUS) ? 0b100000 : 0);
+        addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[0 | mask]);
 
         if (((Boolean)state.getValue(NORTH)).booleanValue())
         {
-            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.NORTH)]);
+            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.NORTH) | mask]);
         }
 
         if (((Boolean)state.getValue(SOUTH)).booleanValue())
         {
-            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.SOUTH)]);
+            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.SOUTH) | mask]);
         }
 
         if (((Boolean)state.getValue(EAST)).booleanValue())
         {
-            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.EAST)]);
+            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.EAST) | mask]);
         }
 
         if (((Boolean)state.getValue(WEST)).booleanValue())
         {
-            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.WEST)]);
+            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.WEST) | mask]);
         }
     }
 
@@ -93,26 +215,26 @@ public class BlockPlatformGlass extends Block{
         return field_185730_f[getBoundingBoxIndex(state)];
     }
 
-    private static int getBoundingBoxIndex(IBlockState p_185728_0_)
+    private static int getBoundingBoxIndex(IBlockState state)
     {
         int i = 0;
-
-        if (((Boolean)p_185728_0_.getValue(NORTH)).booleanValue())
+        i |= (state.getValue(X_MINUS) ? 16 : 0) | (state.getValue(Z_MINUS) ? 32 : 0);
+        if (((Boolean)state.getValue(NORTH)).booleanValue())
         {
             i |= getBoundingBoxIndex(EnumFacing.NORTH);
         }
 
-        if (((Boolean)p_185728_0_.getValue(EAST)).booleanValue())
+        if (((Boolean)state.getValue(EAST)).booleanValue())
         {
             i |= getBoundingBoxIndex(EnumFacing.EAST);
         }
 
-        if (((Boolean)p_185728_0_.getValue(SOUTH)).booleanValue())
+        if (((Boolean)state.getValue(SOUTH)).booleanValue())
         {
             i |= getBoundingBoxIndex(EnumFacing.SOUTH);
         }
 
-        if (((Boolean)p_185728_0_.getValue(WEST)).booleanValue())
+        if (((Boolean)state.getValue(WEST)).booleanValue())
         {
             i |= getBoundingBoxIndex(EnumFacing.WEST);
         }
@@ -180,7 +302,12 @@ public class BlockPlatformGlass extends Block{
      */
     public int getMetaFromState(IBlockState state)
     {
-        return 0;
+        return (state.getValue(X_MINUS) ? 0b1 : 0) | (state.getValue(Z_MINUS) ? 0b10 : 0);
+    }
+    
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+    	return getDefaultState().withProperty(X_MINUS, (meta & 1) == 1).withProperty(Z_MINUS, (meta & 2) == 1);
     }
 
     /**
@@ -221,7 +348,7 @@ public class BlockPlatformGlass extends Block{
 
     protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, new IProperty[] {NORTH, EAST, WEST, SOUTH});
+        return new BlockStateContainer(this, new IProperty[] {NORTH, EAST, WEST, SOUTH, X_MINUS, Z_MINUS});
     }
 
     public boolean canPaneConnectTo(IBlockAccess world, BlockPos pos, EnumFacing dir)
@@ -230,4 +357,10 @@ public class BlockPlatformGlass extends Block{
         IBlockState state = world.getBlockState(off);
         return canPaneConnectToBlock(state.getBlock()) || state.isSideSolid(world, off, dir.getOpposite());
     }
+    
+    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
+    {
+        return this.getDefaultState().withProperty(X_MINUS, placer.posX > pos.getX() + 0.5d).withProperty(Z_MINUS, placer.posZ > pos.getZ() + 0.5d);
+    }
+
 }

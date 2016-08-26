@@ -248,7 +248,7 @@ public class TileEntityNameBanner extends TileEntityBanner
         }
     }
     private boolean checkGoodBanner(){
-    	boolean flag = color > 0x0 && color < 0x1000000;
+    	boolean flag = color >= 0x0 && color < 0x1000000;
     	boolean flag1 = stationColor >= 0x0 && stationColor < 0x1000000;
     	return flag && flag1;
     }

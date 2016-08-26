@@ -1,29 +1,49 @@
 {
 	"multipart": [
-        {   "apply": { "model": "railwayp:pfglass_post" }},
-        {   "when": { "north": true },
-            "apply": { "model": "railwayp:pfglass_side" }
-        },
-        {   "when": { "east": true },
-            "apply": { "model": "railwayp:pfglass_side", "y": 90 }
-        },
-        {   "when": { "south": true },
-            "apply": { "model": "railwayp:pfglass_side_alt" }
-        },
-        {   "when": { "west": true },
-            "apply": { "model": "railwayp:pfglass_side_alt", "y": 90 }
-        },
-        {   "when": { "north": false },
-            "apply": { "model": "railwayp:pfglass_noside" }
-        },
-        {   "when": { "east": false },
-            "apply": { "model": "railwayp:pfglass_noside_alt" }
-        },
-        {   "when": { "south": false },
-            "apply": { "model": "railwayp:pfglass_noside_alt", "y": 90 }
-        },
-        {   "when": { "west": false },
-            "apply": { "model": "railwayp:pfglass_noside", "y": 270 }
-        }
+		{
+			"when": { "lefty": false, "forwardly": false },
+			"apply": { "model": "railwayp:pfglass_post" }
+		},
+		{
+			"when": { "lefty": true, "forwardly": false },
+			"apply": { "model": "railwayp:pfglass_post", "y": 90 }
+		},
+				{
+			"when": { "lefty": false, "forwardly": true },
+			"apply": { "model": "railwayp:pfglass_post", "y": 270 }
+		},
+				{
+			"when": { "lefty": true, "forwardly": true },
+			"apply": { "model": "railwayp:pfglass_post", "y": 180 }
+		},
+		
+		{
+			"when": { "OR": [
+				{ "lefty":false, "forwardly": false, "north": true },
+				{ "lefty":false, "forwardly": true, "south": true }
+			] },
+			"apply": { "model": "railwayp:pfglass_side_plate" }
+		},
+		{
+			"when": { "OR": [
+				{ "lefty":false, "forwardly": false, "west": true },
+				{ "lefty":true, "forwardly": false, "east": true }
+			] },
+			"apply": { "model": "railwayp:pfglass_side_plate", "y": 90 }
+		},
+				{
+			"when": { "OR": [
+				{ "lefty":true, "forwardly": false, "north": true },
+				{ "lefty":true, "forwardly": true, "south": true }
+			] },
+			"apply": { "model": "railwayp:pfglass_side_plate", "y": 180 }
+		},
+				{
+			"when": { "OR": [
+				{ "lefty":false, "forwardly": true, "west": true },
+				{ "lefty":true, "forwardly": true, "east": true }
+			] },
+			"apply": { "model": "railwayp:pfglass_side_plate", "y": 270 }
+		}
     ]
 }
