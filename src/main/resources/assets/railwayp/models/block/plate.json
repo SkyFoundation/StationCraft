@@ -1,6 +1,7 @@
 {
-    "parent": "block/cube_all",
+    "parent": "railwayp:block/colorful",
     "textures": {
+        "side": "railwayp:blocks/plate_filter",
         "all": "railwayp:blocks/plate"
     }
 }

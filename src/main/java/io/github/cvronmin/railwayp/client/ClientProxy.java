@@ -19,7 +19,16 @@ import io.github.cvronmin.railwayp.tileentity.TileEntityPFDoor;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
 import io.github.cvronmin.railwayp.tileentity.TileEntityRouteSignage;
 import io.github.cvronmin.railwayp.tileentity.TileEntityWHPF;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFlowerPot;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -53,6 +62,26 @@ public class ClientProxy extends CommonProxy{
 		itemRend(RPItems.route_sign, "route_sign");
 		itemRend(RPItems.whpf, "whpf");
 		itemRend(RPItems.EDITOR, "editor");
+		FMLClientHandler.instance().getClient().getBlockColors().registerBlockColorHandler(new IBlockColor() {
+			@Override
+			public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+                if (worldIn != null && pos != null)
+                {
+                    TileEntity tileentity = worldIn.getTileEntity(pos);
+
+                    if (tileentity instanceof TileEntityColorful)
+                    {
+                    	return ((TileEntityColorful)tileentity).getColor();
+                    }
+
+                    return -1;
+                }
+                else
+                {
+                    return -1;
+                }
+			}
+		}, RPBlocks.plate, RPBlocks.mosaic_tile);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPlatformBanner.class, new TileEntityPlatformBannerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNameBanner.class, new TileEntityNameBannerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRouteSignage.class, new TileEntityRouteSignageRenderer());

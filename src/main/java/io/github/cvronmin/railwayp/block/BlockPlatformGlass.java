@@ -39,134 +39,134 @@ public class BlockPlatformGlass extends Block{
     public static final PropertyBool Z_MINUS = PropertyBool.create("forwardly");
     protected static final AxisAlignedBB[] field_185730_f = new AxisAlignedBB[] {
     		//CENTER 0b0000
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D + 4, 0.6D + 4, 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.4D + .4, 0.6D + .4, 1.0D, 0.6D + .4),
     		//SOUTH 0b0001
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D + 4, 0.6D + 4, 1.0D, 1.0D    ),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.4D + .4, 0.6D + .4, 1.0D, 1.0D    ),
     		//WEST 0b0010
-    		new AxisAlignedBB(0.0D    , 0.0D, 0.4D + 4, 0.6D + 4, 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.0D    , 0.0D, 0.4D + .4, 0.6D + .4, 1.0D, 0.6D + .4),
     		//SOUTH+WEST 0b0011
-    		new AxisAlignedBB(0.0D    , 0.0D, 0.4D + 4, 0.6D + 4, 1.0D, 1.0D    ),
+    		new AxisAlignedBB(0.0D    , 0.0D, 0.4D + .4, 0.6D + .4, 1.0D, 1.0D    ),
     		//NORTH 0b0100
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D    , 0.6D + 4, 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.0D    , 0.6D + .4, 1.0D, 0.6D + .4),
     		//NORTH+SOUTH 0b0101
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D    , 0.6D + 4, 1.0D, 1.0D    ),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.0D    , 0.6D + .4, 1.0D, 1.0D    ),
     		//NORTH+WEST 0b0110
-    		new AxisAlignedBB(0.0D    , 0.0D, 0.0D    , 0.6D + 4, 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.0D    , 0.0D, 0.0D    , 0.6D + .4, 1.0D, 0.6D + .4),
     		//NORTH+SOUTH+WEST 0b0111
-    		new AxisAlignedBB(0.0D    , 0.0D, 0.0D    , 0.6D + 4, 1.0D, 1.0D    ),
+    		new AxisAlignedBB(0.0D    , 0.0D, 0.0D    , 0.6D + .4, 1.0D, 1.0D    ),
     		//EAST 0b1000
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D + 4, 1.0D    , 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.4D + .4, 1.0D    , 1.0D, 0.6D + .4),
     		//EAST + SOUTH 0b1001
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D + 4, 1.0D    , 1.0D, 1.0D    ),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.4D + .4, 1.0D    , 1.0D, 1.0D    ),
     		//EAST + WEST 0b1010
-    		new AxisAlignedBB(0.0D    , 0.0D, 0.4D + 4, 1.0D    , 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.0D    , 0.0D, 0.4D + .4, 1.0D    , 1.0D, 0.6D + .4),
     		//EAST + SOUTH + WEST 0b1011
-    		new AxisAlignedBB(0.0D    , 0.0D, 0.4D + 4, 1.0D    , 1.0D, 1.0D    ),
+    		new AxisAlignedBB(0.0D    , 0.0D, 0.4D + .4, 1.0D    , 1.0D, 1.0D    ),
     		//EAST + NORTH 0b1100
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D    , 1.0D    , 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.0D    , 1.0D    , 1.0D, 0.6D + .4),
     		//EAST + NORTH + SOUTH 0b1101
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D    , 1.0D    , 1.0D, 1.0D    ),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.0D    , 1.0D    , 1.0D, 1.0D    ),
     		//east + NORTH + WEST 0b1110
-    		new AxisAlignedBB(0.0D    , 0.0D, 0.0D    , 1.0D    , 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.0D    , 0.0D, 0.0D    , 1.0D    , 1.0D, 0.6D + .4),
     		//FULL 0b1111
     		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
     		//TODO X-MINUS (lefty)
     		//CENTER 0b0000
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D + 4, 0.6D - 4, 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.4D + .4, 0.6D - .4, 1.0D, 0.6D + .4),
     		//SOUTH 0b0001
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D + 4, 0.6D - 4, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.4D + .4, 0.6D - .4, 1.0D, 1.0D),
     		//WEST 0b0010
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D + 4, 0.6D - 4, 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D + .4, 0.6D - .4, 1.0D, 0.6D + .4),
     		//SOUTH+WEST 0b0011
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D + 4, 0.6D - 4, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D + .4, 0.6D - .4, 1.0D, 1.0D),
     		//NORTH 0b0100
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 0.6D - 4, 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.0D, 0.6D - .4, 1.0D, 0.6D + .4),
     		//NORTH+SOUTH 0b0101
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 0.6D - 4, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.0D, 0.6D - .4, 1.0D, 1.0D),
     		//NORTH+WEST 0b0110
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D - 4, 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D - .4, 1.0D, 0.6D + .4),
     		//NORTH+SOUTH+WEST 0b0111
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D - 4, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D - .4, 1.0D, 1.0D),
     		//EAST 0b1000
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D + 4, 1.0D, 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.4D + .4, 1.0D, 1.0D, 0.6D + .4),
     		//EAST + SOUTH 0b1001
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D + 4, 1.0D, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.4D + .4, 1.0D, 1.0D, 1.0D),
     		//EAST + WEST 0b1010
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D + 4, 1.0D, 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D + .4, 1.0D, 1.0D, 0.6D + .4),
     		//EAST + SOUTH + WEST 0b1011
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D + 4, 1.0D, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D + .4, 1.0D, 1.0D, 1.0D),
     		//EAST + NORTH 0b1100
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D + .4),
     		//EAST + NORTH + SOUTH 0b1101
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
     		//east + NORTH + WEST 0b1110
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D + 4),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D + .4),
     		//FULL 0b1111
     		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
     		//TODO Z-MINUS (forwardly)
     		//CENTER 0b0000
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D - 4, 0.6D + 4, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.4D - .4, 0.6D + .4, 1.0D, 0.6D - .4),
     		//SOUTH 0b0001
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D - 4, 0.6D + 4, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.4D - .4, 0.6D + .4, 1.0D, 1.0D),
     		//WEST 0b0010
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 0.6D + 4, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - .4, 0.6D + .4, 1.0D, 0.6D - .4),
     		//SOUTH+WEST 0b0011
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 0.6D + 4, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - .4, 0.6D + .4, 1.0D, 1.0D),
     		//NORTH 0b0100
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D, 0.6D + 4, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.0D, 0.6D + .4, 1.0D, 0.6D - .4),
     		//NORTH+SOUTH 0b0101
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D, 0.6D + 4, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.0D, 0.6D + .4, 1.0D, 1.0D),
     		//NORTH+WEST 0b0110
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D + 4, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D + .4, 1.0D, 0.6D - .4),
     		//NORTH+SOUTH+WEST 0b0111
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D + 4, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D + .4, 1.0D, 1.0D),
     		//EAST 0b1000
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D - 4, 1.0D, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.4D - .4, 1.0D, 1.0D, 0.6D - .4),
     		//EAST + SOUTH 0b1001
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.4D - 4, 1.0D, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.4D - .4, 1.0D, 1.0D, 1.0D),
     		//EAST + WEST 0b1010
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 1.0D, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - .4, 1.0D, 1.0D, 0.6D - .4),
     		//EAST + SOUTH + WEST 0b1011
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 1.0D, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - .4, 1.0D, 1.0D, 1.0D),
     		//EAST + NORTH 0b1100
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D - .4),
     		//EAST + NORTH + SOUTH 0b1101
-    		new AxisAlignedBB(0.4D + 4, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.4D + .4, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
     		//east + NORTH + WEST 0b1110
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D - .4),
     		//FULL 0b1111
     		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
     		//TODO X-MINUS (lefty) & Z-MINUS (forwardly)
     		//CENTER 0b0000
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D - 4, 0.6D - 4, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.4D - .4, 0.6D - .4, 1.0D, 0.6D - .4),
     		//SOUTH 0b0001
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D - 4, 0.6D - 4, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.4D - .4, 0.6D - .4, 1.0D, 1.0D),
     		//WEST 0b0010
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 0.6D - 4, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - .4, 0.6D - .4, 1.0D, 0.6D - .4),
     		//SOUTH+WEST 0b0011
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 0.6D - 4, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - .4, 0.6D - .4, 1.0D, 1.0D),
     		//NORTH 0b0100
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 0.6D - 4, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.0D, 0.6D - .4, 1.0D, 0.6D - .4),
     		//NORTH+SOUTH 0b0101
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 0.6D - 4, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.0D, 0.6D - .4, 1.0D, 1.0D),
     		//NORTH+WEST 0b0110
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D - 4, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D - .4, 1.0D, 0.6D - .4),
     		//NORTH+SOUTH+WEST 0b0111
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D - 4, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.6D - .4, 1.0D, 1.0D),
     		//EAST 0b1000
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D - 4, 1.0D, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.4D - .4, 1.0D, 1.0D, 0.6D - .4),
     		//EAST + SOUTH 0b1001
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.4D - 4, 1.0D, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.4D - .4, 1.0D, 1.0D, 1.0D),
     		//EAST + WEST 0b1010
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 1.0D, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - .4, 1.0D, 1.0D, 0.6D - .4),
     		//EAST + SOUTH + WEST 0b1011
-    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - 4, 1.0D, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.4D - .4, 1.0D, 1.0D, 1.0D),
     		//EAST + NORTH 0b1100
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D - .4),
     		//EAST + NORTH + SOUTH 0b1101
-    		new AxisAlignedBB(0.4D - 4, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
+    		new AxisAlignedBB(0.4D - .4, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D),
     		//east + NORTH + WEST 0b1110
-    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D - 4),
+    		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.6D - .4),
     		//FULL 0b1111
     		new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)
     		};
@@ -180,7 +180,7 @@ public class BlockPlatformGlass extends Block{
     public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB p_185477_4_, List<AxisAlignedBB> p_185477_5_, Entity p_185477_6_)
     {
         state = this.getActualState(state, worldIn, pos);
-        int mask = (state.getValue(X_MINUS) ? 0b10000 : 0) | (state.getValue(Z_MINUS) ? 0b100000 : 0);
+        int mask = (state.getValue(X_MINUS) ? 16 : 0) | (state.getValue(Z_MINUS) ? 32 : 0);
         addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[0 | mask]);
 
         if (((Boolean)state.getValue(NORTH)).booleanValue())
@@ -360,7 +360,7 @@ public class BlockPlatformGlass extends Block{
     
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {
-        return this.getDefaultState().withProperty(X_MINUS, placer.posX > pos.getX() + 0.5d).withProperty(Z_MINUS, placer.posZ > pos.getZ() + 0.5d);
+        return this.getDefaultState().withProperty(X_MINUS, hitX < 0.5 ^ (hitY > 0 & hitY < 1 & hitZ > 0 & hitZ < 1 &( hitX == 1 | hitX == 0))).withProperty(Z_MINUS, hitZ < 0.5 ^ (hitY > 0 & hitY < 1 & hitX > 0 & hitX < 1 &( hitZ == 1 | hitZ == 0)));
     }
 
 }

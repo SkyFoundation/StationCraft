@@ -1,5 +1,8 @@
 package io.github.cvronmin.railwayp.tileentity;
 
+import org.apache.logging.log4j.Level;
+
+import io.github.cvronmin.railwayp.Reference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,34 +12,30 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fml.common.FMLLog;
 
-public class TileEntityColorful extends TileEntityBanner {
+public class TileEntityColorful/* extends TileEntityBanner*/extends TileEntity {
 	private int color;
 	private String colorEncoded;
 	public void setColorEncoded(String colorEncoded) {
 		this.colorEncoded = colorEncoded;
 	}
 
-	private short rotation;
+	//private short rotation;
 
 	// private String pattern;
 	public void decodeColor() {
-		if (colorEncoded.length() <= 6)
-			if (!colorEncoded.startsWith("0x")) {
-				try {
-					color = Integer.decode("0x" + colorEncoded);
-				} catch (Exception e) {
-					color = 0;
-				}
-			} else {
+		if (colorEncoded.length() <= 6){
+			if (!colorEncoded.startsWith("0x")) colorEncoded= "0x"+colorEncoded;
 				try {
 					color = Integer.decode(colorEncoded);
 				} catch (Exception e) {
+					FMLLog.log(Reference.NAME, Level.WARN, e, "unable to encode color code: %s . This shouldn\'t be happened", colorEncoded);
 					color = 0;
 				}
 			}
 	}
-	@Override
+	//@Override
     public void setItemValues(ItemStack stack)
     {
 
@@ -47,16 +46,16 @@ public class TileEntityColorful extends TileEntityBanner {
             	colorEncoded = nbttagcompound.getString("Color");
             	decodeColor();
             }
-            if(nbttagcompound.hasKey("Rotation", 2)){
+            /*if(nbttagcompound.hasKey("Rotation", 2)){
         		rotation = nbttagcompound.getShort("Rotation");
-            }
+            }*/
         }
     }
-	@Override
+	//@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setString("Color", Integer.toHexString(this.color));
-		compound.setShort("Rotation", (short) (rotation % 360));
+		//compound.setShort("Rotation", (short) (rotation % 360));
 		if(compound.hasKey("Patterns")){
 			compound.removeTag("Patterns");
 		}
@@ -68,12 +67,12 @@ public class TileEntityColorful extends TileEntityBanner {
 		 * this.pattern); }
 		 */
 	}
-    @Override
+    //@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		colorEncoded = compound.getString("Color");
 		decodeColor();
-		rotation = compound.getShort("Rotation");
+		//rotation = compound.getShort("Rotation");
 		/*
 		 * if(compound.hasKey("Pattern")){ pattern =
 		 * compound.getString("Pattern"); }
@@ -88,9 +87,9 @@ public class TileEntityColorful extends TileEntityBanner {
 		return colorEncoded;
 	}
 
-	public short getRotation() {
+	/*public short getRotation() {
 		return rotation;
-	}
+	}*/
 
 	public Packet<?> getDescriptionPacket() {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();

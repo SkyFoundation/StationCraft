@@ -38,7 +38,7 @@ public class BlockColorful extends BlockContainer{
      */
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+        return EnumBlockRenderType.MODEL;
     }
     /**
      * Used to determine ambient occlusion and culling when rebuilding chunks for render

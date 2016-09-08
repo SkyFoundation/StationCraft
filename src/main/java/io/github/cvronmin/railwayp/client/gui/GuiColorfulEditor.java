@@ -17,6 +17,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class GuiColorfulEditor extends GuiScreen {
@@ -86,7 +87,7 @@ public class GuiColorfulEditor extends GuiScreen {
 
             //GlStateManager.rotate(-f2, 0.0F, 1.0F, 0.0F);
             GlStateManager.translate(0.0F, -1.0625F, 0.0F);
-
+        //this.itemRender.renderItemAndEffectIntoGUI(new ItemStack(this.teedit.getBlockType()), 0, 0);
         TileEntityRendererDispatcher.instance.renderTileEntityAt(this.teedit, -0.5D, -0.75D, -0.5D, 0.0F);
         GlStateManager.popMatrix();
 	}

@@ -1,0 +1,31 @@
+{
+    "ambientocclusion": false,
+    "textures": {
+		"pane":"railwayp:blocks/pfdoor_side",
+		"cutted":"railwayp:blocks/pfdoor_side_cut",
+		"edge":"railwayp:blocks/pfdoor_edge",
+        "particle": "#pane"
+    },
+    "elements": [
+        {   "from": [ 12.8, 0, 0 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "down":  { "uv": [  6.4, 0,  9.6,  6.4 ], "texture": "#edge" },
+                "up":    { "uv": [  6.4, 0,  9.6,  6.4 ], "texture": "#edge" },
+                "north": { "uv": [  6.4, 0,  9.6, 16 ], "texture": "#edge", "cullface": "north" },
+                "west":  { "uv": [  0, 0,  16, 16 ], "texture": "#cutted" },
+                "east":  { "uv": [  0, 0, 16, 16 ], "texture": "#pane" }
+            }
+        },
+        {   "from": [ 0, 0, 12.8 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "down":  { "uv": [  6.4, 0,  9.6,  6.4 ], "texture": "#edge" },
+                "up":    { "uv": [  6.4, 0,  9.6,  6.4 ], "texture": "#edge" },
+                "west": { "uv": [  6.4, 0,  9.6, 16 ], "texture": "#edge", "cullface": "west" },
+                "north":  { "uv": [  16, 0,  0, 16 ], "texture": "#cutted" },
+                "south":  { "uv": [  0, 0, 16, 16 ], "texture": "#pane" }
+            }
+        }
+    ]
+}

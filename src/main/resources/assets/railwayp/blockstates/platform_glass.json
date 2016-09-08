@@ -1,49 +1,73 @@
 {
 	"multipart": [
 		{
-			"when": { "lefty": false, "forwardly": false },
+			"when": { "lefty": false, "forwardly": false, "north": false, "west": false },
 			"apply": { "model": "railwayp:pfglass_post" }
 		},
 		{
-			"when": { "lefty": true, "forwardly": false },
+			"when": { "lefty": true, "forwardly": false, "north": false, "east": false },
 			"apply": { "model": "railwayp:pfglass_post", "y": 90 }
 		},
 				{
-			"when": { "lefty": false, "forwardly": true },
+			"when": { "lefty": false, "forwardly": true, "south": false, "west": false },
 			"apply": { "model": "railwayp:pfglass_post", "y": 270 }
 		},
 				{
-			"when": { "lefty": true, "forwardly": true },
+			"when": { "lefty": true, "forwardly": true, "south": false, "east": false },
 			"apply": { "model": "railwayp:pfglass_post", "y": 180 }
 		},
 		
 		{
 			"when": { "OR": [
-				{ "lefty":false, "forwardly": false, "north": true },
-				{ "lefty":false, "forwardly": true, "south": true }
+				{ "lefty":false, "forwardly": false, "north": true, "west": false },
+				{ "lefty":false, "forwardly": true, "south": true, "west": false }
 			] },
 			"apply": { "model": "railwayp:pfglass_side_plate" }
 		},
 		{
 			"when": { "OR": [
-				{ "lefty":false, "forwardly": false, "west": true },
-				{ "lefty":true, "forwardly": false, "east": true }
+				{ "lefty":false, "forwardly": false, "west": true, "north": false },
+				{ "lefty":true, "forwardly": false, "east": true, "north": false }
 			] },
 			"apply": { "model": "railwayp:pfglass_side_plate", "y": 90 }
 		},
 				{
 			"when": { "OR": [
-				{ "lefty":true, "forwardly": false, "north": true },
-				{ "lefty":true, "forwardly": true, "south": true }
+				{ "lefty":true, "forwardly": false, "north": true, "east": false },
+				{ "lefty":true, "forwardly": true, "south": true, "east": false }
 			] },
 			"apply": { "model": "railwayp:pfglass_side_plate", "y": 180 }
 		},
 				{
 			"when": { "OR": [
-				{ "lefty":false, "forwardly": true, "west": true },
-				{ "lefty":true, "forwardly": true, "east": true }
+				{ "lefty":false, "forwardly": true, "west": true, "south": false },
+				{ "lefty":true, "forwardly": true, "east": true, "south": false }
 			] },
 			"apply": { "model": "railwayp:pfglass_side_plate", "y": 270 }
+		},
+		{
+			"when": {
+				 "lefty":false, "forwardly": false, "north": true, "west": true
+			 },
+			"apply": { "model": "railwayp:pfglass_shape_L" }
+		},
+		{
+			"when": {
+				 "lefty":true, "forwardly": false, "east": true, "north": true
+			},
+			"apply": { "model": "railwayp:pfglass_shape_L", "y": 90 }
+		},
+		{
+			"when": {
+				 "lefty":true, "forwardly": true, "south": true, "east": true 
+			},
+			"apply": { "model": "railwayp:pfglass_shape_L", "y": 180 }
+		},
+		{
+			"when": {
+				 "lefty":false, "forwardly": true, "west": true, "south": true
+			 },
+			"apply": { "model": "railwayp:pfglass_shape_L", "y": 270 }
 		}
     ]
 }
