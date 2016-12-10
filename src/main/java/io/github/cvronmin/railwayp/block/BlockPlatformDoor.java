@@ -128,9 +128,10 @@ public boolean isFullyOpaque(IBlockState state) {
 	            this.checkForMove(worldIn, pos, state);
 	        }
 	    }
+
 @Override
-public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
-		float hitZ, int meta, EntityLivingBase placer, ItemStack stack) {
+public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
+		float hitZ, int meta, EntityLivingBase placer) {
     return this.getDefaultState().withProperty(FACING, getFacingFromEntity(world, pos, placer)).withProperty(LEFTY, shouldBlockPlacedAsLefty(world,pos,placer, hitX,hitY,hitZ)).withProperty(EXTENDED, Boolean.valueOf(false)).withProperty(POWERED, Boolean.valueOf(false));
 }
 

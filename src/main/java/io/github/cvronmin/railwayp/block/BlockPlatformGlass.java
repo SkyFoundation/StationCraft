@@ -359,9 +359,6 @@ public class BlockPlatformGlass extends Block{
         return canPaneConnectToBlock(state.getBlock()) || state.isSideSolid(world, off, dir.getOpposite());
     }
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
-    		float hitZ, int meta, EntityLivingBase placer, ItemStack stack) {
-        return this.getDefaultState().withProperty(X_MINUS, hitX < 0.5 ^ (hitY > 0 & hitY < 1 & hitZ > 0 & hitZ < 1 &( hitX == 1 | hitX == 0))).withProperty(Z_MINUS, hitZ < 0.5 ^ (hitY > 0 & hitY < 1 & hitX > 0 & hitX < 1 &( hitZ == 1 | hitZ == 0)));}
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {
         return this.getDefaultState().withProperty(X_MINUS, hitX < 0.5 ^ (hitY > 0 & hitY < 1 & hitZ > 0 & hitZ < 1 &( hitX == 1 | hitX == 0))).withProperty(Z_MINUS, hitZ < 0.5 ^ (hitY > 0 & hitY < 1 & hitX > 0 & hitX < 1 &( hitZ == 1 | hitZ == 0)));

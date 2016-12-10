@@ -55,10 +55,10 @@ public class MessagerFromClient {
 
 		protected void processMessage(CUpdateBannerByGui message, EntityPlayerMP player) {
 	        BlockPos blockpos1 = message.getPos();
-	        TileEntity tileentity2 = player.world.getTileEntity(blockpos1);
+	        TileEntity tileentity2 = player.worldObj.getTileEntity(blockpos1);
 	        tileentity2.readFromNBT(message.getData());
 	        tileentity2.markDirty();
-	        player.world.notifyBlockUpdate(blockpos1, player.world.getBlockState(blockpos1), player.world.getBlockState(blockpos1), 3);
+	        player.worldObj.notifyBlockUpdate(blockpos1, player.worldObj.getBlockState(blockpos1), player.worldObj.getBlockState(blockpos1), 3);
 
 		}
 	}

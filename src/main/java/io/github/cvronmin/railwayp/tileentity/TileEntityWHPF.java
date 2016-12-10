@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.Side;
@@ -155,10 +156,10 @@ public class TileEntityWHPF extends TileEntityBanner {
 		return new SPacketUpdateTileEntity(this.pos, 6, nbttagcompound);
 	}
 	public short getRotation(){
-		return truebearing > 359 ? 359 : (truebearing < 0 ? 0 : truebearing);
+		return (short) MathHelper.clamp_int(truebearing, 0, 359);
 	}
 	public void setRotation(short rotation){
-		truebearing = (short) (rotation % 360);
+		truebearing = (short) (MathHelper.abs_int(rotation) % 360);
 	}
 	/**
 	 * Retrieves the amount of patterns stored on an ItemStack. If the tag does

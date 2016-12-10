@@ -88,8 +88,8 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
     }
     private void moveCollidedEntities()
     {
-        AxisAlignedBB axisalignedbb = this.getAABB(this.world, this.pos).offset(this.pos);
-        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)null, axisalignedbb);
+        AxisAlignedBB axisalignedbb = this.getAABB(this.worldObj, this.pos).offset(this.pos);
+        List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity((Entity)null, axisalignedbb);
 
         if (!list.isEmpty())
         {
@@ -163,7 +163,7 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
                             d2 = d2 + 0.01D;
                     }
 
-                    entity.move(d0 * (double)enumfacing.getFrontOffsetX(), d1 * (double)enumfacing.getFrontOffsetY(), d2 * (double)enumfacing.getFrontOffsetZ());
+                    entity.moveEntity(d0 * (double)enumfacing.getFrontOffsetX(), d1 * (double)enumfacing.getFrontOffsetY(), d2 * (double)enumfacing.getFrontOffsetZ());
                 }
             }
         }
@@ -192,17 +192,17 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
      */
     public void clearPistonTileEntity()
     {
-        if (this.lastProgress < 1.0F && this.world != null)
+        if (this.lastProgress < 1.0F && this.worldObj != null)
         {
             this.lastProgress = this.progress = 1.0F;
-            this.world.removeTileEntity(this.pos);
+            this.worldObj.removeTileEntity(this.pos);
             this.invalidate();
 
-            if (this.world.getBlockState(this.pos).getBlock() == RPBlocks.platform_door_extension)
+            if (this.worldObj.getBlockState(this.pos).getBlock() == RPBlocks.platform_door_extension)
             {
-                this.world.setBlockState(this.pos, this.pistonState, 3);
-                if(!net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(world, pos, world.getBlockState(pos), java.util.EnumSet.noneOf(EnumFacing.class)).isCanceled())
-                    this.world.notifyBlockOfStateChange(this.pos, this.pistonState.getBlock());
+                this.worldObj.setBlockState(this.pos, this.pistonState, 3);
+                if(!net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(worldObj, pos, worldObj.getBlockState(pos), java.util.EnumSet.noneOf(EnumFacing.class)).isCanceled())
+                    this.worldObj.notifyBlockOfStateChange(this.pos, this.pistonState.getBlock());
             }
         }
     }
@@ -223,14 +223,14 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
         if (this.lastProgress >= 1.0F)
         {
             this.moveCollidedEntities();
-            this.world.removeTileEntity(this.pos);
+            this.worldObj.removeTileEntity(this.pos);
             this.invalidate();
 
-            if (this.world.getBlockState(this.pos).getBlock() == RPBlocks.platform_door_extension)
+            if (this.worldObj.getBlockState(this.pos).getBlock() == RPBlocks.platform_door_extension)
             {
-                this.world.setBlockState(this.pos, this.pistonState, 3);
-                if(!net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(world, pos, world.getBlockState(pos), java.util.EnumSet.noneOf(EnumFacing.class)).isCanceled())
-                    this.world.notifyBlockOfStateChange(this.pos, this.pistonState.getBlock());
+                this.worldObj.setBlockState(this.pos, this.pistonState, 3);
+                if(!net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(worldObj, pos, worldObj.getBlockState(pos), java.util.EnumSet.noneOf(EnumFacing.class)).isCanceled())
+                    this.worldObj.notifyBlockOfStateChange(this.pos, this.pistonState.getBlock());
             }
         }
         else

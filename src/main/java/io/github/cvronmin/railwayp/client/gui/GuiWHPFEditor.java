@@ -59,11 +59,13 @@ public class GuiWHPFEditor extends GuiScreen {
 	public GuiWHPFEditor(TileEntityWHPF te){
 		this.te = te;
 		teedit = new TileEntityWHPF();
+		teedit.setPos(te.getPos());
+		teedit.setWorldObj(te.getWorld());
 		teedit.readFromNBT(this.te.serializeNBT());
 		nbtbu = new NBTTagCompound();
 		nbt = new NBTTagCompound();
-		te.writeToNBT(nbtbu);
-		te.writeToNBT(nbt);
+		this.teedit.writeToNBT(nbtbu);
+		this.teedit.writeToNBT(nbt);
 	}
 	public void initGui() {
 		Keyboard.enableRepeatEvents(true);

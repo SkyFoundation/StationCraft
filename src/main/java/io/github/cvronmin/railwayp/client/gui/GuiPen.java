@@ -23,7 +23,7 @@ public class GuiPen extends Gui {
     }
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void eventHandler(RenderGameOverlayEvent event){
-	EntityPlayer entity = Minecraft.getMinecraft().player;
+	EntityPlayer entity = Minecraft.getMinecraft().thePlayer;
 	int cenX = event.getResolution().getScaledWidth() / 6 / 2, y = event.getResolution().getScaledHeight() / 5 * 2;
 	if(entity.getRidingEntity() instanceof EntityMinecartEmpty){
 	    drawRect(0, event.getResolution().getScaledHeight() / 5 * 2, event.getResolution().getScaledWidth() / 6, event.getResolution().getScaledHeight() / 5 * 3, 419430400);

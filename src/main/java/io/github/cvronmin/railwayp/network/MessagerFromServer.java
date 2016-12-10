@@ -40,7 +40,7 @@ public class MessagerFromServer {
 				       return null; 
 				     } 
 				 
-				     final WorldClient worldClient = Minecraft.getMinecraft().world; 
+				     final WorldClient worldClient = Minecraft.getMinecraft().theWorld; 
 
 				     // This code creates a new task which will be executed by the server during the next tick, 
 				     //  for example see MinecraftServer.updateTimeLightAndEntities(), just under section 
