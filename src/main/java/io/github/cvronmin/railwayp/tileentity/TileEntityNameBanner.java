@@ -76,7 +76,7 @@ public class TileEntityNameBanner extends TileEntityBanner
     		}
     	}
     }
-	@Override
+    
     public void setItemValues(ItemStack stack)
     {
 

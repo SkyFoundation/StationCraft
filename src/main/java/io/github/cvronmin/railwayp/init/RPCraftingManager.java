@@ -1,13 +1,17 @@
 package io.github.cvronmin.railwayp.init;
 
+import java.util.Arrays;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemWrittenBook;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.RecipeSorter.Category;
@@ -118,16 +122,16 @@ public class RPCraftingManager {
 		}
 		
 		@Override
-		public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-	        ItemStack[] aitemstack = new ItemStack[inv.getSizeInventory()];
+		public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+	        NonNullList<ItemStack> nonnulllist = NonNullList.<ItemStack>withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 
-	        for (int i = 0; i < aitemstack.length; ++i)
+	        for (int i = 0; i < nonnulllist.size(); ++i)
 	        {
 	            ItemStack itemstack = inv.getStackInSlot(i);
-	            aitemstack[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack);
+	                nonnulllist.set(i, net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack));
 	        }
 
-	        return aitemstack;
+	        return nonnulllist;
 		}
 		
 		@Override
@@ -137,36 +141,36 @@ public class RPCraftingManager {
 		
 		@Override
 		public ItemStack getRecipeOutput() {
-			return null;
+			return ItemStack.EMPTY;
 		}
 		
 		@Override
 		public ItemStack getCraftingResult(InventoryCrafting inv) {
 	        int i = 0;
-	        ItemStack itemstack = null;
+	        ItemStack itemstack = ItemStack.EMPTY;
 
 	        for (int j = 0; j < inv.getSizeInventory(); ++j)
 	        {
 	            ItemStack itemstack1 = inv.getStackInSlot(j);
 
-	            if (itemstack1 != null)
+	            if (!itemstack1.isEmpty())
 	            {
 	            	if(itemstack1.getItem() == item){
 		                if (itemstack1.hasTagCompound())
 		                {
-		                    if (itemstack != null)
+		                    if (!itemstack.isEmpty())
 		                    {
-		                        return null;
+		                        return ItemStack.EMPTY;
 		                    }
 
 		                    itemstack = itemstack1;
 		                }
 		                else ++i;
-		            	}else return null;
+		            	}else return ItemStack.EMPTY;
 	            }
 	        }
 
-	        if (itemstack != null && i >= 1)
+	        if (!itemstack.isEmpty() && i >= 1)
 	        {
 	            ItemStack itemstack2 = new ItemStack(item, i + 1, itemstack.getMetadata());
 
@@ -180,7 +184,7 @@ public class RPCraftingManager {
 	        }
 	        else
 	        {
-	            return null;
+	            return ItemStack.EMPTY;
 	        }
 		}
 	}

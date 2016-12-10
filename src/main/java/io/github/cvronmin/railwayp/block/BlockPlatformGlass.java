@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.EnumFacing.Axis;
@@ -360,7 +361,7 @@ public class BlockPlatformGlass extends Block{
     }
     @Override
     public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
-    		float hitZ, int meta, EntityLivingBase placer, ItemStack stack) {
+    		float hitZ, int meta, EntityLivingBase placer, EnumHand stack) {
         return this.getDefaultState().withProperty(X_MINUS, hitX < 0.5 ^ (hitY > 0 & hitY < 1 & hitZ > 0 & hitZ < 1 &( hitX == 1 | hitX == 0))).withProperty(Z_MINUS, hitZ < 0.5 ^ (hitY > 0 & hitY < 1 & hitX > 0 & hitX < 1 &( hitZ == 1 | hitZ == 0)));}
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {

@@ -213,7 +213,7 @@ public class BlockPlatformBanner extends BlockContainer
             }
             //TODO
             @Override
-            public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+            public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
                 EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
 
                 if (!worldIn.getBlockState(pos.offset(enumfacing.getOpposite())).getMaterial().isSolid())
@@ -221,7 +221,7 @@ public class BlockPlatformBanner extends BlockContainer
                     this.dropBlockAsItem(worldIn, pos, state, 0);
                     worldIn.setBlockToAir(pos);
                 }
-            	super.neighborChanged(state, worldIn, pos, blockIn);
+            	super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
             }
             /**
              * Called when a neighboring block changes.

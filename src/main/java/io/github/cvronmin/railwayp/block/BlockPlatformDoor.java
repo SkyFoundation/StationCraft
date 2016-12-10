@@ -30,6 +30,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityPiston;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumFacing.AxisDirection;
 import net.minecraft.util.SoundCategory;
@@ -96,7 +97,7 @@ public boolean isFullyOpaque(IBlockState state) {
 	    }
 
 	    @Override
-	    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+	    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 	        if (!worldIn.isRemote)
 	        {
 	            this.checkForMove(worldIn, pos, state);
@@ -128,9 +129,10 @@ public boolean isFullyOpaque(IBlockState state) {
 	            this.checkForMove(worldIn, pos, state);
 	        }
 	    }
+
 @Override
 public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
-		float hitZ, int meta, EntityLivingBase placer, ItemStack stack) {
+		float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
     return this.getDefaultState().withProperty(FACING, getFacingFromEntity(world, pos, placer)).withProperty(LEFTY, shouldBlockPlacedAsLefty(world,pos,placer, hitX,hitY,hitZ)).withProperty(EXTENDED, Boolean.valueOf(false)).withProperty(POWERED, Boolean.valueOf(false));
 }
 
@@ -514,18 +516,18 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 
 	            for (k = list1.size() - 1; k >= 0; --k)
 	            {
-	                worldIn.notifyNeighborsOfStateChange((BlockPos)list1.get(k), ablock[i++]);
+	                worldIn.notifyNeighborsOfStateChange((BlockPos)list1.get(k), ablock[i++], true);
 	            }
 
 	            for (k = list.size() - 1; k >= 0; --k)
 	            {
-	                worldIn.notifyNeighborsOfStateChange((BlockPos)list.get(k), ablock[i++]);
+	                worldIn.notifyNeighborsOfStateChange((BlockPos)list.get(k), ablock[i++], true);
 	            }
 
 	            if (extending)
 	            {
-	                worldIn.notifyNeighborsOfStateChange(blockpos2, RPBlocks.platform_door_head);
-	                worldIn.notifyNeighborsOfStateChange(pos, this);
+	                worldIn.notifyNeighborsOfStateChange(blockpos2, RPBlocks.platform_door_head, true);
+	                worldIn.notifyNeighborsOfStateChange(pos, this, true);
 	            }
 
 	            return true;
@@ -735,7 +737,7 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 	    }
 
 	    @Override
-	    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+	    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos from) {
 	        EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
 	        BlockPos blockpos1 = pos.offset(enumfacing.getOpposite());
 	        IBlockState iblockstate1 = worldIn.getBlockState(blockpos1);
@@ -746,7 +748,7 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 	        }
 	        else
 	        {
-	            iblockstate1.getBlock().neighborChanged(iblockstate1, worldIn, blockpos1, blockIn);
+	            iblockstate1.getBlock().neighborChanged(iblockstate1, worldIn, blockpos1, blockIn, from);
 	        }
 	    }
 	    /**
@@ -938,7 +940,7 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 	        return null;
 	    }
 @Override
-public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos from) {
     if (!worldIn.isRemote)
     {
         worldIn.getTileEntity(pos);

@@ -40,22 +40,23 @@ public class ItemWHPF extends Item
      * @param pos The block being right-clicked
      * @param side The side being right-clicked
      */
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-    {
+    @Override
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
+    		EnumFacing facing, float hitX, float hitY, float hitZ) {
     	IBlockState state = worldIn.getBlockState(pos);
         if (facing == EnumFacing.UP)
         {
             return EnumActionResult.FAIL;
         }
-        else if (!state.getBlock().getMaterial(state).isSolid())
+        else if (!state.getMaterial().isSolid())
         {
             return EnumActionResult.FAIL;
         }
         else
         {
             pos = pos.offset(facing);
-
-            if (!playerIn.canPlayerEdit(pos, facing, stack))
+            ItemStack stack = player.getHeldItem(hand);
+            if (!player.canPlayerEdit(pos, facing, stack))
             {
                 return EnumActionResult.FAIL;
             }
@@ -89,13 +90,13 @@ public class ItemWHPF extends Item
                 else{
                 worldIn.setBlockState(pos, RPBlocks.wall_where_pf.getDefaultState().withProperty(BlockWHPF.FACING, facing), 3);
                 }
-                --stack.stackSize;
+                stack.shrink(1);
                 TileEntity tileentity = worldIn.getTileEntity(pos);
 
                 if (tileentity instanceof TileEntityWHPF)
                 {
                     ((TileEntityWHPF)tileentity).setItemValues(stack);
-                    ((TileEntityWHPF)tileentity).setRotation((short) (playerIn.rotationYaw + 180));
+                    ((TileEntityWHPF)tileentity).setRotation((short) (player.rotationYaw + 180));
                 }
 
                 return EnumActionResult.SUCCESS;

@@ -54,7 +54,7 @@ public class TileEntityRouteSignage extends TileEntityBanner{
     		}
     	}
     }
-    @Override
+
     public void setItemValues(ItemStack stack)
     {
 
@@ -183,7 +183,7 @@ public class TileEntityRouteSignage extends TileEntityBanner{
     }
     public static int getStations(ItemStack stack)
     {
-        NBTTagCompound nbttagcompound = stack.getSubCompound("BlockEntityTag", false);
+        NBTTagCompound nbttagcompound = stack.getSubCompound("BlockEntityTag");
         return nbttagcompound != null && nbttagcompound.hasKey("Stations") ? nbttagcompound.getTagList("Stations", 10).tagCount() : 0;
     }
     /**
@@ -211,7 +211,7 @@ public class TileEntityRouteSignage extends TileEntityBanner{
      */
     public static void removeBannerData(ItemStack stack)
     {
-        NBTTagCompound nbttagcompound = stack.getSubCompound("BlockEntityTag", false);
+        NBTTagCompound nbttagcompound = stack.getSubCompound("BlockEntityTag");
 
         if (nbttagcompound != null && nbttagcompound.hasKey("Patterns", 9))
         {

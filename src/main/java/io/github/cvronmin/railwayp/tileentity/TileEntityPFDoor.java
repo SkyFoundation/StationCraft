@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.init.Blocks;
 //import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -163,7 +164,7 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
                             d2 = d2 + 0.01D;
                     }
 
-                    entity.move(d0 * (double)enumfacing.getFrontOffsetX(), d1 * (double)enumfacing.getFrontOffsetY(), d2 * (double)enumfacing.getFrontOffsetZ());
+                    entity.move(MoverType.PISTON, d0 * (double)enumfacing.getFrontOffsetX(), d1 * (double)enumfacing.getFrontOffsetY(), d2 * (double)enumfacing.getFrontOffsetZ());
                 }
             }
         }
@@ -201,8 +202,8 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
             if (this.world.getBlockState(this.pos).getBlock() == RPBlocks.platform_door_extension)
             {
                 this.world.setBlockState(this.pos, this.pistonState, 3);
-                if(!net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(world, pos, world.getBlockState(pos), java.util.EnumSet.noneOf(EnumFacing.class)).isCanceled())
-                    this.world.notifyBlockOfStateChange(this.pos, this.pistonState.getBlock());
+                if(!net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(world, pos, world.getBlockState(pos), java.util.EnumSet.noneOf(EnumFacing.class), false).isCanceled())
+                    this.world.notifyNeighborsOfStateChange(this.pos, this.pistonState.getBlock(), true);
             }
         }
     }
@@ -229,8 +230,8 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
             if (this.world.getBlockState(this.pos).getBlock() == RPBlocks.platform_door_extension)
             {
                 this.world.setBlockState(this.pos, this.pistonState, 3);
-                if(!net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(world, pos, world.getBlockState(pos), java.util.EnumSet.noneOf(EnumFacing.class)).isCanceled())
-                    this.world.notifyBlockOfStateChange(this.pos, this.pistonState.getBlock());
+                if(!net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(world, pos, world.getBlockState(pos), java.util.EnumSet.noneOf(EnumFacing.class), false).isCanceled())
+                    this.world.notifyNeighborsOfStateChange(this.pos, this.pistonState.getBlock(),true);
             }
         }
         else

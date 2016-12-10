@@ -165,7 +165,7 @@ public class TileEntityPlatformBanner extends TileEntityBanner
 
     public static int getBaseColor(ItemStack stack)
     {
-        NBTTagCompound nbttagcompound = stack.getSubCompound("BlockEntityTag", false);
+        NBTTagCompound nbttagcompound = stack.getSubCompound("BlockEntityTag");
         return nbttagcompound != null && nbttagcompound.hasKey("Base") ? nbttagcompound.getInteger("Base") : stack.getMetadata();
     }
 
@@ -174,7 +174,7 @@ public class TileEntityPlatformBanner extends TileEntityBanner
      */
     public static int getPatterns(ItemStack stack)
     {
-        NBTTagCompound nbttagcompound = stack.getSubCompound("BlockEntityTag", false);
+        NBTTagCompound nbttagcompound = stack.getSubCompound("BlockEntityTag");
         return nbttagcompound != null && nbttagcompound.hasKey("Patterns") ? nbttagcompound.getTagList("Patterns", 10).tagCount() : 0;
     }
     /**
@@ -224,7 +224,7 @@ public class TileEntityPlatformBanner extends TileEntityBanner
      */
     public static void removeBannerData(ItemStack stack)
     {
-        NBTTagCompound nbttagcompound = stack.getSubCompound("BlockEntityTag", false);
+        NBTTagCompound nbttagcompound = stack.getSubCompound("BlockEntityTag");
 
         if (nbttagcompound != null && nbttagcompound.hasKey("Patterns", 9))
         {
@@ -298,7 +298,7 @@ public class TileEntityPlatformBanner extends TileEntityBanner
     }
     public static void func_184248_a(ItemStack p_184248_0_, EnumDyeColor p_184248_1_)
     {
-        NBTTagCompound nbttagcompound = p_184248_0_.getSubCompound("BlockEntityTag", true);
+        NBTTagCompound nbttagcompound = p_184248_0_.getOrCreateSubCompound("BlockEntityTag");
         nbttagcompound.setInteger("Base", p_184248_1_.getDyeDamage());
     }
 

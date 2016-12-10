@@ -36,22 +36,24 @@ public class ItemRouteSignage extends Item{
      * @param pos The block being right-clicked
      * @param side The side being right-clicked
      */
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-    {
+    @Override
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
+    		EnumFacing facing, float hitX, float hitY, float hitZ) {
     	IBlockState state = worldIn.getBlockState(pos);
         if (facing == EnumFacing.DOWN || facing == EnumFacing.UP)
         {
             return EnumActionResult.FAIL;
         }
-        else if (!state.getBlock().getMaterial(state).isSolid())
+        else if (!state.getMaterial().isSolid())
         {
             return EnumActionResult.FAIL;
         }
         else
         {
             pos = pos.offset(facing);
+            ItemStack stack = player.getHeldItem(hand);
 
-            if (!playerIn.canPlayerEdit(pos, facing, stack))
+            if (!player.canPlayerEdit(pos, facing, stack) | !worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos))
             {
                 return EnumActionResult.FAIL;
             }
@@ -62,7 +64,7 @@ public class ItemRouteSignage extends Item{
             else
             {
                 worldIn.setBlockState(pos, RPBlocks.wall_route_sign.getDefaultState().withProperty(BlockWallSign.FACING, facing), 3);
-                --stack.stackSize;
+                stack.shrink(1);
                 TileEntity tileentity = worldIn.getTileEntity(pos);
 
                 if (tileentity instanceof TileEntityRouteSignage)

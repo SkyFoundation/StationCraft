@@ -210,7 +210,7 @@ public class TileEntityWHPF extends TileEntityBanner {
 	 *            tags removed.
 	 */
 	public static void removeBannerData(ItemStack stack) {
-		NBTTagCompound nbttagcompound = stack.getSubCompound("BlockEntityTag", false);
+		NBTTagCompound nbttagcompound = stack.getSubCompound("BlockEntityTag");
 
 		if (nbttagcompound != null && nbttagcompound.hasKey("Patterns", 9)) {
 			NBTTagList nbttaglist = nbttagcompound.getTagList("Patterns", 10);
