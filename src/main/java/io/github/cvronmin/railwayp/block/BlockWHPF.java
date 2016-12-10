@@ -154,10 +154,22 @@ public class BlockWHPF extends BlockContainer{
             }
         }
 
+        @Override
+        public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+            IBlockState state = world.getBlockState(pos);
+			EnumFacing enumfacing = (EnumFacing)state .getValue(FACING);
+
+            if (!world.getBlockState(pos.offset(enumfacing.getOpposite())).getBlock().getMaterial(state).isSolid())
+        {
+            this.dropBlockAsItem((World) world, pos, state, 0);
+            ((World) world).setBlockToAir(pos);
+        }
+        	super.onNeighborChange(world, pos, neighbor);
+        }
         /**
          * Called when a neighboring block changes.
          */
-        public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
+        /*public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
         {
             EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
 
@@ -168,7 +180,7 @@ public class BlockWHPF extends BlockContainer{
             }
 
             super.onNeighborBlockChange(worldIn, pos, state, neighborBlock);
-        }
+        }*/
 
         /**
          * Convert the given metadata into a BlockState for this Block
@@ -214,7 +226,17 @@ public class BlockWHPF extends BlockContainer{
         /**
          * Called when a neighboring block changes.
          */
-        public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
+        @Override
+        public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+        	IBlockState state = world.getBlockState(pos), state1 = world.getBlockState(pos.up());
+            if (!state1.getBlock().getMaterial(state1).isSolid())
+            {
+                this.dropBlockAsItem((World) world, pos, state, 0);
+                ((World) world).setBlockToAir(pos);
+            }
+        	super.onNeighborChange(world, pos, neighbor);
+        }
+        /*public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
         {
             if (!worldIn.getBlockState(pos.up()).getBlock().getMaterial(state).isSolid())
             {
@@ -223,7 +245,7 @@ public class BlockWHPF extends BlockContainer{
             }
 
             super.onNeighborBlockChange(worldIn, pos, state, neighborBlock);
-        }
+        }*/
 
 //        /**
 //         * Convert the given metadata into a BlockState for this Block

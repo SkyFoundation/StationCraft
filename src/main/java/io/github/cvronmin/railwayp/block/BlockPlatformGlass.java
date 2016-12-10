@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
@@ -302,7 +303,7 @@ public class BlockPlatformGlass extends Block{
      */
     public int getMetaFromState(IBlockState state)
     {
-        return (state.getValue(X_MINUS) ? 0b1 : 0) | (state.getValue(Z_MINUS) ? 0b10 : 0);
+        return (state.getValue(X_MINUS) ? 1 : 0) | (state.getValue(Z_MINUS) ? 2 : 0);
     }
     
     @Override
@@ -357,7 +358,10 @@ public class BlockPlatformGlass extends Block{
         IBlockState state = world.getBlockState(off);
         return canPaneConnectToBlock(state.getBlock()) || state.isSideSolid(world, off, dir.getOpposite());
     }
-    
+    @Override
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
+    		float hitZ, int meta, EntityLivingBase placer, ItemStack stack) {
+        return this.getDefaultState().withProperty(X_MINUS, hitX < 0.5 ^ (hitY > 0 & hitY < 1 & hitZ > 0 & hitZ < 1 &( hitX == 1 | hitX == 0))).withProperty(Z_MINUS, hitZ < 0.5 ^ (hitY > 0 & hitY < 1 & hitX > 0 & hitX < 1 &( hitZ == 1 | hitZ == 0)));}
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {
         return this.getDefaultState().withProperty(X_MINUS, hitX < 0.5 ^ (hitY > 0 & hitY < 1 & hitZ > 0 & hitZ < 1 &( hitX == 1 | hitX == 0))).withProperty(Z_MINUS, hitZ < 0.5 ^ (hitY > 0 & hitY < 1 & hitX > 0 & hitX < 1 &( hitZ == 1 | hitZ == 0)));

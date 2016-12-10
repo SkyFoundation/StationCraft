@@ -1,6 +1,7 @@
 package io.github.cvronmin.railwayp;
 
 import io.github.cvronmin.railwayp.init.RPBlocks;
+import io.github.cvronmin.railwayp.init.RPCapabilities;
 import io.github.cvronmin.railwayp.init.RPCraftingManager;
 import io.github.cvronmin.railwayp.init.RPItems;
 import io.github.cvronmin.railwayp.network.CUpdateBannerByGui;
@@ -34,6 +35,7 @@ public class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
     	RPBlocks.register();
     	RPItems.register();
+    	RPCapabilities.preInit(event);
     	registerEntity();
     	snw = NetworkRegistry.INSTANCE.newSimpleChannel("RPchannel");
     	snw.registerMessage(MessagerFromClient.CUpdateBannerByGuiMessager.class, CUpdateBannerByGui.class, 80, Side.SERVER);

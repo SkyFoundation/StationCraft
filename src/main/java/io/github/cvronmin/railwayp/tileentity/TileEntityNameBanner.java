@@ -111,7 +111,7 @@ public class TileEntityNameBanner extends TileEntityBanner
 
     }
 	@Override
-    public void writeToNBT(NBTTagCompound compound)
+    public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
         super.writeToNBT(compound);
         if(color >= 0x0 && color < 0x1000000){
@@ -126,6 +126,7 @@ public class TileEntityNameBanner extends TileEntityBanner
             String s = ITextComponent.Serializer.componentToJson(this.signText[i]);
             compound.setString("Text" + (i + 1), s);
         }
+		return compound;
     }
 	@Override
     public void readFromNBT(NBTTagCompound compound)
@@ -187,7 +188,7 @@ public class TileEntityNameBanner extends TileEntityBanner
      * Allows for a specialized description packet to be created. This is often used to sync tile entity data from the
      * server to the client easily. For example this is used by signs to synchronise the text to be displayed.
      */
-    public Packet getDescriptionPacket()
+    public SPacketUpdateTileEntity getUpdatePacket()
     {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         this.writeToNBT(nbttagcompound);

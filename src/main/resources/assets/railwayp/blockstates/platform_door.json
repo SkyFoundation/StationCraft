@@ -1,12 +1,20 @@
 {
     "variants": {
-        "facing=north,lefty=false": { "model": "railwayp:pfdoor_right" },
-        "facing=south,lefty=false": { "model": "railwayp:pfdoor_right", "y": 180 },
-        "facing=west,lefty=false": { "model": "railwayp:pfdoor_right", "y": 270 },
-        "facing=east,lefty=false": { "model": "railwayp:pfdoor_right", "y": 90 },
-		"facing=north,lefty=true": { "model": "railwayp:pfdoor_left" },
-        "facing=south,lefty=true": { "model": "railwayp:pfdoor_left", "y": 180 },
-        "facing=west,lefty=true": { "model": "railwayp:pfdoor_left", "y": 270 },
-        "facing=east,lefty=true": { "model": "railwayp:pfdoor_left", "y": 90 }
+        "extended=false,facing=north,lefty=false": { "model": "railwayp:pfdoor_right" },
+        "extended=false,facing=south,lefty=false": { "model": "railwayp:pfdoor_right", "y": 180 },
+        "extended=false,facing=west,lefty=false": { "model": "railwayp:pfdoor_right", "y": 270 },
+        "extended=false,facing=east,lefty=false": { "model": "railwayp:pfdoor_right", "y": 90 },
+		"extended=false,facing=north,lefty=true": { "model": "railwayp:pfdoor_left" },
+        "extended=false,facing=south,lefty=true": { "model": "railwayp:pfdoor_left", "y": 180 },
+        "extended=false,facing=west,lefty=true": { "model": "railwayp:pfdoor_left", "y": 270 },
+        "extended=false,facing=east,lefty=true": { "model": "railwayp:pfdoor_left", "y": 90 },
+        "extended=true,facing=north,lefty=false": { "model": "railwayp:pfdoor_extended_right" },
+        "extended=true,facing=south,lefty=false": { "model": "railwayp:pfdoor_extended_right", "y": 180 },
+        "extended=true,facing=west,lefty=false": { "model": "railwayp:pfdoor_extended_right", "y": 270 },
+        "extended=true,facing=east,lefty=false": { "model": "railwayp:pfdoor_extended_right", "y": 90 },
+		"extended=true,facing=north,lefty=true": { "model": "railwayp:pfdoor_extended_left" },
+        "extended=true,facing=south,lefty=true": { "model": "railwayp:pfdoor_extended_left", "y": 180 },
+        "extended=true,facing=west,lefty=true": { "model": "railwayp:pfdoor_extended_left", "y": 270 },
+        "extended=true,facing=east,lefty=true": { "model": "railwayp:pfdoor_extended_left", "y": 90 }
     }
 }

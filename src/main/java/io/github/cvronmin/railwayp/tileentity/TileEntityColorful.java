@@ -4,14 +4,10 @@ import org.apache.logging.log4j.Level;
 
 import io.github.cvronmin.railwayp.Reference;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityBanner;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.common.FMLLog;
 
 public class TileEntityColorful/* extends TileEntityBanner*/extends TileEntity {
@@ -25,6 +21,7 @@ public class TileEntityColorful/* extends TileEntityBanner*/extends TileEntity {
 
 	// private String pattern;
 	public void decodeColor() {
+		if(colorEncoded.isEmpty()) return;
 		if (colorEncoded.length() <= 6){
 			if (!colorEncoded.startsWith("0x")) colorEncoded= "0x"+colorEncoded;
 				try {
@@ -51,8 +48,8 @@ public class TileEntityColorful/* extends TileEntityBanner*/extends TileEntity {
             }*/
         }
     }
-	//@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setString("Color", Integer.toHexString(this.color));
 		//compound.setShort("Rotation", (short) (rotation % 360));
@@ -66,8 +63,9 @@ public class TileEntityColorful/* extends TileEntityBanner*/extends TileEntity {
 		 * if(pattern != null && pattern != ""){ compound.setString("Pattern",
 		 * this.pattern); }
 		 */
+		return compound;
 	}
-    //@Override
+    @Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		colorEncoded = compound.getString("Color");
@@ -90,7 +88,15 @@ public class TileEntityColorful/* extends TileEntityBanner*/extends TileEntity {
 	/*public short getRotation() {
 		return rotation;
 	}*/
-
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(this.pos, 6, getUpdateTag());
+	}
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		// TODO Auto-generated method stub
+		return this.writeToNBT(new NBTTagCompound());
+	}
 	public Packet<?> getDescriptionPacket() {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		this.writeToNBT(nbttagcompound);

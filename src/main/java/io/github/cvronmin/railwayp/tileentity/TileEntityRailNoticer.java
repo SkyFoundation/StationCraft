@@ -13,7 +13,7 @@ public class TileEntityRailNoticer extends TileEntity {
     public String nextStat;
     public String interchange;
 	@Override
-	    public void writeToNBT(NBTTagCompound compound)
+	    public NBTTagCompound writeToNBT(NBTTagCompound compound)
 	    {
 	        super.writeToNBT(compound);
 	        if(thisStat != "" && thisStat != null){
@@ -25,6 +25,7 @@ public class TileEntityRailNoticer extends TileEntity {
 	        if(interchange != "" && interchange != null){
 	            compound.setString("InterChange", interchange);
 	        }
+			return compound;
 	    }
 		@Override
 	    public void readFromNBT(NBTTagCompound compound)
@@ -34,7 +35,7 @@ public class TileEntityRailNoticer extends TileEntity {
 	        nextStat = compound.getString("NextStation");
 	        interchange = compound.getString("Interchange");
 	    }
-    public Packet getDescriptionPacket()
+    public SPacketUpdateTileEntity getUpdatePacket()
     {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         this.writeToNBT(nbttagcompound);

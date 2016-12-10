@@ -82,14 +82,14 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
 
         return this.lastProgress + (this.progress - this.lastProgress) * p_145860_1_;
     }
-    private float func_184320_e(float p_184320_1_)
+    private float getExtendingProgress(float p_184320_1_)
     {
         return this.extending ? p_184320_1_ - 1.0F : 1.0F - p_184320_1_;
     }
-    private void func_184322_i()
+    private void moveCollidedEntities()
     {
-        AxisAlignedBB axisalignedbb = this.func_184321_a(this.worldObj, this.pos).offset(this.pos);
-        List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity((Entity)null, axisalignedbb);
+        AxisAlignedBB axisalignedbb = this.getAABB(this.world, this.pos).offset(this.pos);
+        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)null, axisalignedbb);
 
         if (!list.isEmpty())
         {
@@ -163,7 +163,7 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
                             d2 = d2 + 0.01D;
                     }
 
-                    entity.moveEntity(d0 * (double)enumfacing.getFrontOffsetX(), d1 * (double)enumfacing.getFrontOffsetY(), d2 * (double)enumfacing.getFrontOffsetZ());
+                    entity.move(d0 * (double)enumfacing.getFrontOffsetX(), d1 * (double)enumfacing.getFrontOffsetY(), d2 * (double)enumfacing.getFrontOffsetZ());
                 }
             }
         }
@@ -192,21 +192,27 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
      */
     public void clearPistonTileEntity()
     {
-        if (this.lastProgress < 1.0F && this.worldObj != null)
+        if (this.lastProgress < 1.0F && this.world != null)
         {
             this.lastProgress = this.progress = 1.0F;
-            this.worldObj.removeTileEntity(this.pos);
+            this.world.removeTileEntity(this.pos);
             this.invalidate();
 
-            if (this.worldObj.getBlockState(this.pos).getBlock() == RPBlocks.platform_door_extension)
+            if (this.world.getBlockState(this.pos).getBlock() == RPBlocks.platform_door_extension)
             {
-                this.worldObj.setBlockState(this.pos, this.pistonState, 3);
-                if(!net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(worldObj, pos, worldObj.getBlockState(pos), java.util.EnumSet.noneOf(EnumFacing.class)).isCanceled())
-                    this.worldObj.notifyBlockOfStateChange(this.pos, this.pistonState.getBlock());
+                this.world.setBlockState(this.pos, this.pistonState, 3);
+                if(!net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(world, pos, world.getBlockState(pos), java.util.EnumSet.noneOf(EnumFacing.class)).isCanceled())
+                    this.world.notifyBlockOfStateChange(this.pos, this.pistonState.getBlock());
             }
         }
     }
-
+    public void setProgress(float progress, boolean extending){
+    	if(this.extending ^ extending){
+    		this.progress = 1 - progress;
+    	}else {
+			this.progress = progress;
+		}
+    }
     /**
      * Updates the JList with a new model.
      */
@@ -216,15 +222,15 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
 
         if (this.lastProgress >= 1.0F)
         {
-            this.func_184322_i();
-            this.worldObj.removeTileEntity(this.pos);
+            this.moveCollidedEntities();
+            this.world.removeTileEntity(this.pos);
             this.invalidate();
 
-            if (this.worldObj.getBlockState(this.pos).getBlock() == RPBlocks.platform_door_extension)
+            if (this.world.getBlockState(this.pos).getBlock() == RPBlocks.platform_door_extension)
             {
-                this.worldObj.setBlockState(this.pos, this.pistonState, 3);
-                if(!net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(worldObj, pos, worldObj.getBlockState(pos), java.util.EnumSet.noneOf(EnumFacing.class)).isCanceled())
-                    this.worldObj.notifyBlockOfStateChange(this.pos, this.pistonState.getBlock());
+                this.world.setBlockState(this.pos, this.pistonState, 3);
+                if(!net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(world, pos, world.getBlockState(pos), java.util.EnumSet.noneOf(EnumFacing.class)).isCanceled())
+                    this.world.notifyBlockOfStateChange(this.pos, this.pistonState.getBlock());
             }
         }
         else
@@ -238,7 +244,7 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
 
             if (this.extending)
             {
-                this.func_184322_i();
+                this.moveCollidedEntities();
             }
         }
     }
@@ -252,7 +258,7 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
         this.extending = compound.getBoolean("extending");
     }
 
-    public void writeToNBT(NBTTagCompound compound)
+    public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
         super.writeToNBT(compound);
         compound.setInteger("blockId", Block.getIdFromBlock(this.pistonState.getBlock()));
@@ -260,15 +266,16 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
         compound.setInteger("facing", this.pistonFacing.getIndex());
         compound.setFloat("progress", this.lastProgress);
         compound.setBoolean("extending", this.extending);
+		return compound;
     }
-    public AxisAlignedBB func_184321_a(IBlockAccess p_184321_1_, BlockPos p_184321_2_)
+    public AxisAlignedBB getAABB(IBlockAccess p_184321_1_, BlockPos p_184321_2_)
     {
-        return this.func_184319_a(p_184321_1_, p_184321_2_, this.progress).union(this.func_184319_a(p_184321_1_, p_184321_2_, this.lastProgress));
+        return this.getAABB(p_184321_1_, p_184321_2_, this.progress).union(this.getAABB(p_184321_1_, p_184321_2_, this.lastProgress));
     }
 
-    public AxisAlignedBB func_184319_a(IBlockAccess p_184319_1_, BlockPos p_184319_2_, float p_184319_3_)
+    public AxisAlignedBB getAABB(IBlockAccess p_184319_1_, BlockPos p_184319_2_, float p_184319_3_)
     {
-        p_184319_3_ = this.func_184320_e(p_184319_3_);
+        p_184319_3_ = this.getExtendingProgress(p_184319_3_);
         return this.pistonState.getBoundingBox(p_184319_1_, p_184319_2_).offset((double)(p_184319_3_ * (float)this.pistonFacing.getFrontOffsetX()), (double)(p_184319_3_ * (float)this.pistonFacing.getFrontOffsetY()), (double)(p_184319_3_ * (float)this.pistonFacing.getFrontOffsetZ()));
     }
     static final class SwitchAxis

@@ -94,7 +94,7 @@ public class TileEntityWHPF extends TileEntityBanner {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 
 		if (route > 0 && route < 10) {
@@ -111,6 +111,7 @@ public class TileEntityWHPF extends TileEntityBanner {
 			String s = ITextComponent.Serializer.componentToJson(this.signText[i]);
 			compound.setString("Text" + (i + 1), s);
 		}
+		return compound;
 	}
 
 	@Override
@@ -142,6 +143,12 @@ public class TileEntityWHPF extends TileEntityBanner {
 	 * used to sync tile entity data from the server to the client easily. For
 	 * example this is used by signs to synchronise the text to be displayed.
 	 */
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		this.writeToNBT(nbttagcompound);
+		return new SPacketUpdateTileEntity(this.pos, 6, nbttagcompound);
+	}
 	public Packet getDescriptionPacket() {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		this.writeToNBT(nbttagcompound);

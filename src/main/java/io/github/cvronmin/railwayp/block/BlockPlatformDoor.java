@@ -65,29 +65,29 @@ public class BlockPlatformDoor {
 	    {
 	        return BlockRenderLayer.CUTOUT_MIPPED;
 	    }
-
-	    public boolean canProvidePower()
-	    {
-	        return true;
-	    }
-	    public int isProvidingStrongPower(IBlockAccess worldIn, BlockPos pos, IBlockState state, EnumFacing side)
-	    {
-	        return side != EnumFacing.DOWN ? this.isProvidingWeakPower(worldIn, pos, state, side) : 0;
-//	        return ((Boolean)state.getValue(POWERED)).booleanValue() && state.getValue(FACING) != side ? 15 : 0;
-	    }
-	    public int isProvidingWeakPower(IBlockAccess worldIn, BlockPos pos, IBlockState state, EnumFacing side)
-	    {
-//	    	return ((Boolean)state.getValue(POWERED)).booleanValue() && state.getValue(FACING) != side ? 15 : 0;
-	        return ((Boolean)state.getValue(POWERED)).booleanValue() ? 15 : 0;
-	    }
-	    public boolean isOpaqueCube()
-	    {
-	        return false;
-	    }
+@Override
+public boolean canProvidePower(IBlockState state) {
+	// TODO Auto-generated method stub
+	return false;
+}
+/*@Override
+public int getStrongPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+    return side != EnumFacing.DOWN ? this.getWeakPower(blockState, blockAccess, pos, side) : 0;
+}
+	    @Override
+	    public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+	    	// TODO Auto-generated method stub
+	        return ((Boolean)blockState.getValue(POWERED)).booleanValue() ? 15 : 0;
+	    }*/
+@Override
+public boolean isFullyOpaque(IBlockState state) {
+	// TODO Auto-generated method stub
+	return false;
+}
 
 	    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	    {
-	        worldIn.setBlockState(pos, state.withProperty(FACING, getFacingFromEntity(worldIn, pos, placer)).withProperty(LEFTY, shouldBlockPlacedAsLefty(worldIn, pos, placer)), 2);
+	        //worldIn.setBlockState(pos, state.withProperty(FACING, getFacingFromEntity(worldIn, pos, placer)).withProperty(LEFTY, shouldBlockPlacedAsLefty(worldIn, pos, placer)), 2);
 
 	        if (!worldIn.isRemote)
 	        {
@@ -95,17 +95,32 @@ public class BlockPlatformDoor {
 	        }
 	    }
 
+	    @Override
+	    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+	        if (!worldIn.isRemote)
+	        {
+	            this.checkForMove(worldIn, pos, state);
+	        }
+	    }
 	    /**
 	     * Called when a neighboring block changes.
 	     */
+	    @Override
+	    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+	        if (!((World)world).isRemote)
+	        {
+	            this.checkForMove((World) world, pos, world.getBlockState(pos));
+	        }
+	    }
+	    /*@Override
 	    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
 	    {
 	        if (!worldIn.isRemote)
 	        {
 	            this.checkForMove(worldIn, pos, state);
 	        }
-	    }
-
+	    }*/
+@Override
 	    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
 	    {
 	        if (!worldIn.isRemote && worldIn.getTileEntity(pos) == null)
@@ -113,28 +128,44 @@ public class BlockPlatformDoor {
 	            this.checkForMove(worldIn, pos, state);
 	        }
 	    }
+@Override
+public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
+		float hitZ, int meta, EntityLivingBase placer, ItemStack stack) {
+    return this.getDefaultState().withProperty(FACING, getFacingFromEntity(world, pos, placer)).withProperty(LEFTY, shouldBlockPlacedAsLefty(world,pos,placer, hitX,hitY,hitZ)).withProperty(EXTENDED, Boolean.valueOf(false)).withProperty(POWERED, Boolean.valueOf(false));
+}
 
-	    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-	    {
-	        return this.getDefaultState().withProperty(FACING, getFacingFromEntity(worldIn, pos, placer)).withProperty(LEFTY, shouldBlockPlacedAsLefty(worldIn,pos,placer)).withProperty(EXTENDED, Boolean.valueOf(false)).withProperty(POWERED, Boolean.valueOf(false));
-	    }
-
-	    private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, EntityLivingBase entityIn) {
-	    	EnumFacing sf = getFacingFromEntity(worldIn, clickedBlock, entityIn);
-	    	if(sf.getAxisDirection() == AxisDirection.POSITIVE){
-	    		if(sf.getAxis() == Axis.Z)
-	    			return entityIn.posX > clickedBlock.getX();
-		    	if(sf.getAxis() == Axis.X)
-	    			return entityIn.posZ < clickedBlock.getZ();
-	    	}
-	    	else {
-	    		if(sf.getAxis() == Axis.Z)
-	    			return entityIn.posX < clickedBlock.getX();
-		    	if(sf.getAxis() == Axis.X)
-	    			return entityIn.posZ > clickedBlock.getZ();
-	    	}
-			return false;
-		}
+private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, EntityLivingBase entityIn) {
+	EnumFacing sf = getFacingFromEntity(worldIn, clickedBlock, entityIn);
+	if(sf.getAxisDirection() == AxisDirection.POSITIVE){
+		if(sf.getAxis() == Axis.Z)
+			return entityIn.posX > clickedBlock.getX();
+    	if(sf.getAxis() == Axis.X)
+			return entityIn.posZ < clickedBlock.getZ();
+	}
+	else {
+		if(sf.getAxis() == Axis.Z)
+			return entityIn.posX < clickedBlock.getX();
+    	if(sf.getAxis() == Axis.X)
+			return entityIn.posZ > clickedBlock.getZ();
+	}
+	return false;
+}
+private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, EntityLivingBase entityIn, float hitX, float hitY, float hitZ) {
+	EnumFacing sf = getFacingFromEntity(worldIn, clickedBlock, entityIn);
+	if(sf.getAxisDirection() == AxisDirection.POSITIVE){
+		if(sf.getAxis() == Axis.Z)
+			return hitX < 0.5f;
+    	if(sf.getAxis() == Axis.X)
+			return hitZ > 0.5f;
+	}
+	else {
+		if(sf.getAxis() == Axis.Z)
+			return hitX > 0.5f;
+    	if(sf.getAxis() == Axis.X)
+			return hitZ < 0.5f;
+	}
+	return false;
+}
 	    public static EnumFacing getFacingFromEntity(World worldIn, BlockPos clickedBlock, EntityLivingBase entityIn)
 	    {
 	        if (MathHelper.abs((float)entityIn.posX - (float)clickedBlock.getX()) < 2.0F && MathHelper.abs((float)entityIn.posZ - (float)clickedBlock.getZ()) < 2.0F)
@@ -163,7 +194,7 @@ public class BlockPlatformDoor {
 	        {
 	            if ((new DoorStructureHelper(worldIn, pos, enumfacing, true)).canMove())
 	            {
-	                worldIn.addBlockEvent(pos, this, 0, enumfacing.getIndex());
+	                worldIn.addBlockEvent(pos, this, 0, enumfacing.getHorizontalIndex());
 	            }
 	        }
 	        else if (!flag && ((Boolean)state.getValue(EXTENDED)).booleanValue())
@@ -175,45 +206,33 @@ public class BlockPlatformDoor {
 
 	    private boolean shouldBeExtended(World worldIn, BlockPos pos, EnumFacing facing)
 	    {
-	        EnumFacing[] aenumfacing = EnumFacing.values();
-	        int i = aenumfacing.length;
-	        int j;
-
-	        for (j = 0; j < i; ++j)
+	        for (EnumFacing enumfacing : EnumFacing.values())
 	        {
-	            EnumFacing enumfacing1 = aenumfacing[j];
-
-	            if (enumfacing1 != facing && worldIn.isSidePowered(pos.offset(enumfacing1), enumfacing1))
+	            if (enumfacing != facing && worldIn.isSidePowered(pos.offset(enumfacing), enumfacing))
 	            {
 	                return true;
 	            }
 	        }
 
-	        if (worldIn.isSidePowered(pos, EnumFacing.NORTH))
+	        if (worldIn.isSidePowered(pos, EnumFacing.DOWN))
 	        {
 	            return true;
 	        }
 	        else
 	        {
-	            BlockPos blockpos1 = pos.up();
-	            EnumFacing[] aenumfacing1 = EnumFacing.values();
-	            j = aenumfacing1.length;
+	            BlockPos blockpos = pos.up();
 
-	            for (int k = 0; k < j; ++k)
+	            for (EnumFacing enumfacing1 : EnumFacing.values())
 	            {
-	                EnumFacing enumfacing2 = aenumfacing1[k];
-
-	                if (enumfacing2 != EnumFacing.DOWN && worldIn.isSidePowered(blockpos1.offset(enumfacing2), enumfacing2))
+	                if (enumfacing1 != EnumFacing.DOWN && worldIn.isSidePowered(blockpos.offset(enumfacing1), enumfacing1))
 	                {
 	                    return true;
 	                }
 	            }
-	            blockpos1 = pos.down();
-	            for (int k = 0; k < j; ++k)
+	            blockpos = pos.down();
+	            for (EnumFacing enumfacing1 : EnumFacing.values())
 	            {
-	                EnumFacing enumfacing2 = aenumfacing1[k];
-
-	                if (enumfacing2 != EnumFacing.UP && worldIn.isSidePowered(blockpos1.offset(enumfacing2), enumfacing2))
+	                if (enumfacing1 != EnumFacing.UP && worldIn.isSidePowered(blockpos.offset(enumfacing1), enumfacing1))
 	                {
 	                    return true;
 	                }
@@ -223,6 +242,56 @@ public class BlockPlatformDoor {
 	        }
 	    }
 
+	    @Override
+	    public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param) {
+	        EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+
+	        if (!worldIn.isRemote)
+	        {
+	            boolean flag = this.shouldBeExtended(worldIn, pos, enumfacing);
+
+	            if (flag && id == 1)
+	            {
+	                worldIn.setBlockState(pos, state.withProperty(EXTENDED, Boolean.valueOf(true)).withProperty(POWERED, Boolean.valueOf(true)), 2);
+	                return false;
+	            }
+
+	            if (!flag && id == 0)
+	            {
+	                return false;
+	            }
+	        }
+
+	        if (id == 0)
+	        {
+	            if (!this.doMove(worldIn, pos, enumfacing, true))
+	            {
+	                return false;
+	            }
+
+	            worldIn.setBlockState(pos, state.withProperty(EXTENDED, Boolean.valueOf(true)).withProperty(POWERED, Boolean.valueOf(true)), 2);
+	            worldIn.playSound(null, pos,SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.25F + 0.6F);
+	        }
+	        else if (id == 1)
+	        {
+	            TileEntity tileentity1 = worldIn.getTileEntity(pos.offset(enumfacing));
+	            float p = 1;
+	            if (tileentity1 instanceof TileEntityPFDoor)
+	            {
+	            	p = ((TileEntityPFDoor) tileentity1).getProgress(1);
+	                ((TileEntityPFDoor)tileentity1).clearPistonTileEntity();
+	            }
+
+	            TileEntity teDoor = Moving.newTileEntity(this.getStateFromMeta(param | (state.getValue(LEFTY) ? 4 : 0)), enumfacing, false, true);
+	            ((TileEntityPFDoor)teDoor).setProgress(p, true);
+	            worldIn.setBlockState(pos, RPBlocks.platform_door_extension.getDefaultState().withProperty(Moving.FACING, enumfacing).withProperty(LEFTY, state.getValue(LEFTY)), 3);
+	            worldIn.setTileEntity(pos, teDoor);
+	            worldIn.setBlockToAir(pos.offset(enumfacing));
+	            worldIn.playSound((EntityPlayer)null, pos, SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.15F + 0.6F);
+	        }
+
+	        return true;
+	    }
 	    /**
 	     * Called on both Client and Server when World#addBlockEvent is called
 	     */
@@ -329,7 +398,6 @@ public class BlockPlatformDoor {
 	        int j = meta & 3;
 	        return j > 3 ? null : EnumFacing.getHorizontal(j);
 	    }
-
     public static boolean func_185646_a(IBlockState p_185646_0_, World worldIn, BlockPos pos, EnumFacing facing, boolean p_185646_4_)
     {
         Block block = p_185646_0_.getBlock();
@@ -496,13 +564,17 @@ public class BlockPlatformDoor {
 	        {
 	            i |= 8;
 	        }
-	        if(((Boolean)state.getValue(POWERED)).booleanValue()){
+	        /*if(((Boolean)state.getValue(POWERED)).booleanValue()){
 	        	i |= 16;
-	        }
+	        }*/
 
 	        return i;
 	    }
-
+	    @Override
+	    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	    	// TODO Auto-generated method stub
+	    	return state.withProperty(POWERED, state.getValue(EXTENDED));
+	    }
 	    protected BlockStateContainer createBlockState()
 	    {
 	        return new BlockStateContainer(this, new IProperty[] {FACING, EXTENDED, POWERED, LEFTY});
@@ -645,11 +717,25 @@ public class BlockPlatformDoor {
 	        addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, state.getBoundingBox(worldIn, pos));
 	    }
 
-	    /**
-	     * Called when a neighboring block changes.
-	     */
-	    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
-	    {
+	    @Override
+	    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+	        IBlockState state = world.getBlockState(pos);
+			EnumFacing enumfacing = (EnumFacing)state .getValue(FACING);
+	        BlockPos blockpos1 = pos.offset(enumfacing.getOpposite());
+	        IBlockState iblockstate1 = world.getBlockState(blockpos1);
+
+	        if (iblockstate1.getBlock() != RPBlocks.platform_door_base)
+	        {
+	            ((World) world).setBlockToAir(pos);
+	        }
+	        else
+	        {
+	            iblockstate1.getBlock().onNeighborChange(world, blockpos1, neighbor);
+	        }
+	    }
+
+	    @Override
+	    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
 	        EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
 	        BlockPos blockpos1 = pos.offset(enumfacing.getOpposite());
 	        IBlockState iblockstate1 = worldIn.getBlockState(blockpos1);
@@ -660,8 +746,15 @@ public class BlockPlatformDoor {
 	        }
 	        else
 	        {
-	            iblockstate1.getBlock().onNeighborBlockChange(worldIn, blockpos1, iblockstate1, neighborBlock);
+	            iblockstate1.getBlock().neighborChanged(iblockstate1, worldIn, blockpos1, blockIn);
 	        }
+	    }
+	    /**
+	     * Called when a neighboring block changes.
+	     */
+	    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
+	    {
+
 	    }
 
 	    public static EnumFacing getFacing(int meta)
@@ -844,28 +937,25 @@ public class BlockPlatformDoor {
 	    {
 	        return null;
 	    }
+@Override
+public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    if (!worldIn.isRemote)
+    {
+        worldIn.getTileEntity(pos);
+    }
+}
 
-	    /**
-	     * Called when a neighboring block changes.
-	     */
-	    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
-	    {
-	        if (!worldIn.isRemote)
-	        {
-	            worldIn.getTileEntity(pos);
-	        }
-	    }
 
     public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
     {
         TileEntityPFDoor tileentitypiston = this.getTileEntity(worldIn, pos);
-        return tileentitypiston == null ? null : tileentitypiston.func_184321_a(worldIn, pos);
+        return tileentitypiston == null ? null : tileentitypiston.getAABB(worldIn, pos);
     }
 
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
         TileEntityPFDoor tileentitypiston = this.getTileEntity(source, pos);
-        return tileentitypiston != null ? tileentitypiston.func_184321_a(source, pos) : FULL_BLOCK_AABB;
+        return tileentitypiston != null ? tileentitypiston.getAABB(source, pos) : FULL_BLOCK_AABB;
     }
     
 	    private TileEntityPFDoor getTileEntity(IBlockAccess worldIn, BlockPos pos)

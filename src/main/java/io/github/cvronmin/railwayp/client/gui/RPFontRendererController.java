@@ -13,8 +13,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
@@ -33,18 +35,13 @@ public class RPFontRendererController {
 			rls[i] = new ResourceLocation(location.getResourceDomain(), location.getResourcePath() +"/"+ String.format("textures/font/unicode_page_%02x.png", new Object[] {Integer.valueOf(i)}));
 		}
 		try {
-			Field upl = null;
-			for (Field f : fontRenderer.getClass().getDeclaredFields()) {
-				if(f.getName().equalsIgnoreCase("field_111274_c") || f.getName().equalsIgnoreCase("UNICODE_PAGE_LOCATIONS")){
-					upl = f;
-				break;
-			}
-			}
+			Field upl = ReflectionHelper.findField(FontRenderer.class, "field_111274_c", "UNICODE_PAGE_LOCATIONS");
 			upl.setAccessible(true);
-			Field modifiersField = Field.class.getDeclaredField("modifiers");
-		    modifiersField.setAccessible(true);
-		   modifiersField.setInt(upl, upl.getModifiers() & ~Modifier.FINAL);
-			upl.set(fontRenderer, rls);
+			//Field modifiersField = Field.class.getDeclaredField("modifiers");
+		    //modifiersField.setAccessible(true);
+		   //modifiersField.setInt(upl, upl.getModifiers() & ~Modifier.FINAL);
+		   EnumHelper.setFailsafeFieldValue(upl, null, rls);
+			//upl.set(fontRenderer, rls);
 		} catch (Exception e) {
 			FMLLog.log(Reference.NAME, Level.WARN, e,"");
 		}
@@ -52,18 +49,9 @@ public class RPFontRendererController {
 	private static void restoreUnicodePageLocation(FontRenderer fontRenderer){
 		ResourceLocation[] rls = new ResourceLocation[256];
 		try {
-			Field upl = null;
-			for (Field f : fontRenderer.getClass().getDeclaredFields()) {
-				if(f.getName().equalsIgnoreCase("field_111274_c") || f.getName().equalsIgnoreCase("UNICODE_PAGE_LOCATIONS")){
-					upl = f;
-				break;
-			}
-			}
+			Field upl = ReflectionHelper.findField(FontRenderer.class, "field_111274_c", "UNICODE_PAGE_LOCATIONS");
 			upl.setAccessible(true);
-			Field modifiersField = Field.class.getDeclaredField("modifiers");
-		    modifiersField.setAccessible(true);
-		   modifiersField.setInt(upl, upl.getModifiers() & ~Modifier.FINAL);
-			upl.set(fontRenderer, rls);
+		   EnumHelper.setFailsafeFieldValue(upl, null, rls);
 		} catch (Exception e) {
 			FMLLog.log(Reference.NAME, Level.WARN, e,"");
 		}
@@ -74,23 +62,15 @@ public class RPFontRendererController {
 
         try
         {
-			Field gs = null;
-			for (Field f : fontRenderer.getClass().getDeclaredFields()) {
-				if(f.getName().equalsIgnoreCase("field_78287_e") || f.getName().equalsIgnoreCase("glyphWidth")){
-					gs = f;
-				break;
-			}
-			}
+			Field gs = ReflectionHelper.findField(FontRenderer.class, "field_78287_e","glyphWidth");
 			gs.setAccessible(true);
 			byte[] tmp = new byte[65536];
             iresource = getResource(new ResourceLocation(location.getResourceDomain(), location.getResourcePath() + "/" + "font/glyph_sizes.bin"));
             iresource.getInputStream().read(tmp);
-            gs.set(fontRenderer, tmp);
-        }
-        catch (IOException | SecurityException | IllegalArgumentException | IllegalAccessException ioexception)
-        {
-            throw new RuntimeException(ioexception);
-        }
+            EnumHelper.setFailsafeFieldValue(gs, fontRenderer, tmp);
+        } catch (Exception e) {
+			throw new RuntimeException(e);
+		}
         finally
         {
             IOUtils.closeQuietly((Closeable)iresource);

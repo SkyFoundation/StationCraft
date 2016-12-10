@@ -172,18 +172,18 @@ public class BlockRouteSignage extends BlockContainer
             /**
              * Called when a neighboring block changes.
              */
-            public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
+           /* public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
             {
                 EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
 
-/*                if (!worldIn.getBlockState(pos.offset(enumfacing.getOpposite())).getBlock().getMaterial().isSolid())
+                if (!worldIn.getBlockState(pos.offset(enumfacing.getOpposite())).getBlock().getMaterial().isSolid())
                 {
                     this.dropBlockAsItem(worldIn, pos, state, 0);
                     worldIn.setBlockToAir(pos);
-                }*/
+                }
 
                 super.onNeighborBlockChange(worldIn, pos, state, neighborBlock);
-            }
+            }*/
 
             /**
              * Convert the given metadata into a BlockState for this Block

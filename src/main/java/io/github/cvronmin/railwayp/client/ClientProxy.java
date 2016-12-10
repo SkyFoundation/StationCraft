@@ -1,6 +1,7 @@
 package io.github.cvronmin.railwayp.client;
 
 import io.github.cvronmin.railwayp.CommonProxy;
+import io.github.cvronmin.railwayp.block.BlockColorful;
 import io.github.cvronmin.railwayp.block.BlockPlatformDoor;
 import io.github.cvronmin.railwayp.client.gui.GuiPen;
 import io.github.cvronmin.railwayp.client.renderer.TileEntityColorfulRenderer;
@@ -10,6 +11,7 @@ import io.github.cvronmin.railwayp.client.renderer.TileEntityPlatformBannerRende
 import io.github.cvronmin.railwayp.client.renderer.TileEntityRouteSignageRenderer;
 import io.github.cvronmin.railwayp.client.renderer.TileEntityWHPFRenderer;
 import io.github.cvronmin.railwayp.init.RPBlocks;
+import io.github.cvronmin.railwayp.init.RPCapabilities;
 import io.github.cvronmin.railwayp.init.RPItems;
 import io.github.cvronmin.railwayp.network.MessagerFromServer;
 import io.github.cvronmin.railwayp.network.SUpdateRailNoticerGui;
@@ -32,8 +34,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -45,7 +49,9 @@ public class ClientProxy extends CommonProxy{
     public void preInit(FMLPreInitializationEvent event) {
     	super.preInit(event);
     	snw.registerMessage(MessagerFromServer.SUpdateRailNoticerGuiMessager.class, SUpdateRailNoticerGui.class, 81, Side.CLIENT);
-		ModelLoader.setCustomStateMapper(RPBlocks.platform_door_base, new StateMap.Builder().ignore(BlockPlatformDoor.Base.EXTENDED).ignore(BlockPlatformDoor.Base.POWERED).build());
+		ModelLoader.setCustomStateMapper(RPBlocks.platform_door_base, new StateMap.Builder().ignore(BlockPlatformDoor.Base.POWERED).build());
+		//ModelLoader.setCustomStateMapper(RPBlocks.mosaic_tile, new StateMap.Builder().ignore(BlockColorful.COLOR).build());
+		//ModelLoader.setCustomStateMapper(RPBlocks.plate, new StateMap.Builder().ignore(BlockColorful.COLOR).build());
     }
 	@Override
 	public void init(FMLInitializationEvent event) {
@@ -67,11 +73,12 @@ public class ClientProxy extends CommonProxy{
 			public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
                 if (worldIn != null && pos != null)
                 {
+                	//return 0x817731;
                     TileEntity tileentity = worldIn.getTileEntity(pos);
-
+                	//tileentity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld().getTileEntity(pos);
                     if (tileentity instanceof TileEntityColorful)
                     {
-                    	return ((TileEntityColorful)tileentity).getColor();
+                    	return ((TileEntityColorful)tileentity).getColor() | 0xFF000000;
                     }
 
                     return -1;
@@ -87,7 +94,7 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRouteSignage.class, new TileEntityRouteSignageRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPFDoor.class, new TileEntityPFDoorRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWHPF.class, new TileEntityWHPFRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityColorful.class, new TileEntityColorfulRenderer());
+		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityColorful.class, new TileEntityColorfulRenderer());
 		statio = new GuiPen(FMLClientHandler.instance().getClient());
 		//MinecraftForge.EVENT_BUS.register(statio);
 		MinecraftForge.EVENT_BUS.register(this);

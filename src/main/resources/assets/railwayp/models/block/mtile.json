@@ -1,7 +1,7 @@
 {
     "parent": "railwayp:block/colorful",
     "textures": {
-        "side": "railwayp:blocks/mtile_filter",
-        "all": "railwayp:blocks/mtile"
+        "side1": "railwayp:blocks/mtile_filter",
+        "side": "railwayp:blocks/mtile"
     }
 }

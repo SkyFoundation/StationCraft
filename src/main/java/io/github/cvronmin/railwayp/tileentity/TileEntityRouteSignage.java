@@ -102,7 +102,7 @@ public class TileEntityRouteSignage extends TileEntityBanner{
         this.field_175119_g = true;
     }
     @Override
-    public void writeToNBT(NBTTagCompound compound)
+    public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
         super.writeToNBT(compound);
         if((routeColor >= 0x0 && routeColor < 0x1000000)){
@@ -125,6 +125,7 @@ public class TileEntityRouteSignage extends TileEntityBanner{
             String s = ITextComponent.Serializer.componentToJson(this.nextText[i]);
             compound.setString("NextText" + (i + 1), s);
         }*/
+		return compound;
     }
     @Override
     public void readFromNBT(NBTTagCompound compound)

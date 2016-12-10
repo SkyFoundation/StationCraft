@@ -10,7 +10,9 @@ import com.jcraft.jogg.Packet;
 
 import io.github.cvronmin.railwayp.RailwayP;
 import io.github.cvronmin.railwayp.Reference;
+import io.github.cvronmin.railwayp.capability.IHexColor;
 import io.github.cvronmin.railwayp.client.ClientProxy;
+import io.github.cvronmin.railwayp.init.RPCapabilities;
 import io.github.cvronmin.railwayp.tileentity.TileEntityColorful;
 import io.github.cvronmin.railwayp.tileentity.TileEntityNameBanner;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
@@ -24,11 +26,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.FMLLog;
@@ -158,7 +162,7 @@ public class RPPacket extends Packet implements IRPPacket {
 				TileEntityPlatformBanner te = null;
                 BlockPos blockpos1 = new BlockPos(Integer.valueOf(String.valueOf(data.get(0))), Integer.valueOf(String.valueOf(data.get(1))), Integer.valueOf(String.valueOf(data.get(2))));
         		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-        		World world = server.worldServers[0];
+        		World world = server.worlds[0];
                 TileEntity tileentity2 = world.getTileEntity(blockpos1);
                 IBlockState state = world.getBlockState(blockpos1);
                 if(tileentity2 instanceof TileEntityPlatformBanner) te = (TileEntityPlatformBanner)tileentity2;
@@ -179,7 +183,7 @@ public class RPPacket extends Packet implements IRPPacket {
 				TileEntityNameBanner te1 = null;
                 BlockPos blockpos11 = new BlockPos(Integer.valueOf(String.valueOf(data.get(0))), Integer.valueOf(String.valueOf(data.get(1))), Integer.valueOf(String.valueOf(data.get(2))));
         		MinecraftServer server1 = FMLCommonHandler.instance().getMinecraftServerInstance();
-        		World world1 = server1.worldServers[0];
+        		World world1 = server1.worlds[0];
                 TileEntity tileentity21 = world1.getTileEntity(blockpos11);
                 IBlockState state1 = world1.getBlockState(blockpos11);
                 if(tileentity21 instanceof TileEntityNameBanner) te1 = (TileEntityNameBanner)tileentity21;
@@ -198,7 +202,7 @@ public class RPPacket extends Packet implements IRPPacket {
 				TileEntityWHPF te11 = null;
                 BlockPos blockpos111 = new BlockPos(Integer.valueOf(String.valueOf(data.get(0))), Integer.valueOf(String.valueOf(data.get(1))), Integer.valueOf(String.valueOf(data.get(2))));
         		MinecraftServer server11 = FMLCommonHandler.instance().getMinecraftServerInstance();
-        		World world11 = server11.worldServers[0];
+        		World world11 = server11.worlds[0];
                 TileEntity tileentity211 = world11.getTileEntity(blockpos111);
                 IBlockState state11 = world11.getBlockState(blockpos111);
                 if(tileentity211 instanceof TileEntityWHPF) te11 = (TileEntityWHPF)tileentity211;
@@ -243,7 +247,7 @@ public class RPPacket extends Packet implements IRPPacket {
 				TileEntityPlatformBanner te = null;
                 BlockPos blockpos1 = new BlockPos(Integer.valueOf(String.valueOf(data.get(0))), Integer.valueOf(String.valueOf(data.get(1))), Integer.valueOf(String.valueOf(data.get(2))));
         		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-        		World world = server.worldServers[0];
+        		World world = server.worlds[0];
                 TileEntity tileentity2 = world.getTileEntity(blockpos1);
                 IBlockState state = world.getBlockState(blockpos1);
                 if(tileentity2 instanceof TileEntityPlatformBanner) te = (TileEntityPlatformBanner)tileentity2;
@@ -264,7 +268,7 @@ public class RPPacket extends Packet implements IRPPacket {
 				TileEntityNameBanner te1 = null;
                 BlockPos blockpos11 = new BlockPos(Integer.valueOf(String.valueOf(data.get(0))), Integer.valueOf(String.valueOf(data.get(1))), Integer.valueOf(String.valueOf(data.get(2))));
         		MinecraftServer server1 = FMLCommonHandler.instance().getMinecraftServerInstance();
-        		World world1 = server1.worldServers[0];
+        		World world1 = server1.worlds[0];
                 TileEntity tileentity21 = world1.getTileEntity(blockpos11);
                 IBlockState state1 = world1.getBlockState(blockpos11);
                 if(tileentity21 instanceof TileEntityNameBanner) te1 = (TileEntityNameBanner)tileentity21;
@@ -283,7 +287,7 @@ public class RPPacket extends Packet implements IRPPacket {
 				TileEntityWHPF te11 = null;
                 BlockPos blockpos111 = new BlockPos(Integer.valueOf(String.valueOf(data.get(0))), Integer.valueOf(String.valueOf(data.get(1))), Integer.valueOf(String.valueOf(data.get(2))));
         		MinecraftServer server11 = FMLCommonHandler.instance().getMinecraftServerInstance();
-        		World world11 = server11.worldServers[0];
+        		World world11 = server11.worlds[0];
                 TileEntity tileentity211 = world11.getTileEntity(blockpos111);
                 IBlockState state11 = world11.getBlockState(blockpos111);
                 if(tileentity211 instanceof TileEntityWHPF) te11 = (TileEntityWHPF)tileentity211;
@@ -306,7 +310,7 @@ public class RPPacket extends Packet implements IRPPacket {
 				TileEntityRouteSignage ters = null;
                 BlockPos bp = new BlockPos(Integer.valueOf(String.valueOf(data.get(0))), Integer.valueOf(String.valueOf(data.get(1))), Integer.valueOf(String.valueOf(data.get(2))));
         		MinecraftServer server2 = FMLCommonHandler.instance().getMinecraftServerInstance();
-        		World world2 = server2.worldServers[0];
+        		World world2 = server2.worlds[0];
                 TileEntity tileEntity = world2.getTileEntity(bp);
                 IBlockState state2 = world2.getBlockState(bp);
                 if(tileEntity instanceof TileEntityRouteSignage) ters = (TileEntityRouteSignage)tileEntity;
@@ -323,16 +327,22 @@ public class RPPacket extends Packet implements IRPPacket {
 				TileEntityColorful tec = null;
                 BlockPos bpc = new BlockPos(Integer.valueOf(String.valueOf(data.get(0))), Integer.valueOf(String.valueOf(data.get(1))), Integer.valueOf(String.valueOf(data.get(2))));
         		MinecraftServer serverc = FMLCommonHandler.instance().getMinecraftServerInstance();
-        		World worldc = serverc.worldServers[0];
+        		World worldc = serverc.worlds[0];
                 TileEntity tet = worldc.getTileEntity(bpc);
                 IBlockState statec = worldc.getBlockState(bpc);
                 if(tet instanceof TileEntityColorful) tec = (TileEntityColorful)tet;
                 if(tec == null) break;
                 try {
-                    tec.setColorEncoded(String.valueOf(data.get(3)));
-                    tec.decodeColor();
+                	/*if(tec.hasCapability(RPCapabilities.hexColor, null)){
+                		IStorage<IHexColor> storage = RPCapabilities.hexColor.getStorage();
+                		IHexColor color = tec.getCapability(RPCapabilities.hexColor, null);
+                		storage.readNBT(RPCapabilities.hexColor, color, null, new NBTTagString(String.valueOf(data.get(3))));
+                	}*/
+                	tec.setColorEncoded(String.valueOf(data.get(3)));
+                	tec.decodeColor();
                     tec.markDirty();
                     worldc.notifyBlockUpdate(bpc, statec, statec, 3);
+                    FMLClientHandler.instance().getClient().renderGlobal.markBlockRangeForRenderUpdate(bpc.getX(), bpc.getY(), bpc.getZ(), bpc.getX(), bpc.getY(), bpc.getZ());
                 } catch (Exception e) {
                 	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
 				}

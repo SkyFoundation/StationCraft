@@ -377,10 +377,10 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
     /**
      * Called on both Client and Server when World#addBlockEvent is called
      */
-    public boolean onBlockEventReceived(World worldIn, BlockPos pos, IBlockState state, int eventID, int eventParam)
-    {
-        super.onBlockEventReceived(worldIn, pos, state, eventID, eventParam);
+    @Override
+    public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param) {
+    	super.eventReceived(state, worldIn, pos, id, param);
         TileEntity tileentity = worldIn.getTileEntity(pos);
-        return tileentity == null ? false : tileentity.receiveClientEvent(eventID, eventParam);
+        return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
     }
 }

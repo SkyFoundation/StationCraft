@@ -55,56 +55,11 @@ public class MessagerFromClient {
 
 		protected void processMessage(CUpdateBannerByGui message, EntityPlayerMP player) {
 	        BlockPos blockpos1 = message.getPos();
-	        TileEntity tileentity2 = player.worldObj.getTileEntity(blockpos1);
-	        switch (message.getTargetTileEntity()) {
-			case PLATFORMBANNER:
-				TileEntityPlatformBanner te = null;
-		        if(tileentity2 instanceof TileEntityPlatformBanner) te = (TileEntityPlatformBanner)tileentity2;
-		        if(te == null) break;
-		        try {
-		        	processData(message.getData(), te);
-		            te.markDirty();
-		        } catch (Exception e) {
-		        	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
-				}
-				break;
-			default:
-				break;
-			}
+	        TileEntity tileentity2 = player.world.getTileEntity(blockpos1);
+	        tileentity2.readFromNBT(message.getData());
+	        tileentity2.markDirty();
+	        player.world.notifyBlockUpdate(blockpos1, player.world.getBlockState(blockpos1), player.world.getBlockState(blockpos1), 3);
 
-		}
-		private void processData(Map<String,String> data, TileEntity te){
-			String platform = "", color = "", direction = "", text1 = "", text2 = "", sp1text1 = "", sp1text2 = "";
-			for (Entry<String, String> entry : data.entrySet()) {
-				switch (entry.getKey()) {
-				case "PlatformNumber":
-					platform = entry.getValue();
-					break;
-				case "Color":
-					color = entry.getValue();
-					break;
-				case "Direction":
-					direction = entry.getValue();
-					break;
-				case "Text1":case "ThisText1":
-					text1 = entry.getValue();
-					break;
-				case "NextText1":
-					sp1text1 = entry.getValue();
-					break;
-				case "Text2":case "ThisText2":
-					text2 = entry.getValue();
-					break;
-				case "NextText2":
-					sp1text2 = entry.getValue();
-					break;
-				default:
-					break;
-				}
-			}
-			if(te instanceof TileEntityPlatformBanner){
-				((TileEntityPlatformBanner)te).setData(Integer.parseInt(platform), Byte.parseByte(direction), color, text1, text2);
-			}
 		}
 	}
 	

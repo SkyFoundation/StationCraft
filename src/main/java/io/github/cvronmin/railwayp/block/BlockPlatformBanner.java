@@ -211,11 +211,9 @@ public class BlockPlatformBanner extends BlockContainer
                         return EAST_AABB;
                 }
             }
-            /**
-             * Called when a neighboring block changes.
-             */
-            public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
-            {
+            //TODO
+            @Override
+            public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
                 EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
 
                 if (!worldIn.getBlockState(pos.offset(enumfacing.getOpposite())).getMaterial().isSolid())
@@ -223,8 +221,23 @@ public class BlockPlatformBanner extends BlockContainer
                     this.dropBlockAsItem(worldIn, pos, state, 0);
                     worldIn.setBlockToAir(pos);
                 }
+            	super.neighborChanged(state, worldIn, pos, blockIn);
+            }
+            /**
+             * Called when a neighboring block changes.
+             */
+            @Override
+            public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+            	
+                IBlockState state = world.getBlockState(pos);
+				EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
 
-                super.onNeighborBlockChange(worldIn, pos, state, neighborBlock);
+                if (!world.getBlockState(pos.offset(enumfacing.getOpposite())).getMaterial().isSolid())
+                {
+                    this.dropBlockAsItem((World) world, pos, state, 0);
+                    ((World) world).setBlockToAir(pos);
+                }
+            	super.onNeighborChange(world, pos, neighbor);
             }
             /**
              * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the
