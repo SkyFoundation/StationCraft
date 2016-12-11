@@ -45,7 +45,7 @@ public class ClientProxy extends CommonProxy{
     public void preInit(FMLPreInitializationEvent event) {
     	super.preInit(event);
     	snw.registerMessage(MessagerFromServer.SUpdateRailNoticerGuiMessager.class, SUpdateRailNoticerGui.class, 81, Side.CLIENT);
-		ModelLoader.setCustomStateMapper(RPBlocks.platform_door_base, new StateMap.Builder().ignore(BlockPlatformDoor.Base.EXTENDED).ignore(BlockPlatformDoor.Base.POWERED).build());
+		ModelLoader.setCustomStateMapper(RPBlocks.platform_door_base, new StateMap.Builder().ignore(BlockPlatformDoor.Base.POWERED).build());
     }
 	@Override
 	public void init(FMLInitializationEvent event) {
@@ -87,7 +87,7 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRouteSignage.class, new TileEntityRouteSignageRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPFDoor.class, new TileEntityPFDoorRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWHPF.class, new TileEntityWHPFRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityColorful.class, new TileEntityColorfulRenderer());
+		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityColorful.class, new TileEntityColorfulRenderer());
 		statio = new GuiPen(FMLClientHandler.instance().getClient());
 		//MinecraftForge.EVENT_BUS.register(statio);
 		MinecraftForge.EVENT_BUS.register(this);

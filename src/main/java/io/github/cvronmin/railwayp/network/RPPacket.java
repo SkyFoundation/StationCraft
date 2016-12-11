@@ -333,6 +333,7 @@ public class RPPacket extends Packet implements IRPPacket {
                     tec.decodeColor();
                     tec.markDirty();
                     worldc.notifyBlockUpdate(bpc, statec, statec, 3);
+                    FMLClientHandler.instance().getClient().renderGlobal.markBlockRangeForRenderUpdate(bpc.getX(), bpc.getY(), bpc.getZ(), bpc.getX(), bpc.getY(), bpc.getZ());
                 } catch (Exception e) {
                 	FMLLog.log(Reference.MODID, Level.ERROR, e, "");
 				}

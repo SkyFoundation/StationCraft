@@ -206,7 +206,13 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
             }
         }
     }
-
+    public void setProgress(float progress, boolean extending){
+    	if(this.extending ^ extending){
+    		this.progress = 1 - progress;
+    	}else {
+			this.progress = progress;
+		}
+    }
     /**
      * Updates the JList with a new model.
      */

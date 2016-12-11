@@ -68,9 +68,9 @@ public class BlockPlatformDoor {
 
 	    public boolean canProvidePower()
 	    {
-	        return true;
+	        return false;
 	    }
-	    public int isProvidingStrongPower(IBlockAccess worldIn, BlockPos pos, IBlockState state, EnumFacing side)
+/*	    public int isProvidingStrongPower(IBlockAccess worldIn, BlockPos pos, IBlockState state, EnumFacing side)
 	    {
 	        return side != EnumFacing.DOWN ? this.isProvidingWeakPower(worldIn, pos, state, side) : 0;
 //	        return ((Boolean)state.getValue(POWERED)).booleanValue() && state.getValue(FACING) != side ? 15 : 0;
@@ -79,7 +79,7 @@ public class BlockPlatformDoor {
 	    {
 //	    	return ((Boolean)state.getValue(POWERED)).booleanValue() && state.getValue(FACING) != side ? 15 : 0;
 	        return ((Boolean)state.getValue(POWERED)).booleanValue() ? 15 : 0;
-	    }
+	    }*/
 	    public boolean isOpaqueCube()
 	    {
 	        return false;
@@ -87,7 +87,7 @@ public class BlockPlatformDoor {
 
 	    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	    {
-	        worldIn.setBlockState(pos, state.withProperty(FACING, getFacingFromEntity(worldIn, pos, placer)).withProperty(LEFTY, shouldBlockPlacedAsLefty(worldIn, pos, placer)), 2);
+	        //worldIn.setBlockState(pos, state.withProperty(FACING, getFacingFromEntity(worldIn, pos, placer)).withProperty(LEFTY, shouldBlockPlacedAsLefty(worldIn, pos, placer)), 2);
 
 	        if (!worldIn.isRemote)
 	        {
@@ -113,28 +113,44 @@ public class BlockPlatformDoor {
 	            this.checkForMove(worldIn, pos, state);
 	        }
 	    }
+	    @Override
+	    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY,
+	    		float hitZ, int meta, EntityLivingBase placer) {
+    return this.getDefaultState().withProperty(FACING, getFacingFromEntity(worldIn, pos, placer)).withProperty(LEFTY, shouldBlockPlacedAsLefty(worldIn,pos,placer, hitX,hitY,hitZ)).withProperty(EXTENDED, Boolean.valueOf(false)).withProperty(POWERED, Boolean.valueOf(false));
+}
 
-	    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-	    {
-	        return this.getDefaultState().withProperty(FACING, getFacingFromEntity(worldIn, pos, placer)).withProperty(LEFTY, shouldBlockPlacedAsLefty(worldIn,pos,placer)).withProperty(EXTENDED, Boolean.valueOf(false)).withProperty(POWERED, Boolean.valueOf(false));
-	    }
-
-	    private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, EntityLivingBase entityIn) {
-	    	EnumFacing sf = getFacingFromEntity(worldIn, clickedBlock, entityIn);
-	    	if(sf.getAxisDirection() == AxisDirection.POSITIVE){
-	    		if(sf.getAxis() == Axis.Z)
-	    			return entityIn.posX > clickedBlock.getX();
-		    	if(sf.getAxis() == Axis.X)
-	    			return entityIn.posZ < clickedBlock.getZ();
-	    	}
-	    	else {
-	    		if(sf.getAxis() == Axis.Z)
-	    			return entityIn.posX < clickedBlock.getX();
-		    	if(sf.getAxis() == Axis.X)
-	    			return entityIn.posZ > clickedBlock.getZ();
-	    	}
-			return false;
-		}
+private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, EntityLivingBase entityIn) {
+	EnumFacing sf = getFacingFromEntity(worldIn, clickedBlock, entityIn);
+	if(sf.getAxisDirection() == AxisDirection.POSITIVE){
+		if(sf.getAxis() == Axis.Z)
+			return entityIn.posX > clickedBlock.getX();
+    	if(sf.getAxis() == Axis.X)
+			return entityIn.posZ < clickedBlock.getZ();
+	}
+	else {
+		if(sf.getAxis() == Axis.Z)
+			return entityIn.posX < clickedBlock.getX();
+    	if(sf.getAxis() == Axis.X)
+			return entityIn.posZ > clickedBlock.getZ();
+	}
+	return false;
+}
+private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, EntityLivingBase entityIn, float hitX, float hitY, float hitZ) {
+	EnumFacing sf = getFacingFromEntity(worldIn, clickedBlock, entityIn);
+	if(sf.getAxisDirection() == AxisDirection.POSITIVE){
+		if(sf.getAxis() == Axis.Z)
+			return hitX < 0.5f;
+    	if(sf.getAxis() == Axis.X)
+			return hitZ > 0.5f;
+	}
+	else {
+		if(sf.getAxis() == Axis.Z)
+			return hitX > 0.5f;
+    	if(sf.getAxis() == Axis.X)
+			return hitZ < 0.5f;
+	}
+	return false;
+}
 	    public static EnumFacing getFacingFromEntity(World worldIn, BlockPos clickedBlock, EntityLivingBase entityIn)
 	    {
 	        if (MathHelper.abs((float)entityIn.posX - (float)clickedBlock.getX()) < 2.0F && MathHelper.abs((float)entityIn.posZ - (float)clickedBlock.getZ()) < 2.0F)
@@ -163,7 +179,7 @@ public class BlockPlatformDoor {
 	        {
 	            if ((new DoorStructureHelper(worldIn, pos, enumfacing, true)).canMove())
 	            {
-	                worldIn.addBlockEvent(pos, this, 0, enumfacing.getIndex());
+	                worldIn.addBlockEvent(pos, this, 0, enumfacing.getHorizontalIndex());
 	            }
 	        }
 	        else if (!flag && ((Boolean)state.getValue(EXTENDED)).booleanValue())
@@ -259,14 +275,17 @@ public class BlockPlatformDoor {
 	        else if (eventID == 1)
 	        {
 	            TileEntity tileentity1 = worldIn.getTileEntity(pos.offset(enumfacing));
-
+	            float p = 1;
 	            if (tileentity1 instanceof TileEntityPFDoor)
 	            {
+	            	p = ((TileEntityPFDoor) tileentity1).getProgress(1);
 	                ((TileEntityPFDoor)tileentity1).clearPistonTileEntity();
 	            }
 
+	            TileEntity teDoor = Moving.newTileEntity(this.getStateFromMeta(eventParam | (state.getValue(LEFTY) ? 4 : 0)), enumfacing, false, true);
+	            ((TileEntityPFDoor)teDoor).setProgress(p, true);
 	            worldIn.setBlockState(pos, RPBlocks.platform_door_extension.getDefaultState().withProperty(Moving.FACING, enumfacing).withProperty(LEFTY, state.getValue(LEFTY)), 3);
-	            worldIn.setTileEntity(pos, Moving.newTileEntity(this.getStateFromMeta(eventParam | (state.getValue(LEFTY) ? 4 : 0)), enumfacing, false, true));
+	            worldIn.setTileEntity(pos, teDoor);
 	            worldIn.setBlockToAir(pos.offset(enumfacing));
 	            worldIn.playSound((EntityPlayer)null, pos, SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.15F + 0.6F);
 	        }
@@ -496,13 +515,17 @@ public class BlockPlatformDoor {
 	        {
 	            i |= 8;
 	        }
-	        if(((Boolean)state.getValue(POWERED)).booleanValue()){
+	        /*if(((Boolean)state.getValue(POWERED)).booleanValue()){
 	        	i |= 16;
-	        }
+	        }*/
 
 	        return i;
 	    }
-
+	    @Override
+	    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	    	// TODO Auto-generated method stub
+	    	return state.withProperty(POWERED, state.getValue(EXTENDED));
+	    }
 	    protected BlockStateContainer createBlockState()
 	    {
 	        return new BlockStateContainer(this, new IProperty[] {FACING, EXTENDED, POWERED, LEFTY});

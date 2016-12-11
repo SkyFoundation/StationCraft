@@ -25,6 +25,7 @@ public class TileEntityColorful/* extends TileEntityBanner*/extends TileEntity {
 
 	// private String pattern;
 	public void decodeColor() {
+		if(colorEncoded.isEmpty()) return;
 		if (colorEncoded.length() <= 6){
 			if (!colorEncoded.startsWith("0x")) colorEncoded= "0x"+colorEncoded;
 				try {
@@ -51,7 +52,7 @@ public class TileEntityColorful/* extends TileEntityBanner*/extends TileEntity {
             }*/
         }
     }
-	//@Override
+	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setString("Color", Integer.toHexString(this.color));
@@ -67,7 +68,7 @@ public class TileEntityColorful/* extends TileEntityBanner*/extends TileEntity {
 		 * this.pattern); }
 		 */
 	}
-    //@Override
+    @Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		colorEncoded = compound.getString("Color");
@@ -90,7 +91,10 @@ public class TileEntityColorful/* extends TileEntityBanner*/extends TileEntity {
 	/*public short getRotation() {
 		return rotation;
 	}*/
-
+@Override
+public NBTTagCompound getTileData() {
+	return this.serializeNBT();
+}
 	public Packet<?> getDescriptionPacket() {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		this.writeToNBT(nbttagcompound);
