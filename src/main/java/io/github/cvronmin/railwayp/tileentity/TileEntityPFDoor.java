@@ -269,15 +269,15 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
         compound.setBoolean("extending", this.extending);
 		return compound;
     }
-    public AxisAlignedBB getAABB(IBlockAccess p_184321_1_, BlockPos p_184321_2_)
+    public AxisAlignedBB getAABB(IBlockAccess world, BlockPos pos)
     {
-        return this.getAABB(p_184321_1_, p_184321_2_, this.progress).union(this.getAABB(p_184321_1_, p_184321_2_, this.lastProgress));
+        return this.getAABB(world, pos, this.progress).union(this.getAABB(world, pos, this.lastProgress));
     }
 
-    public AxisAlignedBB getAABB(IBlockAccess p_184319_1_, BlockPos p_184319_2_, float p_184319_3_)
+    public AxisAlignedBB getAABB(IBlockAccess world, BlockPos pos, float progress)
     {
-        p_184319_3_ = this.getExtendingProgress(p_184319_3_);
-        return this.pistonState.getBoundingBox(p_184319_1_, p_184319_2_).offset((double)(p_184319_3_ * (float)this.pistonFacing.getFrontOffsetX()), (double)(p_184319_3_ * (float)this.pistonFacing.getFrontOffsetY()), (double)(p_184319_3_ * (float)this.pistonFacing.getFrontOffsetZ()));
+        progress = this.getExtendingProgress(progress);
+        return this.pistonState.getBoundingBox(world, pos).offset((double)(progress * (float)this.pistonFacing.getFrontOffsetX()), (double)(progress * (float)this.pistonFacing.getFrontOffsetY()), (double)(progress * (float)this.pistonFacing.getFrontOffsetZ()));
     }
     static final class SwitchAxis
         {

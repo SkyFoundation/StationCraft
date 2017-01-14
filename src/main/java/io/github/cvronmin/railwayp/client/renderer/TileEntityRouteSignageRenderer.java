@@ -93,31 +93,34 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
 				//GlStateManager.disableLighting();
 				Tessellator tessellator = Tessellator.getInstance();
 				VertexBuffer buffer = tessellator.getBuffer();
-				buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+				buffer.setTranslation(-71/32f,-71/32f,-0.075f);
+				buffer.begin(9, DefaultVertexFormats.POSITION_COLOR);
 				int color = entityBanner.getRouteColor();
-				buffer.pos(-2f, -1.55f, -0.075)
+				//buffer.pos(0, 0, -0.075f).color(((color >> 16) & 255) / 255f, ((color >> 8) & 255) / 255f, (color & 255) / 255f, 1f).endVertex();
+				buffer.pos(-2f+71/32f, -1.55 + 71/32f, 0)
 				.color(((color >> 16) & 255) / 255f, ((color >> 8) & 255) / 255f, (color & 255) / 255f, 1f)
 				.endVertex();
-				buffer.pos(-2f, -1.45, -0.075)
+				buffer.pos(-2f+71/32f, -1.45 + 71/32f, 0)
 						.color(((color >> 16) & 255) / 255f, ((color >> 8) & 255) / 255f, (color & 255) / 255f, 1f)
 						.endVertex();
-				buffer.pos(2f, -1.45, -0.075)
+				buffer.pos(2f + 71/32f, -1.45 + 71/32f, 0)
 				.color(((color >> 16) & 255) / 255f, ((color >> 8) & 255) / 255f, (color & 255) / 255f, 1f)
 				.endVertex();
-				buffer.pos(2f, -1.55f, -0.075)
+				buffer.pos(2f + 71/32f, -1.55f + 71/32f, 0)
 						.color(((color >> 16) & 255) / 255f, ((color >> 8) & 255) / 255f, (color & 255) / 255f, 1f)
 						.endVertex();
 				tessellator.draw();
 				buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-				buffer.pos(start, -1.55f, -0.075556).color(0.5f, 0.5f, 0.5f, 1f).endVertex();
-				buffer.pos(start, -1.45, -0.075556).color(0.5f, 0.5f, 0.5f, 1f).endVertex();
-				buffer.pos(end, -1.45, -0.075556).color(0.5f, 0.5f, 0.5f, 1f).endVertex();
-				buffer.pos(end, -1.55f, -0.075556).color(0.5f, 0.5f, 0.5f, 1f).endVertex();
+				buffer.pos(start+71/32f, -1.55f+71/32f, -0.075556).color(0.5f, 0.5f, 0.5f, 1f).endVertex();
+				buffer.pos(start+71/32f, -1.45+71/32f, -0.075556).color(0.5f, 0.5f, 0.5f, 1f).endVertex();
+				buffer.pos(end+71/32f, -1.45+71/32f, -0.075556).color(0.5f, 0.5f, 0.5f, 1f).endVertex();
+				buffer.pos(end+71/32f, -1.55f+71/32f, -0.075556).color(0.5f, 0.5f, 0.5f, 1f).endVertex();
 				tessellator.draw();
 				for (int i = 0; i < stmidpts.length; i++) {
 					Station station = entityBanner.getStationList().get(i);
 						drawStation(stmidpts[i], station, i, hereId == i ? false : (entityBanner.getDirection() == 0 ? (i < hereId ? false : true) : (entityBanner.getDirection() == 2 ? (i > hereId ? false : true) : false)));
 				}
+				buffer.setTranslation(0, 0, 0);
 				GlStateManager.enableTexture2D();
 				//GlStateManager.enableLighting();
 				GlStateManager.depthMask(false);
@@ -299,86 +302,86 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
 			float r = ((color >> 16) & 255) / 255f, g = ((color >> 8) & 255) / 255f, b = (color & 255) / 255f;
 			if (index % 2 == 0) {
 				buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-				buffer.pos(-2f + offsetMiddleTop - .025, -1.45f, -0.075)
+				buffer.pos(-2f + offsetMiddleTop - .025+71/32f, -1.45f+71/32f, -0)
 				.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
 				.endVertex();
-				buffer.pos(-2f + offsetMiddleTop - .025, -1.35, -0.075)
+				buffer.pos(-2f + offsetMiddleTop - .025+71/32f, -1.35+71/32f, -0)
 						.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
 						.endVertex();
-				buffer.pos(-2f + offsetMiddleTop + .025, -1.35, -.075)
+				buffer.pos(-2f + offsetMiddleTop + .025+71/32f, -1.35+71/32f, -0)
 						.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
 						.endVertex();
-				buffer.pos(-2f + offsetMiddleTop + .025, -1.45f, -0.075)
+				buffer.pos(-2f + offsetMiddleTop + .025+71/32f, -1.45f+71/32f, -0)
 				.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
 				.endVertex();
 				tessellator.draw();
 			} else {
 				buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-				buffer.pos(-2f + offsetMiddleTop - .025, -1.65f, -0.075)
+				buffer.pos(-2f + offsetMiddleTop - .025+71/32f, -1.65f+71/32f, -0)
 				.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
 				.endVertex();
-				buffer.pos(-2f + offsetMiddleTop - .025, -1.55, -0.075)
+				buffer.pos(-2f + offsetMiddleTop - .025+71/32f, -1.55+71/32f, -0)
 						.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
 						.endVertex();
-				buffer.pos(-2f + offsetMiddleTop + .025, -1.55, -.075)
+				buffer.pos(-2f + offsetMiddleTop + .025+71/32f, -1.55+71/32f, -0)
 				.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
 				.endVertex();
-				buffer.pos(-2f + offsetMiddleTop + .025, -1.65f, -0.075)
+				buffer.pos(-2f + offsetMiddleTop + .025+71/32f, -1.65f+71/32f, -0)
 						.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
 						.endVertex();
 				tessellator.draw();
 			}
 		}
 		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.525f, -0.077).color(1f, 1, 1, 1).endVertex();
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.475, -0.077).color(1f, 1, 1, 1).endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.475, -.077).color(1f, 1, 1, 1).endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.525f, -0.077).color(1f, 1, 1, 1).endVertex();
+		buffer.pos(-2f + offsetMiddleTop - .025+71/32f, -1.525f+71/32f, -0.002).color(1f, 1, 1, 1).endVertex();
+		buffer.pos(-2f + offsetMiddleTop - .025+71/32f, -1.475+71/32f, -0.002).color(1f, 1, 1, 1).endVertex();
+		buffer.pos(-2f + offsetMiddleTop + .025+71/32f, -1.475+71/32f, -.002).color(1f, 1, 1, 1).endVertex();
+		buffer.pos(-2f + offsetMiddleTop + .025+71/32f, -1.525f+71/32f, -0.002).color(1f, 1, 1, 1).endVertex();
 		tessellator.draw();
 
 		// buffer.reset();
 		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(-2f + offsetMiddleTop - .05, -1.525f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop - .05+71/32f, -1.525f+71/32f, -0.002).color(bordercolor, bordercolor, bordercolor, 1f)
 		.endVertex();
-		buffer.pos(-2f + offsetMiddleTop - .05, -1.475, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop - .05+71/32f, -1.475+71/32f, -0.002).color(bordercolor, bordercolor, bordercolor, 1f)
 				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.475, -.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop - .025+71/32f, -1.475+71/32f, -.002).color(bordercolor, bordercolor, bordercolor, 1f)
 		.endVertex();
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.525f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop - .025+71/32f, -1.525f+71/32f, -0.002).color(bordercolor, bordercolor, bordercolor, 1f)
 				.endVertex();
 		tessellator.draw();
 		// buffer.reset();
 		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(-2f + offsetMiddleTop + .05, -1.475, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop + .05+71/32f, -1.475+71/32f, -0.002).color(bordercolor, bordercolor, bordercolor, 1f)
 				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .05, -1.525f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop + .05+71/32f, -1.525f+71/32f, -0.002).color(bordercolor, bordercolor, bordercolor, 1f)
 				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.525f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop + .025+71/32f, -1.525f+71/32f, -0.002).color(bordercolor, bordercolor, bordercolor, 1f)
 				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.475, -.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop + .025+71/32f, -1.475+71/32f, -.002).color(bordercolor, bordercolor, bordercolor, 1f)
 				.endVertex();
 		tessellator.draw();
 
 		// buffer.reset();
 		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.475, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop - .025+71/32f, -1.475+71/32f, -0.002).color(bordercolor, bordercolor, bordercolor, 1f)
 				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.45f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop - .025+71/32f, -1.45f+71/32f, -0.002).color(bordercolor, bordercolor, bordercolor, 1f)
 				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.45f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop + .025+71/32f, -1.45f+71/32f, -0.002).color(bordercolor, bordercolor, bordercolor, 1f)
 				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.475, -.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop + .025+71/32f, -1.475+71/32f, -.002).color(bordercolor, bordercolor, bordercolor, 1f)
 				.endVertex();
 		tessellator.draw();
 		// buffer.reset();
 		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.55, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop - .025+71/32f, -1.55+71/32f, -0.002).color(bordercolor, bordercolor, bordercolor, 1f)
 				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.525f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop - .025+71/32f, -1.525f+71/32f, -0.002).color(bordercolor, bordercolor, bordercolor, 1f)
 				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.525f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop + .025+71/32f, -1.525f+71/32f, -0.002).color(bordercolor, bordercolor, bordercolor, 1f)
 				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.55, -.077).color(bordercolor, bordercolor, bordercolor, 1f)
+		buffer.pos(-2f + offsetMiddleTop + .025+71/32f, -1.55+71/32f, -.002).color(bordercolor, bordercolor, bordercolor, 1f)
 				.endVertex();
 		tessellator.draw();
 		GlStateManager.depthMask(true);
