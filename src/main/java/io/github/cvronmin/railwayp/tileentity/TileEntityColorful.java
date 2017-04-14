@@ -17,8 +17,6 @@ public class TileEntityColorful/* extends TileEntityBanner*/extends TileEntity {
 		this.colorEncoded = colorEncoded;
 	}
 
-	//private short rotation;
-
 	// private String pattern;
 	public void decodeColor() {
 		if(colorEncoded.isEmpty()) return;
@@ -43,26 +41,19 @@ public class TileEntityColorful/* extends TileEntityBanner*/extends TileEntity {
             	colorEncoded = nbttagcompound.getString("Color");
             	decodeColor();
             }
-            /*if(nbttagcompound.hasKey("Rotation", 2)){
-        		rotation = nbttagcompound.getShort("Rotation");
-            }*/
         }
     }
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setString("Color", Integer.toHexString(this.color));
-		//compound.setShort("Rotation", (short) (rotation % 360));
 		if(compound.hasKey("Patterns")){
 			compound.removeTag("Patterns");
 		}
 		if(compound.hasKey("Base")){
 			compound.removeTag("Base");
 		}
-		/*
-		 * if(pattern != null && pattern != ""){ compound.setString("Pattern",
-		 * this.pattern); }
-		 */
+
 		return compound;
 	}
     @Override
@@ -70,11 +61,6 @@ public class TileEntityColorful/* extends TileEntityBanner*/extends TileEntity {
 		super.readFromNBT(compound);
 		colorEncoded = compound.getString("Color");
 		decodeColor();
-		//rotation = compound.getShort("Rotation");
-		/*
-		 * if(compound.hasKey("Pattern")){ pattern =
-		 * compound.getString("Pattern"); }
-		 */
 	}
 
 	public int getColor() {
@@ -85,9 +71,6 @@ public class TileEntityColorful/* extends TileEntityBanner*/extends TileEntity {
 		return colorEncoded;
 	}
 
-	/*public short getRotation() {
-		return rotation;
-	}*/
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		return new SPacketUpdateTileEntity(this.pos, 6, getUpdateTag());

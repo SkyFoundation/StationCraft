@@ -1,5 +1,6 @@
 package io.github.cvronmin.railwayp.tileentity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -293,47 +294,30 @@ public class TileEntityRouteSignage extends TileEntityBanner{
     	boolean flag3 = stations.tagCount() >= 2;
     	return flag1 && flag2 && flag3;
     }
+
     public byte getDirection(){
     	return this.direction;
     }
-	public int getRouteColor() {
+
+    public int getRouteColor() {
 		return routeColor;
 	}
+
 	public static class Station{
 		public final ITextComponent[] stationName = new ITextComponent[]{new TextComponentString(""),new TextComponentString("")};
-		private boolean isInterchangeStation;
 		private boolean iAmHere;
-		private int interchangeLineColor;
-		private final ITextComponent[] interchangeLineName = new ITextComponent[]{new TextComponentString(""),new TextComponentString("")};
-		public Station(String[] stationNameArray, boolean here, String... interlinename){
-			stationName[0] = new TextComponentString(stationNameArray[0]);
-			stationName[1] = new TextComponentString(stationNameArray[1]);
-			iAmHere = here;
-			if (interlinename != null) {
-				if (interlinename.length >= 2) {
-					isInterchangeStation = true;
-					interchangeLineName[0] = new TextComponentString(interlinename[0]);
-					interchangeLineName[1] = new TextComponentString(interlinename[1]);
-				}
-			}
-		}
+		private List<RailLine> interchangeLines = new ArrayList<>();
 		public Station(Station station){
 			stationName[0] = station.stationName[0];
 			stationName[1] = station.stationName[1];
 			iAmHere = station.iAmHere;
-			isInterchangeStation = station.isInterchangeStation;
-			interchangeLineName[0] = station.interchangeLineName[0];
-			interchangeLineName[1] = station.interchangeLineName[1];
-			interchangeLineColor = station.interchangeLineColor;
+			interchangeLines = Lists.newArrayList(station.getInterchangeLines());
 		}
 		public Station(){
 			
 		}
 		public boolean isInterchangeStation() {
-			return isInterchangeStation;
-		}
-		public ITextComponent[] getInterchangeLineName() {
-			return interchangeLineName;
+			return !getInterchangeLines().isEmpty();
 		}
 		public boolean amIHere(){
 			return iAmHere;
@@ -351,34 +335,35 @@ public class TileEntityRouteSignage extends TileEntityBanner{
 			return this;
 		}
 		public static Station getStationFormCompound(NBTTagCompound compound){
+			Station station = new Station();
 			NBTTagList ss = compound.getTagList("Name", 8);
-			boolean here = compound.getBoolean("Here");
-			NBTTagCompound ls = compound.getCompoundTag("InterChangeLine");
-			if(ls != null){
-				NBTTagList list = ls.getTagList("Name", 8);
-				if(list.tagCount() < 2)
-					return new Station(new String[]{ss.getStringTagAt(0), ss.getStringTagAt(1)}, here);
-				return new Station(new String[]{ss.getStringTagAt(0), ss.getStringTagAt(1)}, here,list.getStringTagAt(0),list.getStringTagAt(1)).setInterchangeLineColor(ls.getString("Color"));
+			station.setStationName(ss.tagCount() > 0 ? ss.getStringTagAt(0) : "", ss.tagCount() > 1 ? ss.getStringTagAt(1) : "");
+			station.setIfIAmHere(compound.getBoolean("Here"));
+			NBTTagList icls = compound.getTagList("InterChangeLines",10);
+			for (int i = 0; i < icls.tagCount();i++){
+				station.getInterchangeLines().add(new RailLine().readFromCompound(icls.getCompoundTagAt(i)));
 			}
-			return new Station(new String[]{ss.getStringTagAt(0), ss.getStringTagAt(1)}, here);
+			NBTTagCompound ls = compound.getCompoundTag("InterChangeLine");
+			if(ls != null && !ls.hasNoTags()){
+				station.getInterchangeLines().add(new RailLine().readFromCompound(ls));
+			}
+			return station;
 		}
-		public NBTTagCompound writeStationToCompound(){
+
+		public NBTTagCompound writeStationToCompound() {
 			NBTTagCompound compound = new NBTTagCompound();
 			NBTTagList ss = new NBTTagList();
 			ss.appendTag(new NBTTagString(TextComponentUtil.getPureText(stationName[0])));
 			ss.appendTag(new NBTTagString(TextComponentUtil.getPureText(stationName[1])));
 			compound.setTag("Name", ss);
 			compound.setBoolean("Here", iAmHere);
-			if(!interchangeLineName[0].getUnformattedComponentText().isEmpty() | !interchangeLineName[1].getUnformattedComponentText().isEmpty()){
-			NBTTagCompound ls = new NBTTagCompound();
-				NBTTagList list = new NBTTagList();
-				list.appendTag(new NBTTagString(TextComponentUtil.getPureText(interchangeLineName[0])));
-				list.appendTag(new NBTTagString(TextComponentUtil.getPureText(interchangeLineName[1])));
-				ls.setTag("Name", list);
-				ls.setString("Color", Integer.toHexString(interchangeLineColor));
-				compound.setTag("InterChangeLine", ls);
+
+			NBTTagList list = new NBTTagList();
+			for (RailLine line : getInterchangeLines()) {
+				list.appendTag(line.writeToCompound());
 			}
-				return compound;
+			compound.setTag("InterChangeLines", list);
+			return compound;
 		}
 		public static NBTTagList writeStationsToTagList(List<Station> list){
 			NBTTagList compound = new NBTTagList();
@@ -399,44 +384,79 @@ public class TileEntityRouteSignage extends TileEntityBanner{
 			this.stationName[1] = new TextComponentString(name2);
 			return this;
 		}
-		public Station setInterchangeLineName(String name1, String name2){
-			if(!name1.isEmpty() | !name2.isEmpty()) this.isInterchangeStation = true;
-			else this.isInterchangeStation = false;
-			this.interchangeLineName[0] = new TextComponentString(name1);
-			this.interchangeLineName[1] = new TextComponentString(name2);
-			return this;
+
+		public List<RailLine> getInterchangeLines() {
+			return interchangeLines;
 		}
-		public Station setInterchangeLineColor(int color){
-			interchangeLineColor = color;
-			return this;
-		}
-		public int getInterchangeLineColor(){
-			return interchangeLineColor;
-		}
-		public Station setInterchangeLineColor(String color){
-			return setInterchangeLineColor(decodeColor(color));
-		}
-	    private static int decodeColor(String colorEncoded){
-	    	if(colorEncoded.length() <= 6)
-	    	if(!colorEncoded.startsWith("0x")){
-	    		try{
-	    			return Integer.decode("0x" + colorEncoded);
-	    		}
-	    		catch(Exception e){
-	    			return 0;
-	    		}
-	    	}
-	    	else{
-	    		try{
-	    			return Integer.decode(colorEncoded);
-	    		}
-	    		catch(Exception e){
-	    			return 0;
-	    		}
-	    	}
-	    	return 0;
-	    }
 	}
+
+	public static class RailLine{
+		private int lineColor;
+		private final ITextComponent[] lineName = new ITextComponent[]{new TextComponentString(""),new TextComponentString("")};
+		public RailLine(){}
+		public RailLine(RailLine src){
+			lineName[0] = src.lineName[0];
+			lineName[1] = src.lineName[1];
+			lineColor = src.lineColor;
+		}
+		public RailLine setLineName(String name1, String name2){
+			this.lineName[0] = new TextComponentString(name1);
+			this.lineName[1] = new TextComponentString(name2);
+			return this;
+		}
+		public RailLine setLineColor(int color){
+			lineColor = color;
+			return this;
+		}
+		public int getLineColor(){
+			return lineColor;
+		}
+		public RailLine setLineColor(String color){
+			return setLineColor(decodeColor(color));
+		}
+		private static int decodeColor(String colorEncoded){
+			if(colorEncoded.length() <= 6)
+				if(!colorEncoded.startsWith("0x")){
+					try{
+						return Integer.decode("0x" + colorEncoded);
+					}
+					catch(Exception e){
+						return 0;
+					}
+				}
+				else{
+					try{
+						return Integer.decode(colorEncoded);
+					}
+					catch(Exception e){
+						return 0;
+					}
+				}
+			return 0;
+		}
+
+		public NBTTagCompound writeToCompound(){
+			NBTTagCompound ls = new NBTTagCompound();
+			NBTTagList list = new NBTTagList();
+			list.appendTag(new NBTTagString(TextComponentUtil.getPureText(lineName[0])));
+			list.appendTag(new NBTTagString(TextComponentUtil.getPureText(lineName[1])));
+			ls.setTag("Name", list);
+			ls.setString("Color", Integer.toHexString(lineColor));
+			return ls;
+		}
+
+		public RailLine readFromCompound(NBTTagCompound compound){
+			NBTTagList list = compound.getTagList("Name", 8);
+			setLineName(list.tagCount() > 0 ? list.getStringTagAt(0) : "", list.tagCount() > 1 ? list.getStringTagAt(1) : "");
+			setLineColor(compound.getString("Color"));
+			return this;
+		}
+
+		public ITextComponent[] getLineName() {
+			return lineName;
+		}
+	}
+
 	public void setData(byte dir, String color, List<Station> stations2) {
     	this.direction = dir;
     	this.routeColorEncoded = color;

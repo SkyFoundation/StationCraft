@@ -68,7 +68,7 @@ public class GuiNameBannerEditor extends GuiScreen {
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
 
-		this.signTypeTextField = new GuiTextField(10, this.fontRendererObj, posX + (-75 / 2 - 95), posY + (-80), 75, 20);
+		this.signTypeTextField = new GuiTextField(10, this.fontRenderer, posX + (-75 / 2 - 95), posY + (-80), 75, 20);
 		this.signTypeTextField.setMaxStringLength(1);
 		this.signTypeTextField.setValidator(new Predicate<String>() {
 			@Override
@@ -81,19 +81,19 @@ public class GuiNameBannerEditor extends GuiScreen {
 		});
 		this.signTypeTextField.setText(Integer.toString(te.getSignType()));
 		
-		this.stationColorTextField = new GuiTextField(14, this.fontRendererObj, posX + (-75 / 2), posY + (-80), 75, 20);
+		this.stationColorTextField = new GuiTextField(14, this.fontRenderer, posX + (-75 / 2), posY + (-80), 75, 20);
 		this.stationColorTextField.setMaxStringLength(6);
 		this.stationColorTextField.setText(Integer.toHexString(te.getStationColor()));
 
-		this.colorTextField = new GuiTextField(11, this.fontRendererObj, posX + (+75 / 2 + 20), posY + (-80), 75, 20);
+		this.colorTextField = new GuiTextField(11, this.fontRenderer, posX + (+75 / 2 + 20), posY + (-80), 75, 20);
 		this.colorTextField.setMaxStringLength(6);
 		this.colorTextField.setText(Integer.toHexString(te.getColor()));
 
-		this.text1TextField = new GuiTextField(12, this.fontRendererObj, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50), 75 * 2 + 20 * 1, 20);
+		this.text1TextField = new GuiTextField(12, this.fontRenderer, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50), 75 * 2 + 20 * 1, 20);
 		this.text1TextField.setMaxStringLength(32767);
 		this.text1TextField.setText(te.signText[0].getUnformattedText());
 
-		this.text2TextField = new GuiTextField(13, this.fontRendererObj, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20), 75 * 2 + 20 * 1, 20);
+		this.text2TextField = new GuiTextField(13, this.fontRenderer, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20), 75 * 2 + 20 * 1, 20);
 		this.text2TextField.setMaxStringLength(32767);
 		this.text2TextField.setText(te.signText[1].getUnformattedText());
 		
@@ -154,13 +154,13 @@ public class GuiNameBannerEditor extends GuiScreen {
 		this.drawDefaultBackground();
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
-		this.drawCenteredString(this.fontRendererObj,I18n.format("gui.editor.title.nb", new Object[0]), posX, 20, 0xffffff);
-		this.drawString(fontRendererObj, I18n.format("gui.signage.type", new Object[0]), posX + (-75 / 2 - 95), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.color.station", new Object[0]), posX + (-75 / 2), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.color", new Object[0]), posX + (75 / 2 + 20), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, "Text1", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, "Text2", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.preview", new Object[0]), posX +(75 / 2 + 20), posY - 50 - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+		this.drawCenteredString(this.fontRenderer,I18n.format("gui.editor.title.nb", new Object[0]), posX, 20, 0xffffff);
+		this.drawString(fontRenderer, I18n.format("gui.signage.type", new Object[0]), posX + (-75 / 2 - 95), posY + (-80) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.color.station", new Object[0]), posX + (-75 / 2), posY + (-80) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.color", new Object[0]), posX + (75 / 2 + 20), posY + (-80) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, "Text1", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, "Text2", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.preview", new Object[0]), posX +(75 / 2 + 20), posY - 50 - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
 		this.signTypeTextField.drawTextBox();
 		this.stationColorTextField.drawTextBox();
 		this.colorTextField.drawTextBox();

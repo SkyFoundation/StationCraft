@@ -56,17 +56,17 @@ public class GuiColorfulEditor extends GuiScreen {
 		this.buttonList.clear();
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
-		this.colorField = new GuiTextField(11, this.fontRendererObj, posX + (+75 / 2 + 20), posY + (-80), 75, 17);
+		this.colorField = new GuiTextField(11, this.fontRenderer, posX + (+75 / 2 + 20), posY + (-80), 75, 17);
 		this.colorField.setMaxStringLength(6);
 		this.colorField.setText(Integer.toHexString(teedit.getColor()));
 		this.colorField.setValidator(new Predicate<String>() {
 			@Override
 			public boolean apply(String s) {
-				return s.isEmpty() | s.matches("-?[0-9a-fA-F]+");
+				return s.isEmpty() || s.matches("-?[0-9a-fA-F]+");
 				}
 		});
-		this.buttonList.add(doneBtn = new GuiButton(0, posX - 4 - 150, this.height - 40, 150, 20, I18n.format("gui.done", new Object[0])));
-		this.buttonList.add(cancelBtn = new GuiButton(1, posX + 4, this.height - 40, 150, 20, I18n.format("gui.cancel", new Object[0])));
+		this.buttonList.add(doneBtn = new GuiButton(0, posX - 4 - 150, this.height - 40, 150, 20, I18n.format("gui.done")));
+		this.buttonList.add(cancelBtn = new GuiButton(1, posX + 4, this.height - 40, 150, 20, I18n.format("gui.cancel")));
 		this.buttonList.add(selectColorBtn = new GuiButton(10,posX + (+75 / 2 + 20 + 75 + 2),posY -80 - 1, 20,20,"..."));
 	}
 	@SuppressWarnings("deprecation")
@@ -75,8 +75,8 @@ public class GuiColorfulEditor extends GuiScreen {
 		this.drawDefaultBackground();
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
-		this.drawString(fontRendererObj, I18n.format("gui.color", new Object[0]), posX + (75 / 2 + 20), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.preview", new Object[0]), posX +(75 / 2 + 20), posY - 50 - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.color", new Object[0]), posX + (75 / 2 + 20), posY + (-80) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.preview", new Object[0]), posX +(75 / 2 + 20), posY - 50 - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
 		this.colorField.drawTextBox();
         float f = 1.0F / 16;
         float f1 = 1.0F / 16;

@@ -74,7 +74,7 @@ public class CommonProxy {
 	{
 		if (handler instanceof NetHandlerPlayServer)
 		{
-			return ((NetHandlerPlayServer) handler).playerEntity;
+			return ((NetHandlerPlayServer) handler).player;
 		}
 		else
 		{

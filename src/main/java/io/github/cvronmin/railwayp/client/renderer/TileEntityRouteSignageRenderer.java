@@ -1,29 +1,28 @@
 package io.github.cvronmin.railwayp.client.renderer;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.lwjgl.opengl.GL11;
-
 import com.google.common.collect.Maps;
-
+import io.github.cvronmin.railwayp.client.GLRenderUtil;
 import io.github.cvronmin.railwayp.client.model.ModelRouteSignage;
 import io.github.cvronmin.railwayp.client.renderer.texture.UnifedBannerTextures;
 import io.github.cvronmin.railwayp.tileentity.TileEntityRouteSignage;
 import io.github.cvronmin.railwayp.tileentity.TileEntityRouteSignage.Station;
+import static io.github.cvronmin.railwayp.client.GLRenderUtil.*;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import java.util.List;
+import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<TileEntityRouteSignage> {
@@ -33,8 +32,8 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
 			"textures/entity/signage_base.png");
 	private ModelRouteSignage bannerModel = new ModelRouteSignage();
 
-	public void renderTileEntityAt(TileEntityRouteSignage entityBanner, double x, double y, double z, float p_180545_8_,
-			int p_180545_9_) {
+	public void renderTileEntityAt(TileEntityRouteSignage entityBanner, double x, double y, double z, float partialTicks,
+			int destroyStage) {
 		boolean flag = entityBanner.getWorld() != null;
 		int j = flag ? entityBanner.getBlockMetadata() : 0;
 		long k = flag ? entityBanner.getWorld().getTotalWorldTime() : 0L;
@@ -86,301 +85,186 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
 							start = entityBanner.getDirection() == 0 ? now : (entityBanner.getDirection() == 2 ? -2f :  0);
 							end = entityBanner.getDirection() == 0 ? 2f : (entityBanner.getDirection() == 2 ? now :  0);
 						}
-						}
+					}
 				}
 				//stmidpts[entityBanner.getStationList().size() - 1] = 4f;
-				GlStateManager.disableTexture2D();
-				//GlStateManager.disableLighting();
-				Tessellator tessellator = Tessellator.getInstance();
-				VertexBuffer buffer = tessellator.getBuffer();
-				buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-				int color = entityBanner.getRouteColor();
-				buffer.pos(-2f, -1.55f, -0.075)
-				.color(((color >> 16) & 255) / 255f, ((color >> 8) & 255) / 255f, (color & 255) / 255f, 1f)
-				.endVertex();
-				buffer.pos(-2f, -1.45, -0.075)
-						.color(((color >> 16) & 255) / 255f, ((color >> 8) & 255) / 255f, (color & 255) / 255f, 1f)
-						.endVertex();
-				buffer.pos(2f, -1.45, -0.075)
-				.color(((color >> 16) & 255) / 255f, ((color >> 8) & 255) / 255f, (color & 255) / 255f, 1f)
-				.endVertex();
-				buffer.pos(2f, -1.55f, -0.075)
-						.color(((color >> 16) & 255) / 255f, ((color >> 8) & 255) / 255f, (color & 255) / 255f, 1f)
-						.endVertex();
-				tessellator.draw();
-				buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-				buffer.pos(start, -1.55f, -0.075556).color(0.5f, 0.5f, 0.5f, 1f).endVertex();
-				buffer.pos(start, -1.45, -0.075556).color(0.5f, 0.5f, 0.5f, 1f).endVertex();
-				buffer.pos(end, -1.45, -0.075556).color(0.5f, 0.5f, 0.5f, 1f).endVertex();
-				buffer.pos(end, -1.55f, -0.075556).color(0.5f, 0.5f, 0.5f, 1f).endVertex();
-				tessellator.draw();
-				for (int i = 0; i < stmidpts.length; i++) {
-					Station station = entityBanner.getStationList().get(i);
-						drawStation(stmidpts[i], station, i, hereId == i ? false : (entityBanner.getDirection() == 0 ? (i < hereId ? false : true) : (entityBanner.getDirection() == 2 ? (i > hereId ? false : true) : false)));
-				}
-				GlStateManager.enableTexture2D();
-				//GlStateManager.enableLighting();
+				drawRouteLine(entityBanner, stmidpts, hereId, start, end);
 				GlStateManager.depthMask(false);
 			}
 			GlStateManager.popMatrix();
 		}
 		if (stmidpts != null) {
-			FontRenderer fontrenderer = this.getFontRenderer();
-			f3 = 0.015625F * f1;
-			boolean overed = entityBanner.getDirection() == 2 ? true : false;
-			boolean needpost = false, changed = false;
-			int color = overed ? 0x7F7F7F : 0x000000;
-			// Main
-			for (int i = 0; i < stmidpts.length; i++) {
-				float offset = stmidpts[i];
-				float offsetY = 0.25f / 1.5f;
-				if (i % 2 == 1)
-					offsetY = -offsetY + 0.1f;
-				Station station = entityBanner.getStationList().get(i);
-				if (station.amIHere() & entityBanner.getDirection() != 1 & !changed) {
-					if (overed) {
-						overed = false;
-						color = overed ? 0x7F7F7F : 0x000000;
-						changed = true;
-					} else
-						needpost = true;
-				}
-				GlStateManager.pushMatrix();
-				GlStateManager.translate((offset - 2f) / 1.5f, offsetY, 0);
-				GlStateManager.translate(-0.4F + 0.4, 0.5F * f1 + 0.6, 0.07F * f1);
-				GlStateManager.scale(f3 * .65, -f3 * .65, f3 * .65);
-				GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
-				GlStateManager.depthMask(false);
-				if (p_180545_9_ < 0) {
-					if (station.stationName[0] != null) {
-						ITextComponent ichatcomponent = station.stationName[0];
-						List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false, true);
-						String s = list != null && list.size() > 0 ? ((ITextComponent) list.get(0)).getFormattedText()
-								: "";
-						fontrenderer.drawString(s, (float) (-fontrenderer.getStringWidth(s) / 2),
-								0 * 10 - station.stationName.length * 5, color, false);
-					}
-				}
-				GlStateManager.depthMask(true);
-				GlStateManager.popMatrix();
-				GlStateManager.pushMatrix();
-				GlStateManager.translate((offset - 2f) / 1.5f, offsetY, 0);
-				GlStateManager.translate(-0.4F + 0.4, 0.5F * f1 + 0.6, 0.07F * f1);
-				GlStateManager.scale(f3 * 0.45, -f3 * 0.45, f3 * 0.45);
-				GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
-				GlStateManager.depthMask(false);
-				if (p_180545_9_ < 0) {
-					if (station.stationName[1] != null) {
-						ITextComponent ichatcomponent = station.stationName[1];
-						List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false, true);
-						String s = list != null && list.size() > 0 ? ((ITextComponent) list.get(0)).getFormattedText()
-								: "";
-						fontrenderer.drawString(s, (float) (-fontrenderer.getStringWidth(s) / 2),
-								(float) (1 * 10 - station.stationName.length * 5), color, false);
-					}
-				}
-				GlStateManager.depthMask(true);
-				GlStateManager.popMatrix();
-				// MainEnd
-
-				if (station.isInterchangeStation()) {
-					f3 = 0.015625F * f1;
-					offsetY = 0.025f;
-					if (i % 2 == 1)
-						offsetY = -offsetY - .225f;
-					// Next
-					GlStateManager.pushMatrix();
-					GlStateManager.translate((offset - 2f) / 1.5f, -offsetY, 0);
-					GlStateManager.translate(-0.4F + 0.4, 0.5F * f1 + 0.6, 0.07F * f1);
-					GlStateManager.scale(f3 * .45, -f3 * .45, f3 * .45);
-					GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
-					GlStateManager.depthMask(false);
-					if (p_180545_9_ < 0) {
-						if (station.getInterchangeLineName()[0] != null) {
-							ITextComponent ichatcomponent = station.getInterchangeLineName()[0];
-							List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false,
-									true);
-							String s = list != null && list.size() > 0
-									? ((ITextComponent) list.get(0)).getFormattedText() : "";
-							fontrenderer.drawString(s, (-fontrenderer.getStringWidth(s) / 2),
-									0 * 10 - station.getInterchangeLineName().length * 5 + 20 * 0.6666667f, color,
-									false);
-						}
-					}
-					GlStateManager.depthMask(true);
-					GlStateManager.popMatrix();
-					GlStateManager.pushMatrix();
-					GlStateManager.translate((offset - 2f) / 1.5f, -offsetY, 0);
-					GlStateManager.translate(-0.4F + 0.4, 0.5F * f1 + 0.6, 0.07F * f1);
-					GlStateManager.scale(f3 * 0.25, -f3 * 0.25, f3 * 0.25);
-					GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
-					GlStateManager.depthMask(false);
-					if (p_180545_9_ < 0) {
-						if (station.getInterchangeLineName()[1] != null) {
-							ITextComponent ichatcomponent = station.getInterchangeLineName()[1];
-							List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false,
-									true);
-							String s = list != null && list.size() > 0
-									? ((ITextComponent) list.get(0)).getFormattedText() : "";
-							fontrenderer.drawString(s, (-fontrenderer.getStringWidth(s) / 2),
-									1 * 10 - station.getInterchangeLineName().length * 5 + 20, color, false);
-						}
-					}
-					GlStateManager.depthMask(true);
-					GlStateManager.popMatrix();
-				} // NextEnd
-				if (needpost) {
-					overed = true;
-					color = overed ? 0x7F7F7F : 0x000000;
-					needpost = false;
-					changed = true;
-				}
-			}
+			drawRouteLineText(entityBanner, destroyStage, f1, stmidpts);
 		}
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.popMatrix();
 	}
 
+	private void drawRouteLineText(TileEntityRouteSignage entityBanner, int destroyStage, float f1, float[] stmidpts) {
+		float f3;FontRenderer fontrenderer = this.getFontRenderer();
+		f3 = 0.015625F * f1;
+		boolean overed = entityBanner.getDirection() == 2;
+		boolean needpost = false, changed = false;
+		int color = overed ? 0x7F7F7F : 0x000000;
+		// Main
+		for (int i = 0; i < stmidpts.length; i++) {
+            float offset = stmidpts[i];
+            float offsetY = 0.25f / 1.5f;
+            if (i % 2 == 1)
+                offsetY = -offsetY + 0.1f;
+            Station station = entityBanner.getStationList().get(i);
+            if (station.amIHere() & entityBanner.getDirection() != 1 & !changed) {
+                if (overed) {
+                    overed = false;
+                    color = overed ? 0x7F7F7F : 0x000000;
+                    changed = true;
+                } else
+                    needpost = true;
+            }
+            GlStateManager.pushMatrix();
+			GlStateManager.translate((offset - 2f) / 1.5f, offsetY, 0);
+            drawPairTexts(getFontRenderer(), 0, 0.5F * f1 + 0.6f, 0.07F * f1, f3 * .65f, f3 * .45f, color, station.stationName, new int[0], EnumAlignment.CENTER);
+            GlStateManager.popMatrix();
+            // MainEnd
+
+            if (station.isInterchangeStation()) {
+                f3 = 0.015625F * f1;
+                offsetY = 0.025f;
+                if (i % 2 == 1)
+                    offsetY = -offsetY - .225f;
+                // Next
+				if(station.getInterchangeLines().size() == 1) {
+					GlStateManager.pushMatrix();
+					GlStateManager.translate((offset - 2f) / 1.5f, -offsetY, 0);
+					drawPairTexts(fontrenderer, 0, 0.5f * f1 + 0.6f, 0.07f * f1, f3 * .45f, f3 * .25f, 20 * .66666667f, 20, color, station.getInterchangeLines().get(0).getLineName(), new int[0], EnumAlignment.CENTER);
+					GlStateManager.popMatrix();
+				}
+				else{
+					int max = station.getInterchangeLines().size() > 12 ? 12 : station.getInterchangeLines().size();
+					GlStateManager.pushMatrix();
+					GlStateManager.translate((offset - 2f) / 1.5f, -offsetY, 0);
+					for (int j = 0; j < max; j++) {
+						int m = j % MathHelper.ceil(max / 2f) + 1;
+						int m1 = j <= MathHelper.ceil(max / 2f) - 1 ? 1 : -1;
+						drawPairTexts(fontrenderer, 0.115f * m1, 0.5f * f1 + 0.6f + 0.05f * m * ((i % 2) == 0 ? -1 : 1) - .12f * ((i % 2) == 0 ? -1 : 1), 0.07f * f1, f3 * .45f, f3 * .25f, 20 * .66666667f, 20, color, station.getInterchangeLines().get(j).getLineName(), new int[0], j < MathHelper.ceil(max / 2f) ? EnumAlignment.LEFT : EnumAlignment.RIGHT);
+					}
+					GlStateManager.popMatrix();
+				}
+            }
+            if (needpost) {
+                overed = true;
+                color = overed ? 0x7F7F7F : 0x000000;
+                needpost = false;
+                changed = true;
+            }
+        }
+	}
+
+	private void drawRouteLine(TileEntityRouteSignage entityBanner, float[] stmidpts, int hereId, float start, float end) {
+		GlStateManager.disableTexture2D();
+		//GlStateManager.disableLighting();
+		Tessellator tessellator = Tessellator.getInstance();
+		VertexBuffer buffer = tessellator.getBuffer();
+		int color = entityBanner.getRouteColor();
+		drawRect(-2f,-1.55f, -0.07, 2f, -1.45, 0xff000000 | color);
+		drawRect(start,-1.55f, -0.0705555, end, -1.45, 0xff7f7f7f);
+		for (int i = 0; i < stmidpts.length; i++) {
+            Station station = entityBanner.getStationList().get(i);
+                drawStation(stmidpts[i], station, i, hereId != i && (entityBanner.getDirection() == 0 ? (i >= hereId) : (entityBanner.getDirection() == 2 && (i <= hereId))));
+        }
+		GlStateManager.enableTexture2D();
+		//GlStateManager.enableLighting();
+	}
+
 	private ResourceLocation func_178463_a(TileEntityRouteSignage bannerObj) {
-		/*
-		 * String s = bannerObj.func_175116_e();
-		 * 
-		 * if (s.isEmpty()) { return null; } else {
-		 * TileEntityRouteSignageRenderer.TimedBannerTexture timedbannertexture
-		 * = (TileEntityRouteSignageRenderer.TimedBannerTexture)DESIGNS.get(s);
-		 * 
-		 * if (timedbannertexture == null) { if (DESIGNS.size() >= 256) { long i
-		 * = System.currentTimeMillis(); Iterator iterator =
-		 * DESIGNS.keySet().iterator();
-		 * 
-		 * while (iterator.hasNext()) { String s1 = (String)iterator.next();
-		 * TileEntityRouteSignageRenderer.TimedBannerTexture timedbannertexture1
-		 * = (TileEntityRouteSignageRenderer.TimedBannerTexture)DESIGNS.get(s1);
-		 * 
-		 * if (i - timedbannertexture1.systemTime > 60000L) {
-		 * Minecraft.getMinecraft().getTextureManager().deleteTexture(
-		 * timedbannertexture1.bannerTexture); iterator.remove(); } }
-		 * 
-		 * if (DESIGNS.size() >= 256) { return null; } }
-		 * 
-		 * List list1 = bannerObj.getPatternList(); List list =
-		 * bannerObj.getColorList(); ArrayList arraylist = Lists.newArrayList();
-		 * Iterator iterator1 = list1.iterator();
-		 * 
-		 * while (iterator1.hasNext()) {
-		 * TileEntityRouteSignage.EnumBannerPattern enumbannerpattern =
-		 * (TileEntityRouteSignage.EnumBannerPattern)iterator1.next();
-		 * arraylist.add("railwayp" + ":" + "textures/entity/banner/" +
-		 * enumbannerpattern.getPatternName() + ".png"); }
-		 * 
-		 * timedbannertexture = new
-		 * TileEntityRouteSignageRenderer.TimedBannerTexture(null);
-		 * timedbannertexture.bannerTexture = new ResourceLocation("railwayp",
-		 * s); Minecraft.getMinecraft().getTextureManager().loadTexture(
-		 * timedbannertexture.bannerTexture, new
-		 * LayeredCustomColorMaskTexture(BANNERTEXTURES, arraylist, list));
-		 * DESIGNS.put(s, timedbannertexture); }
-		 * 
-		 * timedbannertexture.systemTime = System.currentTimeMillis(); return
-		 * timedbannertexture.bannerTexture; }
-		 */
 		return UnifedBannerTextures.ROUTESIGN_DESIGNS.getResourceLocation(bannerObj.getPatternResourceLocation(),
 				bannerObj.getPatternList(), bannerObj.getColorList());
 
 	}
 
-	private void drawStation(double offsetMiddleTop, Station station, int index, boolean overed) {
+	private void drawStation(double offsetMiddleTop, Station station, int index, boolean over) {
 		Tessellator tessellator = Tessellator.getInstance();
 		VertexBuffer buffer = tessellator.getBuffer();
-		float bordercolor = overed ? 0.5f : 0f;
 		GlStateManager.depthMask(false);
 		if (station.isInterchangeStation()) {
-			int color = station.getInterchangeLineColor();
-			float r = ((color >> 16) & 255) / 255f, g = ((color >> 8) & 255) / 255f, b = (color & 255) / 255f;
-			if (index % 2 == 0) {
-				buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-				buffer.pos(-2f + offsetMiddleTop - .025, -1.45f, -0.075)
-				.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
-				.endVertex();
-				buffer.pos(-2f + offsetMiddleTop - .025, -1.35, -0.075)
-						.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
-						.endVertex();
-				buffer.pos(-2f + offsetMiddleTop + .025, -1.35, -.075)
-						.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
-						.endVertex();
-				buffer.pos(-2f + offsetMiddleTop + .025, -1.45f, -0.075)
-				.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
-				.endVertex();
-				tessellator.draw();
-			} else {
-				buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-				buffer.pos(-2f + offsetMiddleTop - .025, -1.65f, -0.075)
-				.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
-				.endVertex();
-				buffer.pos(-2f + offsetMiddleTop - .025, -1.55, -0.075)
-						.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
-						.endVertex();
-				buffer.pos(-2f + offsetMiddleTop + .025, -1.55, -.075)
-				.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
-				.endVertex();
-				buffer.pos(-2f + offsetMiddleTop + .025, -1.65f, -0.075)
-						.color(overed ? bordercolor : r, overed ? bordercolor : g, overed ? bordercolor : b, 1f)
-						.endVertex();
-				tessellator.draw();
+			if(station.getInterchangeLines().size() == 1) {
+				int color = station.getInterchangeLines().get(0).getLineColor();
+				float r = ((color >> 16) & 255) / 255f, g = ((color >> 8) & 255) / 255f, b = (color & 255) / 255f;
+				if (index % 2 == 0) {
+					drawRect(-2f + offsetMiddleTop - .025, -1.5f, -0.075, -2f + offsetMiddleTop + .025, -1.35f, over ? 0xff7f7f7f : 0xff000000 | color);
+				} else {
+					drawRect(-2f + offsetMiddleTop - .025, -1.65f, -0.075, -2f + offsetMiddleTop + .025, -1.5f, over ? 0xff7f7f7f : 0xff000000 | color);
+				}
+				GLRenderUtil.drawCircle(-2f + offsetMiddleTop, -1.5f, -0.0707776, over ? 0xff7f7f7f : 0xff000000, 0, 360, 0.055f);
+				GLRenderUtil.drawCircle(-2f + offsetMiddleTop, -1.5f, -0.071, 0xffffffff, 0, 360, 0.045f);
+			}
+			else {
+				float offlen;
+				if (station.getInterchangeLines().size() >= 3 && station.getInterchangeLines().size() <= 12){
+					offlen = .05f * (MathHelper.ceil(station.getInterchangeLines().size() / 2f) + 1) + .025f * MathHelper.ceil(station.getInterchangeLines().size() / 2f);
+				}
+				else if(station.getInterchangeLines().size() > 12){
+					offlen = .05f * 7 + .025f * 6;
+				}
+				else{
+					offlen = .05f * (station.getInterchangeLines().size() + 1) + .025f * (station.getInterchangeLines().size());
+				}
+				if (index % 2 == 0) {
+					for (int i = 0; i < station.getInterchangeLines().size() && i < 12;i++){
+						int color = station.getInterchangeLines().get(i).getLineColor();
+						int m = i + 1;
+						float len = .055f + 0.1f;
+						int leftRatio = 0,
+						rightRatio = 1;
+						if(station.getInterchangeLines().size() > 12){
+							m = i % 6 + 1;
+							leftRatio = i > 5 ? -1 : 0;
+							rightRatio = leftRatio + 1;
+						}else if(station.getInterchangeLines().size() >= 3){
+							m = i % MathHelper.ceil(station.getInterchangeLines().size() / 2f) + 1;
+							leftRatio = i > MathHelper.ceil(station.getInterchangeLines().size() / 2f) - 1 ? -1 : 0;
+							rightRatio = leftRatio + 1;
+						}
+						drawRect(-2f + offsetMiddleTop + len * leftRatio, -1.5f + 0.055f + .025f * m + .05f * (m - 1), -.075f, -2f + offsetMiddleTop + len * rightRatio, -1.5f + 0.055f + .025f * m + .05f * m, over ? 0xff7f7f7f : color | 0xff000000);
+					}
+					drawCircle(-2f + offsetMiddleTop, -1.5f, -0.0707776, over ? 0xff7f7f7f : 0xff000000, 0, 180, 0.055f);
+					drawCircle(-2f + offsetMiddleTop, -1.5f, -0.071, 0xffffffff, 0, 180, 0.045f);
+					drawRect(-2f + offsetMiddleTop - .055f, -1.5f, -.0707776, -2f + offsetMiddleTop + .055f, -1.5f + offlen,over ? 0xff7f7f7f : 0xff000000);
+					drawRect(-2f + offsetMiddleTop - .045f, -1.5f, -.071, -2f + offsetMiddleTop + .045f, -1.5f + offlen,0xffffffff);
+					drawCircle(-2f + offsetMiddleTop, -1.5f + offlen, -0.0707776, over ? 0xff7f7f7f : 0xff000000, 180, 360, 0.055f);
+					drawCircle(-2f + offsetMiddleTop, -1.5f + offlen, -0.071, 0xffffffff, 180, 360, 0.045f);
+				}
+				else {
+					for (int i = 0; i < station.getInterchangeLines().size() && i < 12;i++){
+						int color = station.getInterchangeLines().get(i).getLineColor();
+						int m = i + 1;
+						float len = .055f + 0.1f;
+						int leftRatio = 0,
+								rightRatio = 1;
+						if(station.getInterchangeLines().size() > 12){
+							m = i % 6 + 1;
+							leftRatio = i > 5 ? -1 : 0;
+							rightRatio = leftRatio + 1;
+						}else if(station.getInterchangeLines().size() >= 3){
+							m = i % MathHelper.ceil(station.getInterchangeLines().size() / 2f) + 1;
+							leftRatio = i > MathHelper.ceil(station.getInterchangeLines().size() / 2f) - 1 ? -1 : 0;
+							rightRatio = leftRatio + 1;
+						}
+						drawRect(-2f + offsetMiddleTop + len * leftRatio, -1.5f - ( 0.055f + .025f * m + .05f * m), -.075f, -2f + offsetMiddleTop + len * rightRatio, -1.5f -( 0.055f + .025f * m + .05f * (m - 1)), over ? 0xff7f7f7f : color | 0xff000000);
+					}
+					drawCircle(-2f + offsetMiddleTop, -1.5f - offlen, -0.0707776, over ? 0xff7f7f7f : 0xff000000, 0, 180, 0.055f);
+					drawCircle(-2f + offsetMiddleTop, -1.5f - offlen, -0.071, 0xffffffff, 0, 180, 0.045f);
+					drawRect(-2f + offsetMiddleTop - .055f, -1.5f - offlen, -.0707776, -2f + offsetMiddleTop + .055f, -1.5f,over ? 0xff7f7f7f : 0xff000000);
+					drawRect(-2f + offsetMiddleTop - .045f, -1.5f - offlen, -.071, -2f + offsetMiddleTop + .045f, -1.5f,0xffffffff);
+					drawCircle(-2f + offsetMiddleTop, -1.5f, -0.0707776, over ? 0xff7f7f7f : 0xff000000, 180, 360, 0.055f);
+					drawCircle(-2f + offsetMiddleTop, -1.5f, -0.071, 0xffffffff, 180, 360, 0.045f);
+				}
 			}
 		}
-		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.525f, -0.077).color(1f, 1, 1, 1).endVertex();
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.475, -0.077).color(1f, 1, 1, 1).endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.475, -.077).color(1f, 1, 1, 1).endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.525f, -0.077).color(1f, 1, 1, 1).endVertex();
-		tessellator.draw();
-
-		// buffer.reset();
-		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(-2f + offsetMiddleTop - .05, -1.525f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
-		.endVertex();
-		buffer.pos(-2f + offsetMiddleTop - .05, -1.475, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
-				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.475, -.077).color(bordercolor, bordercolor, bordercolor, 1f)
-		.endVertex();
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.525f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
-				.endVertex();
-		tessellator.draw();
-		// buffer.reset();
-		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(-2f + offsetMiddleTop + .05, -1.475, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
-				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .05, -1.525f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
-				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.525f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
-				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.475, -.077).color(bordercolor, bordercolor, bordercolor, 1f)
-				.endVertex();
-		tessellator.draw();
-
-		// buffer.reset();
-		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.475, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
-				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.45f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
-				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.45f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
-				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.475, -.077).color(bordercolor, bordercolor, bordercolor, 1f)
-				.endVertex();
-		tessellator.draw();
-		// buffer.reset();
-		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.55, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
-				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop - .025, -1.525f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
-				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.525f, -0.077).color(bordercolor, bordercolor, bordercolor, 1f)
-				.endVertex();
-		buffer.pos(-2f + offsetMiddleTop + .025, -1.55, -.077).color(bordercolor, bordercolor, bordercolor, 1f)
-				.endVertex();
-		tessellator.draw();
+		else {
+			drawCircle(-2f + offsetMiddleTop, -1.5f, -0.0707776, over ? 0xff7f7f7f : 0xff000000, 0, 360, 0.055f);
+			drawCircle(-2f + offsetMiddleTop, -1.5f, -0.071, 0xffffffff, 0, 360, 0.045f);
+		}
 		GlStateManager.depthMask(true);
 	}
 

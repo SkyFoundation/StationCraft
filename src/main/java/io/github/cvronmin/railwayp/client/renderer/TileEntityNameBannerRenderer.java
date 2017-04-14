@@ -61,15 +61,7 @@ public class TileEntityNameBannerRenderer extends TileEntitySpecialRenderer<Tile
 		}
 		GlStateManager.translate((float) x + 0.5F, (float) y - 0.25F * f1, (float) z + 0.5F);
 		GlStateManager.rotate(-f3, 0.0F, 1.0F, 0.0F);
-		if (te.getWorld() != null & te.getPos() != null) {
-	        EnumFacing enumfacing = (EnumFacing)te.getWorld().getBlockState(te.getPos()).getValue(BlockNameBanner.FACING);
-	        TileEntity te1 = te.getWorld().getTileEntity(te.getPos().offset(enumfacing.getOpposite()));
-	        if (te1 instanceof TileEntityColorful)
-	        {
-        		//GlStateManager.translate(-Math.cos(Math.toRadians(((TileEntityColorful)te1).getRotation())) * 1.25f, 0, Math.sin(Math.toRadians(((TileEntityColorful)te1).getRotation())) * 1.95f);
-	        	//GlStateManager.rotate(-((TileEntityColorful)te1).getRotation(), 0, 1, 0);
-	        }
-		}
+
 		GlStateManager.translate(-0.0175F, -0.3125F - 0.05, -0.5375F + 0.055);
 		GlStateManager.enableRescaleNormal();
 		float a = 0, b = 0, corr = 0.055f;
