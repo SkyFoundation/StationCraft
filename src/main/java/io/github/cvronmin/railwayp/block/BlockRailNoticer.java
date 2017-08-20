@@ -27,13 +27,7 @@ import net.minecraft.world.World;
 
 public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvider{
 
-    public static final PropertyEnum<BlockRailBase.EnumRailDirection> SHAPE = PropertyEnum.<BlockRailBase.EnumRailDirection>create("shape", BlockRailBase.EnumRailDirection.class, new Predicate<BlockRailBase.EnumRailDirection>()
-    {
-        public boolean apply(BlockRailBase.EnumRailDirection p_apply_1_)
-        {
-            return p_apply_1_ != BlockRailBase.EnumRailDirection.NORTH_EAST && p_apply_1_ != BlockRailBase.EnumRailDirection.NORTH_WEST && p_apply_1_ != BlockRailBase.EnumRailDirection.SOUTH_EAST && p_apply_1_ != BlockRailBase.EnumRailDirection.SOUTH_WEST;
-        }
-    });
+    public static final PropertyEnum<BlockRailBase.EnumRailDirection> SHAPE = PropertyEnum.<BlockRailBase.EnumRailDirection>create("shape", BlockRailBase.EnumRailDirection.class, p_apply_1_ -> p_apply_1_ != EnumRailDirection.NORTH_EAST && p_apply_1_ != EnumRailDirection.NORTH_WEST && p_apply_1_ != EnumRailDirection.SOUTH_EAST && p_apply_1_ != EnumRailDirection.SOUTH_WEST);
     public static final PropertyBool POWERED = PropertyBool.create("powered");
     private boolean readyupdate = true;
     public BlockRailNoticer()
@@ -67,7 +61,7 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
     {
         if (!worldIn.isRemote)
         {
-            if (!((Boolean)state.getValue(POWERED)).booleanValue())
+            if (!state.getValue(POWERED).booleanValue())
             {
                 this.updatePoweredState(worldIn, pos, state);
             }
@@ -81,7 +75,7 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
 
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
-        if (!worldIn.isRemote && ((Boolean)state.getValue(POWERED)).booleanValue())
+        if (!worldIn.isRemote && state.getValue(POWERED).booleanValue())
         {
             this.updatePoweredState(worldIn, pos, state);
         }
@@ -89,17 +83,17 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
 
     public int isProvidingWeakPower(IBlockAccess worldIn, BlockPos pos, IBlockState state, EnumFacing side)
     {
-        return ((Boolean)state.getValue(POWERED)).booleanValue() ? 15 : 0;
+        return state.getValue(POWERED).booleanValue() ? 15 : 0;
     }
 
     public int isProvidingStrongPower(IBlockAccess worldIn, BlockPos pos, IBlockState state, EnumFacing side)
     {
-        return !((Boolean)state.getValue(POWERED)).booleanValue() ? 0 : (side == EnumFacing.UP ? 15 : 0);
+        return !state.getValue(POWERED).booleanValue() ? 0 : (side == EnumFacing.UP ? 15 : 0);
     }
 
     private void updatePoweredState(World worldIn, BlockPos pos, IBlockState state)
     {
-        boolean flag = ((Boolean)state.getValue(POWERED)).booleanValue();
+        boolean flag = state.getValue(POWERED).booleanValue();
         boolean flag1 = false;
         List<EntityMinecart> list = this.<EntityMinecart>findMinecarts(worldIn, pos, EntityMinecart.class, new Predicate[0]);
 
@@ -197,9 +191,9 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
     public int getMetaFromState(IBlockState state)
     {
         byte b0 = 0;
-        int i = b0 | ((BlockRailBase.EnumRailDirection)state.getValue(SHAPE)).getMetadata();
+        int i = b0 | state.getValue(SHAPE).getMetadata();
 
-        if (((Boolean)state.getValue(POWERED)).booleanValue())
+        if (state.getValue(POWERED).booleanValue())
         {
             i |= 8;
         }
@@ -241,7 +235,7 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
         {
             case CLOCKWISE_180:
 
-                switch ((BlockRailBase.EnumRailDirection)state.getValue(SHAPE))
+                switch (state.getValue(SHAPE))
                 {
                     case ASCENDING_EAST:
                         return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_WEST);
@@ -263,7 +257,7 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
 
             case COUNTERCLOCKWISE_90:
 
-                switch ((BlockRailBase.EnumRailDirection)state.getValue(SHAPE))
+                switch (state.getValue(SHAPE))
                 {
                     case ASCENDING_EAST:
                         return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_NORTH);
@@ -289,7 +283,7 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
 
             case CLOCKWISE_90:
 
-                switch ((BlockRailBase.EnumRailDirection)state.getValue(SHAPE))
+                switch (state.getValue(SHAPE))
                 {
                     case ASCENDING_EAST:
                         return state.withProperty(SHAPE, BlockRailBase.EnumRailDirection.ASCENDING_SOUTH);
@@ -325,7 +319,7 @@ public class BlockRailNoticer extends BlockRailBase implements ITileEntityProvid
     @SuppressWarnings("incomplete-switch")
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
     {
-        BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = (BlockRailBase.EnumRailDirection)state.getValue(SHAPE);
+        BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = state.getValue(SHAPE);
 
         switch (mirrorIn)
         {

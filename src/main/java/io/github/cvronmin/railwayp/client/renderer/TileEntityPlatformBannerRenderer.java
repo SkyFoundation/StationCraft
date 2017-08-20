@@ -41,12 +41,12 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer<
 	private ModelPlatformBanner bannerModel = new ModelPlatformBanner();
 	private static final int TEXT1_MAX_ALLOW_LENGTH = 60;
 
-	public void renderTileEntityAt(TileEntityPlatformBanner entityBanner, double x, double y, double z,
-			float partialTicks, int destroyStages) {
-		boolean flag = entityBanner.getWorld() != null;
-		boolean flag1 = !flag || entityBanner.getBlockType() == RPBlocks.wall_platform_banner;
-		int j = flag ? entityBanner.getBlockMetadata() : 0;
-		long k = flag ? entityBanner.getWorld().getTotalWorldTime() : 0L;
+	@Override
+	public void render(TileEntityPlatformBanner te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+		boolean flag = te.getWorld() != null;
+		boolean flag1 = !flag || te.getBlockType() == RPBlocks.wall_platform_banner;
+		int j = flag ? te.getBlockMetadata() : 0;
+		long k = flag ? te.getWorld().getTotalWorldTime() : 0L;
 		GlStateManager.pushMatrix();
 		float f1 = 0.6666667F;
 		float f3 = 0.0F;
@@ -66,9 +66,9 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer<
 		GlStateManager.translate((float) x + 0.5F, (float) y - 0.25F * f1, (float) z + 0.5F);
 		GlStateManager.rotate(-f3, 0.0F, 1.0F, 0.0F);
 		GlStateManager.translate(-0.0175F, -0.3125F, -0.5375F);
-		this.bannerModel.extensionViews(entityBanner.shouldExtend);
+		this.bannerModel.extensionViews(te.shouldExtend);
 		GlStateManager.enableRescaleNormal();
-		ResourceLocation resourcelocation = this.getBannerResourceLocation(entityBanner);
+		ResourceLocation resourcelocation = this.getBannerResourceLocation(te);
 
 		if (resourcelocation != null) {
 			this.bindTexture(resourcelocation);
@@ -77,7 +77,7 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer<
 			this.bannerModel.renderBanner();
 			GlStateManager.popMatrix();
 		}
-		if (entityBanner.getDirection() != 1) {
+		if (te.getDirection() != 1) {
 			FontRenderer fontrenderer = this.getFontRenderer();
 			f3 = 0.015625F * f1;
 			GlStateManager.pushMatrix();
@@ -86,17 +86,17 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer<
 			GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
 			GlStateManager.depthMask(false);
 			int xx;
-			if (destroyStages < 0) {
-				if (entityBanner.signText[0] != null) {
-					ITextComponent ichatcomponent = entityBanner.signText[0];
+			if (destroyStage < 0) {
+				if (te.signText[0] != null) {
+					ITextComponent ichatcomponent = te.signText[0];
 					List list = GuiUtilRenderComponents.splitText(ichatcomponent, 180, fontrenderer, false, true);
 					String s = list != null && list.size() > 0 ? ((ITextComponent) list.get(0)).getFormattedText() : "";
-					xx = entityBanner.getDirection() == 0 ? 12
-							: (entityBanner.getDirection() == 2 ? 36 - fontrenderer.getStringWidth(s) : 0);
+					xx = te.getDirection() == 0 ? 12
+							: (te.getDirection() == 2 ? 36 - fontrenderer.getStringWidth(s) : 0);
 					int xxx = fontrenderer.getStringWidth(s);
 					if (xxx > TEXT1_MAX_ALLOW_LENGTH) {
 						GlStateManager.scale(TEXT1_MAX_ALLOW_LENGTH / (float)xxx, 1, 1);
-						if(entityBanner.getDirection() == 0)
+						if(te.getDirection() == 0)
 						xx *= (float)xxx / TEXT1_MAX_ALLOW_LENGTH;
 						else{
 							xx /= (float)xxx / TEXT1_MAX_ALLOW_LENGTH;
@@ -104,7 +104,7 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer<
 						}
 						//xx *= entityBanner.getDirection() == 0 ? (float)xxx / TEXT1_MAX_ALLOW_LENGTH : TEXT1_MAX_ALLOW_LENGTH/(float)xxx;
 					}
-					fontrenderer.drawString(s, xx, 0 * 10 - entityBanner.signText.length * 5, 0);
+					fontrenderer.drawString(s, xx, 0 * 10 - te.signText.length * 5, 0);
 				}
 			}
 			GlStateManager.depthMask(true);
@@ -114,14 +114,14 @@ public class TileEntityPlatformBannerRenderer extends TileEntitySpecialRenderer<
 			GlStateManager.scale(f3, -f3, f3);
 			GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
 			GlStateManager.depthMask(false);
-			if (destroyStages < 0) {
-				if (entityBanner.signText[1] != null) {
-					ITextComponent ichatcomponent = entityBanner.signText[1];
+			if (destroyStage < 0) {
+				if (te.signText[1] != null) {
+					ITextComponent ichatcomponent = te.signText[1];
 					List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false, true);
 					String s = list != null && list.size() > 0 ? ((ITextComponent) list.get(0)).getFormattedText() : "";
-					xx = entityBanner.getDirection() == 0 ? 24
-							: (entityBanner.getDirection() == 2 ? 72 - fontrenderer.getStringWidth(s) : 0);
-					fontrenderer.drawString(s, xx, 1 * 10 - entityBanner.signText.length * 5, 0);
+					xx = te.getDirection() == 0 ? 24
+							: (te.getDirection() == 2 ? 72 - fontrenderer.getStringWidth(s) : 0);
+					fontrenderer.drawString(s, xx, 1 * 10 - te.signText.length * 5, 0);
 				}
 			}
 			GlStateManager.depthMask(true);

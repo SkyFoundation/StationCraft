@@ -32,6 +32,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+
 public class BlockPlatformGlass extends Block{
     public static final PropertyBool NORTH = PropertyBool.create("north");
     public static final PropertyBool EAST = PropertyBool.create("east");
@@ -179,30 +181,30 @@ public class BlockPlatformGlass extends Block{
         this.setCreativeTab(CreativeTabs.DECORATIONS);
     }
 
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB p_185477_4_, List<AxisAlignedBB> p_185477_5_, Entity p_185477_6_)
-    {
+    @Override
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
         state = this.getActualState(state, worldIn, pos);
         int mask = (state.getValue(X_MINUS) ? 16 : 0) | (state.getValue(Z_MINUS) ? 32 : 0);
-        addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[0 | mask]);
+        addCollisionBoxToList(pos, entityBox, collidingBoxes, field_185730_f[0 | mask]);
 
-        if (((Boolean)state.getValue(NORTH)).booleanValue())
+        if (state.getValue(NORTH))
         {
-            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.NORTH) | mask]);
+            addCollisionBoxToList(pos, entityBox, collidingBoxes, field_185730_f[getBoundingBoxIndex(EnumFacing.NORTH) | mask]);
         }
 
-        if (((Boolean)state.getValue(SOUTH)).booleanValue())
+        if (state.getValue(SOUTH))
         {
-            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.SOUTH) | mask]);
+            addCollisionBoxToList(pos, entityBox, collidingBoxes, field_185730_f[getBoundingBoxIndex(EnumFacing.SOUTH) | mask]);
         }
 
-        if (((Boolean)state.getValue(EAST)).booleanValue())
+        if (state.getValue(EAST))
         {
-            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.EAST) | mask]);
+            addCollisionBoxToList(pos, entityBox, collidingBoxes, field_185730_f[getBoundingBoxIndex(EnumFacing.EAST) | mask]);
         }
 
-        if (((Boolean)state.getValue(WEST)).booleanValue())
+        if (state.getValue(WEST))
         {
-            addCollisionBoxToList(pos, p_185477_4_, p_185477_5_, field_185730_f[getBoundingBoxIndex(EnumFacing.WEST) | mask]);
+            addCollisionBoxToList(pos, entityBox, collidingBoxes, field_185730_f[getBoundingBoxIndex(EnumFacing.WEST) | mask]);
         }
     }
 
@@ -210,7 +212,7 @@ public class BlockPlatformGlass extends Block{
     {
         return 1 << p_185729_0_.getHorizontalIndex();
     }
-
+    @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
         state = this.getActualState(state, source, pos);
@@ -221,22 +223,22 @@ public class BlockPlatformGlass extends Block{
     {
         int i = 0;
         i |= (state.getValue(X_MINUS) ? 16 : 0) | (state.getValue(Z_MINUS) ? 32 : 0);
-        if (((Boolean)state.getValue(NORTH)).booleanValue())
+        if (state.getValue(NORTH))
         {
             i |= getBoundingBoxIndex(EnumFacing.NORTH);
         }
 
-        if (((Boolean)state.getValue(EAST)).booleanValue())
+        if (state.getValue(EAST))
         {
             i |= getBoundingBoxIndex(EnumFacing.EAST);
         }
 
-        if (((Boolean)state.getValue(SOUTH)).booleanValue())
+        if (state.getValue(SOUTH))
         {
             i |= getBoundingBoxIndex(EnumFacing.SOUTH);
         }
 
-        if (((Boolean)state.getValue(WEST)).booleanValue())
+        if (state.getValue(WEST))
         {
             i |= getBoundingBoxIndex(EnumFacing.WEST);
         }
@@ -248,6 +250,7 @@ public class BlockPlatformGlass extends Block{
      * Get the actual Block state of this Block at the given position. This applies properties not visible in the
      * metadata, such as fence connections.
      */
+    @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
     {
         return state.withProperty(NORTH, canPaneConnectTo(worldIn, pos, EnumFacing.NORTH))
@@ -259,6 +262,7 @@ public class BlockPlatformGlass extends Block{
     /**
      * Get the Item that this Block should drop when harvested.
      */
+    @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         return super.getItemDropped(state, rand, fortune);
@@ -267,11 +271,12 @@ public class BlockPlatformGlass extends Block{
     /**
      * Used to determine ambient occlusion and culling when rebuilding chunks for render
      */
+    @Override
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
-
+    @Override
     public boolean isFullCube(IBlockState state)
     {
         return false;

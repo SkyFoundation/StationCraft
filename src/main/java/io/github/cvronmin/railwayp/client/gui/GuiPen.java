@@ -28,15 +28,15 @@ public class GuiPen extends Gui {
 	if(entity.getRidingEntity() instanceof EntityMinecartEmpty){
 	    drawRect(0, event.getResolution().getScaledHeight() / 5 * 2, event.getResolution().getScaledWidth() / 6, event.getResolution().getScaledHeight() / 5 * 3, 419430400);
 	    String s = I18n.format("gui.railway");
-	    this.mc.fontRendererObj.drawString(s, cenX - mc.fontRendererObj.getStringWidth(s) / 2, y + event.getResolution().getScaledHeight() / 5 / 10, 0xffffff);
+	    this.mc.fontRenderer.drawString(s, cenX - mc.fontRenderer.getStringWidth(s) / 2, y + event.getResolution().getScaledHeight() / 5 / 10, 0xffffff);
 	    if(thisStation != null && thisStation != ""){
 		if(nextStation != null && nextStation != ""){
 		    String s1 = thisStation + rt + nextStation;
-		    mc.fontRendererObj.drawString(s1, cenX - mc.fontRendererObj.getStringWidth(s1) / 2, y + event.getResolution().getScaledHeight() / 5 / 10 * 2, 0xffffff);
+		    mc.fontRenderer.drawString(s1, cenX - mc.fontRenderer.getStringWidth(s1) / 2, y + event.getResolution().getScaledHeight() / 5 / 10 * 2, 0xffffff);
 		}
 		else{
 		    String s1 = pt + thisStation;
-		    mc.fontRendererObj.drawString(s1, cenX - mc.fontRendererObj.getStringWidth(s1) / 2, y + event.getResolution().getScaledHeight() / 5 / 10 * 2, 0xffffff);
+		    mc.fontRenderer.drawString(s1, cenX - mc.fontRenderer.getStringWidth(s1) / 2, y + event.getResolution().getScaledHeight() / 5 / 10 * 2, 0xffffff);
 		}
 	    }
 	}

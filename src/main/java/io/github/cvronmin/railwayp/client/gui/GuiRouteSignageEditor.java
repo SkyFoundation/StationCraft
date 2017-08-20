@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -29,7 +30,6 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
@@ -68,25 +68,22 @@ public class GuiRouteSignageEditor extends GuiScreen {
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
 		
-		this.directionTextField = new GuiTextField(14, this.fontRendererObj, posX + (-75 / 2), posY + (-80), 75, 20);
+		this.directionTextField = new GuiTextField(14, this.fontRenderer, posX + (-75 / 2), posY + (-80), 75, 20);
 		this.directionTextField.setMaxStringLength(1);
-		this.directionTextField.setValidator(new Predicate<String>() {
-			@Override
-			public boolean apply(String input) {
-				for(char ch : input.toCharArray()){
-					if(ch != '0' & ch != '1' & ch != '2' & ch != '3')return false;
-				}
-				return true;
-			}
-		});
+		this.directionTextField.setValidator(input -> {
+            for(char ch : input.toCharArray()){
+                if(ch != '0' && ch != '1' && ch != '2' && ch != '3')return false;
+            }
+            return true;
+        });
 		this.directionTextField.setText(Byte.toString(te.getDirection()));
 
-		this.colorTextField = new GuiTextField(11, this.fontRendererObj, posX + (+75 / 2 + 20), posY + (-80), 75, 20);
+		this.colorTextField = new GuiTextField(11, this.fontRenderer, posX + (+75 / 2 + 20), posY + (-80), 75, 20);
 		this.colorTextField.setMaxStringLength(6);
 		this.colorTextField.setText(Integer.toHexString(te.getRouteColor()));
 		
-		this.buttonList.add(doneBtn = new GuiButton(0, posX - 4 - 150, this.height - 40, 150, 20, I18n.format("gui.done", new Object[0])));
-		this.buttonList.add(cancelBtn = new GuiButton(1, posX + 4, this.height - 40, 150, 20, I18n.format("gui.cancel", new Object[0])));
+		this.buttonList.add(doneBtn = new GuiButton(0, posX - 4 - 150, this.height - 40, 150, 20, I18n.format("gui.done")));
+		this.buttonList.add(cancelBtn = new GuiButton(1, posX + 4, this.height - 40, 150, 20, I18n.format("gui.cancel")));
 		this.buttonList.add(editStationBtn = new GuiButton(10, posX + (-75 / 2 - 95), posY + (-80), 75, 20, I18n.format("gui.station.count", stations.size())));
 	}
     /**
@@ -141,13 +138,13 @@ public class GuiRouteSignageEditor extends GuiScreen {
 		this.drawDefaultBackground();
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
-		this.drawCenteredString(this.fontRendererObj,I18n.format("gui.editor.title.pb", new Object[0]), posX, 20, 0xffffff);
+		this.drawCenteredString(fontRenderer,I18n.format("gui.editor.title.pb"), posX, 20, 0xffffff);
 		//this.drawString(fontRendererObj, I18n.format("gui.platform", new Object[0]), posX + (-75 / 2 - 95), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.direction", new Object[0]), posX + (-75 / 2), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.color", new Object[0]), posX + (75 / 2 + 20), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.direction"), posX + (-75 / 2), posY + (-80) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.color"), posX + (75 / 2 + 20), posY + (-80) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
 		//this.drawString(fontRendererObj, "Text1", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
 		//this.drawString(fontRendererObj, "Text2", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.preview", new Object[0]), posX - 50, posY + 10 - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.preview"), posX - 50, posY + 10 - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
 		//this.platformTextField.drawTextBox();
 		this.directionTextField.drawTextBox();
 		this.colorTextField.drawTextBox();
@@ -184,7 +181,7 @@ public class GuiRouteSignageEditor extends GuiScreen {
             //GlStateManager.rotate(-f2, 0.0F, 1.0F, 0.0F);
             GlStateManager.translate(0.0F, -1.0625F, 0.0F);
 
-        TileEntityRendererDispatcher.instance.renderTileEntityAt(this.teedit, -0.5D, -0.75D, -0.5D, 0.0F);
+        TileEntityRendererDispatcher.instance.render(this.teedit, -0.5D, -0.75D, -0.5D, 0.0F);
         GlStateManager.popMatrix();
 	}
 	protected void actionPerformed(GuiButton button) {
@@ -238,11 +235,11 @@ public class GuiRouteSignageEditor extends GuiScreen {
 	    {
 	        this.entryList = new ListEntries(this);
 
-	        int undoGlyphWidth = mc.fontRendererObj.getStringWidth(UNDO_CHAR) * 2;
-	        int resetGlyphWidth = mc.fontRendererObj.getStringWidth(RESET_CHAR) * 2;
-	        int doneWidth = Math.max(mc.fontRendererObj.getStringWidth(I18n.format("gui.done")) + 20, 100);
-	        int undoWidth = mc.fontRendererObj.getStringWidth(" " + I18n.format("fml.configgui.tooltip.undoChanges")) + undoGlyphWidth + 20;
-	        int resetWidth = mc.fontRendererObj.getStringWidth(" " + I18n.format("fml.configgui.tooltip.resetToDefault")) + resetGlyphWidth + 20;
+	        int undoGlyphWidth = mc.fontRenderer.getStringWidth(UNDO_CHAR) * 2;
+	        int resetGlyphWidth = mc.fontRenderer.getStringWidth(RESET_CHAR) * 2;
+	        int doneWidth = Math.max(mc.fontRenderer.getStringWidth(I18n.format("gui.done")) + 20, 100);
+	        int undoWidth = mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.undoChanges")) + undoGlyphWidth + 20;
+	        int resetWidth = mc.fontRenderer.getStringWidth(" " + I18n.format("fml.configgui.tooltip.resetToDefault")) + resetGlyphWidth + 20;
 	        int buttonWidthHalf = (doneWidth + 5 + undoWidth + 5 + resetWidth) / 2;
 	        this.buttonList.add(doneBtn = new GuiButtonExt(1, this.width / 2 - buttonWidthHalf, this.height - 29, doneWidth, 20, I18n.format("gui.done")));
 	    }
@@ -272,7 +269,7 @@ public class GuiRouteSignageEditor extends GuiScreen {
 	            {
 	            	this.parentScreen.stations = stationList;
 	            }
-	            catch (Throwable e)
+	            catch (Exception e)
 	            {
 	                e.printStackTrace();
 	            }
@@ -298,13 +295,13 @@ public class GuiRouteSignageEditor extends GuiScreen {
 	     * @param partialTicks How far into the current tick (1/20th of a second) the game is
 	     */
 	    @Override
-	    public void drawScreen(int par1, int par2, float par3)
+	    public void drawScreen(int mouseX, int mouseY, float partialTicks)
 	    {
 	        //this.drawDefaultBackground();
-	        this.entryList.drawScreen(par1, par2, par3);
-	        this.drawCenteredString(this.fontRendererObj, I18n.format("gui.editor.title.stations"), this.width / 2, 8, 16777215);
+	        this.entryList.drawScreen(mouseX, mouseY, partialTicks);
+	        this.drawCenteredString(this.fontRenderer, I18n.format("gui.editor.title.stations"), this.width / 2, 8, 16777215);
 
-	        super.drawScreen(par1, par2, par3);
+	        super.drawScreen(mouseX, mouseY, partialTicks);
 	        //this.entryList.drawScreenPost(par1, par2, par3);
 	    }
 	    /**
@@ -339,11 +336,11 @@ public class GuiRouteSignageEditor extends GuiScreen {
 	     * @param state The mouse button that was released
 	     */
 	    @Override
-	    protected void mouseReleased(int x, int y, int mouseEvent)
+	    protected void mouseReleased(int mouseX, int mouseY, int state)
 	    {
-	        if (mouseEvent != 0 || !this.entryList.mouseReleased(x, y, mouseEvent))
+	        if (state != 0 || !this.entryList.mouseReleased(mouseX, mouseY, state))
 	        {
-	            super.mouseReleased(x, y, mouseEvent);
+	            super.mouseReleased(mouseX, mouseY, state);
 	        }
 	    }
 	    public static class ListEntries extends GuiListExtended{
@@ -376,7 +373,7 @@ public class GuiRouteSignageEditor extends GuiScreen {
 	                GlStateManager.disableLighting();
 	                GlStateManager.disableFog();
 	                Tessellator tessellator = Tessellator.getInstance();
-	                VertexBuffer vertexbuffer = tessellator.getBuffer();
+	                BufferBuilder vertexbuffer = tessellator.getBuffer();
 	                ScaledResolution res = new ScaledResolution(mc);
 	                double scaleW = mc.displayWidth / res.getScaledWidth_double();
 	                double scaleH = mc.displayHeight / res.getScaledHeight_double();
@@ -393,7 +390,7 @@ public class GuiRouteSignageEditor extends GuiScreen {
 	                    this.drawListHeader(k, l, tessellator);
 	                }
 
-	                this.drawSelectionBox(k, l, mouseXIn, mouseYIn);
+	                this.drawSelectionBox(k, l, mouseXIn, mouseYIn, partialTicks);
 	                GlStateManager.disableDepth();
 	                GlStateManager.enableBlend();
 	                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
@@ -515,35 +512,39 @@ public class GuiRouteSignageEditor extends GuiScreen {
 				public void setSelected(int p_178011_1_, int p_178011_2_, int p_178011_3_) {}
 
 				@Override
-				public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX,
-						int mouseY, boolean isSelected) {
+				public void updatePosition(int p_192633_1_, int p_192633_2_, int p_192633_3_, float p_192633_4_) {
+
+				}
+
+				@Override
+				public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
 					if(isSelected)Gui.drawRect(x, y, listWidth, y + slotHeight, 0x66FFFFFF);
 					String s = TextComponentUtil.getPureText(station.stationName[0]);
 					if(s.isEmpty())s = I18n.format("gui.station.nullname");
-					this.client.fontRendererObj.drawString(s, x + 33 + 2, y + 1, 0xFFFFFF);
+					this.client.fontRenderer.drawString(s, x + 33 + 2, y + 1, 0xFFFFFF);
 					s = TextComponentUtil.getPureText(station.stationName[1]);
 					if(s.isEmpty())s = I18n.format("gui.station.nullname");
-					this.client.fontRendererObj.drawString(s, x + 33 + 2, y + this.client.fontRendererObj.FONT_HEIGHT + 1, 0xFFFFFF);
+					this.client.fontRenderer.drawString(s, x + 33 + 2, y + this.client.fontRenderer.FONT_HEIGHT + 1, 0xFFFFFF);
 					if(station.isInterchangeStation()){
 						s = TextComponentUtil.getPureText( station.getInterchangeLineName()[0]);
 						if(s.isEmpty())s = I18n.format("gui.station.nullname");
 						String tmp = TextComponentUtil.getPureText( station.getInterchangeLineName()[1]);
 						if(tmp.isEmpty())s = I18n.format("gui.station.nullname");
 						s += " " + tmp;
-						this.client.fontRendererObj.drawString("Interchange station of " + s, x + 33 + 2, y + client.fontRendererObj.FONT_HEIGHT * 2 + 3, 0xFFFFFF);
+						this.client.fontRenderer.drawString("Interchange station of " + s, x + 33 + 2, y + client.fontRenderer.FONT_HEIGHT * 2 + 3, 0xFFFFFF);
 					}
 					Gui.drawRect(x + 2, y + 7, x + 16 + 5, y + 16 + 1, 0xFF000000);
 					Gui.drawRect(x + 7, y + 2, x + 16 + 1, y + 16 + 5, 0xFF000000);
 					Gui.drawRect(x + 7, y + 7, x + 16 + 1, y + 16 + 1, station.amIHere() ? 0xFFAFFF00 : 0xFFFFFFFF);
 	                this.btnAddNewEntryAbove.visible = true;
-	                this.btnAddNewEntryAbove.xPosition = listWidth - 18-18-2-2;
-	                this.btnAddNewEntryAbove.yPosition = y;
-	                this.btnAddNewEntryAbove.drawButton(client, mouseX, mouseY);
+	                this.btnAddNewEntryAbove.x = listWidth - 18-18-2-2;
+	                this.btnAddNewEntryAbove.y = y;
+	                this.btnAddNewEntryAbove.drawButton(client, mouseX, mouseY, partialTicks);
 	                //this.btnRemoveEntry.visible = false;
 	                this.btnRemoveEntry.visible = true;
-	                this.btnRemoveEntry.xPosition = listWidth - 18-2;
-	                this.btnRemoveEntry.yPosition = y;
-	                this.btnRemoveEntry.drawButton(client, mouseX, mouseY);
+	                this.btnRemoveEntry.x = listWidth - 18-2;
+	                this.btnRemoveEntry.y = y;
+	                this.btnRemoveEntry.drawButton(client, mouseX, mouseY, partialTicks);
 				}
 
 				@Override
@@ -602,10 +603,9 @@ public class GuiRouteSignageEditor extends GuiScreen {
 				public void setSelected(int p_178011_1_, int p_178011_2_, int p_178011_3_) {}
 
 				@Override
-				public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX,
-						int mouseY, boolean isSelected) {
+				public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks) {
 					if(isSelected)Gui.drawRect(x, y, listWidth, y + slotHeight, 0x66FFFFFF);
-					this.client.fontRendererObj.drawString(I18n.format("gui.station.add"), x + 33 + 2, y + 1, 0xFFFFFF);
+					this.client.fontRenderer.drawString(I18n.format("gui.station.add"), x + 33 + 2, y + 1, 0xFFFFFF);
 					//this.client.fontRendererObj.drawString(station.stationName[1].getFormattedText(), x + 33 + 2, y + this.client.fontRendererObj.FONT_HEIGHT + 1, 0xFFFFFF);
 					/*if(station.isInterchangeStation()){
 						this.client.fontRendererObj.drawString("Interchange station of " + station.getInterchangeLineName()[0].getFormattedText() + " " + station.getInterchangeLineName()[1].getFormattedText(), x + 33 + 2, y + client.fontRendererObj.FONT_HEIGHT * 2 + 3, 0xFFFFFF);
@@ -657,7 +657,11 @@ public class GuiRouteSignageEditor extends GuiScreen {
 
 				@Override
 				public void mouseClicked(int x, int y, int mouseEvent) {}
-				
+
+				@Override
+				public void updatePosition(int p_192633_1_, int p_192633_2_, int p_192633_3_, float p_192633_4_) {
+
+				}
 			}
 			protected interface IGuiEntryExtended extends IGuiListEntry{
 		        public void keyTyped(char eventChar, int eventKey);
@@ -690,28 +694,28 @@ public class GuiRouteSignageEditor extends GuiScreen {
 			int posX = (this.width) / 2;
 			int posY = (this.height) / 2;
 			
-			this.stationName1TF = new GuiTextField(11, this.fontRendererObj, posX  -135, posY + (-80), 130, 20);
+			this.stationName1TF = new GuiTextField(11, this.fontRenderer, posX  -135, posY + (-80), 130, 20);
 			this.stationName1TF.setMaxStringLength(32767);
 			this.stationName1TF.setText(TextComponentUtil.getPureText(station.stationName[0]));
 
-			this.stationName2TF = new GuiTextField(12, this.fontRendererObj, posX + 5, posY + (-80), 130, 20);
+			this.stationName2TF = new GuiTextField(12, this.fontRenderer, posX + 5, posY + (-80), 130, 20);
 			this.stationName2TF.setMaxStringLength(32767);
 			this.stationName2TF.setText(TextComponentUtil.getPureText( station.stationName[1]));
 			
-			this.ilName1TF = new GuiTextField(13, this.fontRendererObj, posX - 135, posY + (-40), 130, 20);
+			this.ilName1TF = new GuiTextField(13, this.fontRenderer, posX - 135, posY + (-40), 130, 20);
 			this.ilName1TF.setMaxStringLength(32767);
 			this.ilName1TF.setText(TextComponentUtil.getPureText( station.getInterchangeLineName()[0]));
 
-			this.ilName2TF = new GuiTextField(14, this.fontRendererObj, posX + 5, posY + (-40), 130, 20);
+			this.ilName2TF = new GuiTextField(14, this.fontRenderer, posX + 5, posY + (-40), 130, 20);
 			this.ilName2TF.setMaxStringLength(32767);
 			this.ilName2TF.setText(TextComponentUtil.getPureText( station.getInterchangeLineName()[1]));
 			
-			this.ilColorTF = new GuiTextField(15, this.fontRendererObj, posX + 5, posY + (-10), 130, 20);
+			this.ilColorTF = new GuiTextField(15, this.fontRenderer, posX + 5, posY + (-10), 130, 20);
 			this.ilColorTF.setMaxStringLength(6);
 			this.ilColorTF.setText(Integer.toHexString(station.getInterchangeLineColor()));
 			
-			this.buttonList.add(doneBtn = new GuiButton(0, posX - 4 - 150, this.height - 40, 150, 20, I18n.format("gui.done", new Object[0])));
-			this.buttonList.add(BackBtn = new GuiButton(1, posX + 4, this.height - 40, 150, 20, I18n.format("gui.cancel", new Object[0])));
+			this.buttonList.add(doneBtn = new GuiButton(0, posX - 4 - 150, this.height - 40, 150, 20, I18n.format("gui.done")));
+			this.buttonList.add(BackBtn = new GuiButton(1, posX + 4, this.height - 40, 150, 20, I18n.format("gui.cancel")));
 			this.buttonList.add(hereBtn = new GuiButtonExt(10, posX - 135, posY, 130, 20, Boolean.toString(station.amIHere())));
 		}
 	    /**
@@ -760,13 +764,13 @@ public class GuiRouteSignageEditor extends GuiScreen {
 			this.drawDefaultBackground();
 			int posX = (this.width) / 2;
 			int posY = (this.height) / 2;
-			this.drawCenteredString(this.fontRendererObj,I18n.format("gui.editor.title.station", new Object[0]), posX, 20, 0xffffff);
-			this.drawString(fontRendererObj, I18n.format("gui.station.name.1"), posX -135, posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-			this.drawString(fontRendererObj, I18n.format("gui.station.name.2"), posX + 5, posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-			this.drawString(fontRendererObj, I18n.format("gui.station.interchange.name.1"), posX -135, posY + (-40) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-			this.drawString(fontRendererObj, I18n.format("gui.station.interchange.name.2"), posX + 5, posY + (-40) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-			this.drawString(fontRendererObj, I18n.format("gui.station.interchange.color"), posX + 5, posY + (-10) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-			this.drawString(fontRendererObj, I18n.format("gui.station.here"), posX -135, posY - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+			this.drawCenteredString(this.fontRenderer,I18n.format("gui.editor.title.station"), posX, 20, 0xffffff);
+			this.drawString(fontRenderer, I18n.format("gui.station.name.1"), posX -135, posY + (-80) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+			this.drawString(fontRenderer, I18n.format("gui.station.name.2"), posX + 5, posY + (-80) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+			this.drawString(fontRenderer, I18n.format("gui.station.interchange.name.1"), posX -135, posY + (-40) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+			this.drawString(fontRenderer, I18n.format("gui.station.interchange.name.2"), posX + 5, posY + (-40) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+			this.drawString(fontRenderer, I18n.format("gui.station.interchange.color"), posX + 5, posY + (-10) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+			this.drawString(fontRenderer, I18n.format("gui.station.here"), posX -135, posY - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
 			this.stationName1TF.drawTextBox();
 			this.stationName2TF.drawTextBox();
 			this.ilName1TF.drawTextBox();

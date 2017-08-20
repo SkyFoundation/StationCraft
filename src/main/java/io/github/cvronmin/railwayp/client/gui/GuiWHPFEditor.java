@@ -1,24 +1,12 @@
 package io.github.cvronmin.railwayp.client.gui;
 
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.lwjgl.input.Keyboard;
-
 import com.google.common.base.Predicate;
-
 import io.github.cvronmin.railwayp.RailwayP;
 import io.github.cvronmin.railwayp.init.RPBlocks;
 import io.github.cvronmin.railwayp.network.RPPacket;
-import io.github.cvronmin.railwayp.network.RPPacketHandler;
 import io.github.cvronmin.railwayp.network.RPPacket.EnumRPPacket;
-import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
 import io.github.cvronmin.railwayp.tileentity.TileEntityWHPF;
-import io.github.cvronmin.railwayp.util.NTUtil;
-import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -26,18 +14,12 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.client.CPacketCustomPayload;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import org.lwjgl.input.Keyboard;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiWHPFEditor extends GuiScreen {
 	/** Text Field to set NBT PlatformNumber **/
@@ -72,59 +54,50 @@ public class GuiWHPFEditor extends GuiScreen {
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
 
-		this.platformTextField = new GuiTextField(10, this.fontRendererObj, posX + (-75 / 2 - 95), posY + (-80), 75, 20);
+		this.platformTextField = new GuiTextField(10, this.fontRenderer, posX + (-75 / 2 - 95), posY + (-80), 75, 20);
 		this.platformTextField.setMaxStringLength(1);
-		this.platformTextField.setValidator(new Predicate<String>() {
-			@Override
-			public boolean apply(String input) {
-				for(char ch : input.toCharArray()){
-					if(!Character.isDigit(ch)) return false;
-				}
-				return true;
-			}
-		});
+		this.platformTextField.setValidator(input -> {
+            for(char ch : input.toCharArray()){
+                if(!Character.isDigit(ch)) return false;
+            }
+            return true;
+        });
 		this.platformTextField.setText(Integer.toString(te.getRoute()));
 		
-		this.directionTextField = new GuiTextField(14, this.fontRendererObj, posX + (-75 / 2), posY + (-80), 75, 20);
+		this.directionTextField = new GuiTextField(14, this.fontRenderer, posX + (-75 / 2), posY + (-80), 75, 20);
 		this.directionTextField.setMaxStringLength(1);
-		this.directionTextField.setValidator(new Predicate<String>() {
-			@Override
-			public boolean apply(String input) {
-				for(char ch : input.toCharArray()){
-					if(ch != '0' & ch != '1' & ch != '2' & ch != '3')return false;
-				}
-				return true;
-			}
-		});
+		this.directionTextField.setValidator(input -> {
+            for(char ch : input.toCharArray()){
+                if(ch != '0' && ch != '1' && ch != '2' && ch != '3')return false;
+            }
+            return true;
+        });
 		this.directionTextField.setText(Byte.toString(te.getDirection()));
 
-		this.rotationTextField = new GuiTextField(15, this.fontRendererObj, posX + (-75 / 2 - 95), posY + (10), 75, 20);
+		this.rotationTextField = new GuiTextField(15, this.fontRenderer, posX + (-75 / 2 - 95), posY + (10), 75, 20);
 		this.rotationTextField.setMaxStringLength(3);
-		this.rotationTextField.setValidator(new Predicate<String>() {
-			@Override
-			public boolean apply(String input) {
-				for(char ch : input.toCharArray()){
-					if(!Character.isDigit(ch)) return false;
-				}
-				return true;
-			}
-		});
+		this.rotationTextField.setValidator(input -> {
+            for(char ch : input.toCharArray()){
+                if(!Character.isDigit(ch)) return false;
+            }
+            return true;
+        });
 		this.rotationTextField.setText(Short.toString(te.getRotation()));
 		
-		this.colorTextField = new GuiTextField(11, this.fontRendererObj, posX + (+75 / 2 + 20), posY + (-80), 75, 20);
+		this.colorTextField = new GuiTextField(11, this.fontRenderer, posX + (+75 / 2 + 20), posY + (-80), 75, 20);
 		this.colorTextField.setMaxStringLength(6);
 		this.colorTextField.setText(Integer.toHexString(te.getRouteColor()));
 
-		this.text1TextField = new GuiTextField(12, this.fontRendererObj, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50), 75 * 3 + 20 * 2, 20);
+		this.text1TextField = new GuiTextField(12, this.fontRenderer, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50), 75 * 3 + 20 * 2, 20);
 		this.text1TextField.setMaxStringLength(32767);
 		this.text1TextField.setText(te.signText[0].getUnformattedText());
 
-		this.text2TextField = new GuiTextField(13, this.fontRendererObj, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20), 75 * 3 + 20 * 2, 20);
+		this.text2TextField = new GuiTextField(13, this.fontRenderer, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20), 75 * 3 + 20 * 2, 20);
 		this.text2TextField.setMaxStringLength(32767);
 		this.text2TextField.setText(te.signText[1].getUnformattedText());
 		
-		this.buttonList.add(doneBtn = new GuiButton(0, posX - 4 - 150, this.height - 40, 150, 20, I18n.format("gui.done", new Object[0])));
-		this.buttonList.add(cancelBtn = new GuiButton(1, posX + 4, this.height - 40, 150, 20, I18n.format("gui.cancel", new Object[0])));
+		this.buttonList.add(doneBtn = new GuiButton(0, posX - 4 - 150, this.height - 40, 150, 20, I18n.format("gui.done")));
+		this.buttonList.add(cancelBtn = new GuiButton(1, posX + 4, this.height - 40, 150, 20, I18n.format("gui.cancel")));
 
 	}
     /**
@@ -184,14 +157,14 @@ public class GuiWHPFEditor extends GuiScreen {
 		this.drawDefaultBackground();
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
-		this.drawCenteredString(this.fontRendererObj,I18n.format("gui.editor.title.whpf", new Object[0]), posX, 20, 0xffffff);
-		this.drawString(fontRendererObj, I18n.format("gui.platform", new Object[0]), posX + (-75 / 2 - 95), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.direction", new Object[0]), posX + (-75 / 2), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.color", new Object[0]), posX + (75 / 2 + 20), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, "Text1", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, "Text2", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.preview", new Object[0]), posX, posY + 10 - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.rotation", new Object[0]), posX + (-75 / 2 - 95), posY + 10 - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+		this.drawCenteredString(fontRenderer,I18n.format("gui.editor.title.whpf"), posX, 20, 0xffffff);
+		this.drawString(fontRenderer, I18n.format("gui.platform"), posX + (-75 / 2 - 95), posY + (-80) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.direction"), posX + (-75 / 2), posY + (-80) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.color"), posX + (75 / 2 + 20), posY + (-80) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, "Text1", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, "Text2", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.preview"), posX, posY + 10 - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.rotation"), posX + (-75 / 2 - 95), posY + 10 - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
 		this.platformTextField.drawTextBox();
 		this.directionTextField.drawTextBox();
 		this.colorTextField.drawTextBox();
@@ -239,7 +212,7 @@ public class GuiWHPFEditor extends GuiScreen {
             GlStateManager.rotate(f2, 0.0F, 1.0F, 0.0F);
             GlStateManager.translate(0.0F, -1.0625F, 0.0F);
         }
-        TileEntityRendererDispatcher.instance.renderTileEntityAt(this.teedit, -0.5D, -0.75D, -0.5D, 0.0F);
+        TileEntityRendererDispatcher.instance.render(this.teedit, -0.5D, -0.75D, -0.5D, 0.0F);
         GlStateManager.popMatrix();
 	}
 	protected void actionPerformed(GuiButton button) {

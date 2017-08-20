@@ -63,7 +63,7 @@ public class TileEntityRouteSignage extends TileEntityBanner{
             NBTTagCompound nbttagcompound = stack.getTagCompound().getCompoundTag("BlockEntityTag");
             if (nbttagcompound.hasKey("Stations"))
             {
-                this.stations = (NBTTagList)nbttagcompound.getTagList("Stations", 10).copy();
+                this.stations = nbttagcompound.getTagList("Stations", 10).copy();
             }
             if(nbttagcompound.hasKey("LineColor", 8)){
             	routeColorEncoded = nbttagcompound.getString("LineColor");
@@ -227,7 +227,7 @@ public class TileEntityRouteSignage extends TileEntityBanner{
 
                     if (stack.getTagCompound().hasNoTags())
                     {
-                        stack.setTagCompound((NBTTagCompound)null);
+                        stack.setTagCompound(null);
                     }
                 }
             }
@@ -253,7 +253,7 @@ public class TileEntityRouteSignage extends TileEntityBanner{
                 this.patternList = Lists.newArrayList();
                 this.colorList = Lists.newArrayList();
                 this.patternList.add(EnumUnifiedBannerPattern.BASE);
-                this.colorList.add(EnumDyeColor.byDyeDamage(15).getMapColor().colorValue);
+                this.colorList.add(EnumDyeColor.byDyeDamage(15).getColorValue());
                 this.patternResourceLocation = "b" + this.baseColor;
                 if (this.checkGoodBanner()) {
                     EnumUnifiedBannerPattern enumbannerpattern = EnumUnifiedBannerPattern.LONGRIBBON;
@@ -369,7 +369,7 @@ public class TileEntityRouteSignage extends TileEntityBanner{
 			ss.appendTag(new NBTTagString(TextComponentUtil.getPureText(stationName[1])));
 			compound.setTag("Name", ss);
 			compound.setBoolean("Here", iAmHere);
-			if(!interchangeLineName[0].getUnformattedComponentText().isEmpty() | !interchangeLineName[1].getUnformattedComponentText().isEmpty()){
+			if(!interchangeLineName[0].getUnformattedComponentText().isEmpty() || !interchangeLineName[1].getUnformattedComponentText().isEmpty()){
 			NBTTagCompound ls = new NBTTagCompound();
 				NBTTagList list = new NBTTagList();
 				list.appendTag(new NBTTagString(TextComponentUtil.getPureText(interchangeLineName[0])));
@@ -400,8 +400,7 @@ public class TileEntityRouteSignage extends TileEntityBanner{
 			return this;
 		}
 		public Station setInterchangeLineName(String name1, String name2){
-			if(!name1.isEmpty() | !name2.isEmpty()) this.isInterchangeStation = true;
-			else this.isInterchangeStation = false;
+			this.isInterchangeStation = !name1.isEmpty() || !name2.isEmpty();
 			this.interchangeLineName[0] = new TextComponentString(name1);
 			this.interchangeLineName[1] = new TextComponentString(name2);
 			return this;

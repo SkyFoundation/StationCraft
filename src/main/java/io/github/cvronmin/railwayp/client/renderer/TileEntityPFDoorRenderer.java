@@ -1,7 +1,5 @@
 package io.github.cvronmin.railwayp.client.renderer;
 
-import org.lwjgl.opengl.GL11;
-
 import io.github.cvronmin.railwayp.block.BlockPlatformDoor;
 import io.github.cvronmin.railwayp.init.RPBlocks;
 import io.github.cvronmin.railwayp.tileentity.TileEntityPFDoor;
@@ -9,11 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -21,14 +15,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class TileEntityPFDoorRenderer extends TileEntitySpecialRenderer<TileEntityPFDoor>
 {
     private BlockRendererDispatcher blockRenderer;
 
-    public void renderTileEntityAt(TileEntityPFDoor te, double x, double y, double z, float partialTicks, int destroyStage)
-    {
+    @Override
+    public void render(TileEntityPFDoor te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if(blockRenderer == null) blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
         BlockPos blockpos = te.getPos();
         IBlockState iblockstate = te.getPistonState();
@@ -37,7 +32,7 @@ public class TileEntityPFDoorRenderer extends TileEntitySpecialRenderer<TileEnti
         if (iblockstate.getMaterial() != Material.AIR && te.getProgress(partialTicks) < 1.0F)
         {
             Tessellator tessellator = Tessellator.getInstance();
-            VertexBuffer vertexbuffer = tessellator.getBuffer();
+            BufferBuilder vertexbuffer = tessellator.getBuffer();
             this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             RenderHelper.disableStandardItemLighting();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -81,7 +76,7 @@ public class TileEntityPFDoorRenderer extends TileEntitySpecialRenderer<TileEnti
         }
     }
 
-    private boolean renderStateModel(BlockPos p_188186_1_, IBlockState p_188186_2_, VertexBuffer p_188186_3_, World p_188186_4_, boolean p_188186_5_)
+    private boolean renderStateModel(BlockPos p_188186_1_, IBlockState p_188186_2_, BufferBuilder p_188186_3_, World p_188186_4_, boolean p_188186_5_)
     {
         return this.blockRenderer.getBlockModelRenderer().renderModel(p_188186_4_, this.blockRenderer.getModelForState(p_188186_2_), p_188186_2_, p_188186_1_, p_188186_3_, p_188186_5_);
     }

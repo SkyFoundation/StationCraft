@@ -1,42 +1,23 @@
 package io.github.cvronmin.railwayp.client.gui;
 
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.lwjgl.input.Keyboard;
-
 import com.google.common.base.Predicate;
-
 import io.github.cvronmin.railwayp.RailwayP;
 import io.github.cvronmin.railwayp.network.RPPacket;
-import io.github.cvronmin.railwayp.network.RPPacketHandler;
 import io.github.cvronmin.railwayp.network.RPPacket.EnumRPPacket;
 import io.github.cvronmin.railwayp.tileentity.TileEntityNameBanner;
-import io.github.cvronmin.railwayp.tileentity.TileEntityPlatformBanner;
-import io.github.cvronmin.railwayp.util.NTUtil;
-import io.netty.buffer.Unpooled;
-import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.client.CPacketCustomPayload;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import org.lwjgl.input.Keyboard;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiNameBannerEditor extends GuiScreen {
 	/** Text Field to set NBT SignType **/
@@ -68,37 +49,34 @@ public class GuiNameBannerEditor extends GuiScreen {
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
 
-		this.signTypeTextField = new GuiTextField(10, this.fontRendererObj, posX + (-75 / 2 - 95), posY + (-80), 75, 20);
+		this.signTypeTextField = new GuiTextField(10, this.fontRenderer, posX + (-75 / 2 - 95), posY + (-80), 75, 20);
 		this.signTypeTextField.setMaxStringLength(1);
-		this.signTypeTextField.setValidator(new Predicate<String>() {
-			@Override
-			public boolean apply(String input) {
-				for(char ch : input.toCharArray()){
-					if(ch != '0' & ch != '1' & ch != '2')return false;
-				}
-				return true;
-			}
-		});
+		this.signTypeTextField.setValidator(input -> {
+            for(char ch : input.toCharArray()){
+                if(ch != '0' && ch != '1' && ch != '2')return false;
+            }
+            return true;
+        });
 		this.signTypeTextField.setText(Integer.toString(te.getSignType()));
 		
-		this.stationColorTextField = new GuiTextField(14, this.fontRendererObj, posX + (-75 / 2), posY + (-80), 75, 20);
+		this.stationColorTextField = new GuiTextField(14, this.fontRenderer, posX + (-75 / 2), posY + (-80), 75, 20);
 		this.stationColorTextField.setMaxStringLength(6);
 		this.stationColorTextField.setText(Integer.toHexString(te.getStationColor()));
 
-		this.colorTextField = new GuiTextField(11, this.fontRendererObj, posX + (+75 / 2 + 20), posY + (-80), 75, 20);
+		this.colorTextField = new GuiTextField(11, this.fontRenderer, posX + (+75 / 2 + 20), posY + (-80), 75, 20);
 		this.colorTextField.setMaxStringLength(6);
 		this.colorTextField.setText(Integer.toHexString(te.getColor()));
 
-		this.text1TextField = new GuiTextField(12, this.fontRendererObj, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50), 75 * 2 + 20 * 1, 20);
+		this.text1TextField = new GuiTextField(12, this.fontRenderer, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50), 75 * 2 + 20 * 1, 20);
 		this.text1TextField.setMaxStringLength(32767);
 		this.text1TextField.setText(te.signText[0].getUnformattedText());
 
-		this.text2TextField = new GuiTextField(13, this.fontRendererObj, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20), 75 * 2 + 20 * 1, 20);
+		this.text2TextField = new GuiTextField(13, this.fontRenderer, posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20), 75 * 2 + 20 * 1, 20);
 		this.text2TextField.setMaxStringLength(32767);
 		this.text2TextField.setText(te.signText[1].getUnformattedText());
 		
-		this.buttonList.add(doneBtn = new GuiButton(0, posX - 4 - 150, this.height - 40, 150, 20, I18n.format("gui.done", new Object[0])));
-		this.buttonList.add(cancelBtn = new GuiButton(1, posX + 4, this.height - 40, 150, 20, I18n.format("gui.cancel", new Object[0])));
+		this.buttonList.add(doneBtn = new GuiButton(0, posX - 4 - 150, this.height - 40, 150, 20, I18n.format("gui.done")));
+		this.buttonList.add(cancelBtn = new GuiButton(1, posX + 4, this.height - 40, 150, 20, I18n.format("gui.cancel")));
 	}
     /**
      * Called when the screen is unloaded. Used to disable keyboard repeat events
@@ -154,13 +132,13 @@ public class GuiNameBannerEditor extends GuiScreen {
 		this.drawDefaultBackground();
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
-		this.drawCenteredString(this.fontRendererObj,I18n.format("gui.editor.title.nb", new Object[0]), posX, 20, 0xffffff);
-		this.drawString(fontRendererObj, I18n.format("gui.signage.type", new Object[0]), posX + (-75 / 2 - 95), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.color.station", new Object[0]), posX + (-75 / 2), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.color", new Object[0]), posX + (75 / 2 + 20), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, "Text1", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, "Text2", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.preview", new Object[0]), posX +(75 / 2 + 20), posY - 50 - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+		this.drawCenteredString(fontRenderer,I18n.format("gui.editor.title.nb"), posX, 20, 0xffffff);
+		this.drawString(fontRenderer, I18n.format("gui.signage.type"), posX + (-75 / 2 - 95), posY + (-80) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.color.station"), posX + (-75 / 2), posY + (-80) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.color"), posX + (75 / 2 + 20), posY + (-80) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, "Text1", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-50) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, "Text2", posX + (-(75 * 3 + 20 * 2) / 2), posY + (-20) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.preview"), posX +(75 / 2 + 20), posY - 50 - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
 		this.signTypeTextField.drawTextBox();
 		this.stationColorTextField.drawTextBox();
 		this.colorTextField.drawTextBox();
@@ -197,7 +175,7 @@ public class GuiNameBannerEditor extends GuiScreen {
             //GlStateManager.rotate(-f2, 0.0F, 1.0F, 0.0F);
             GlStateManager.translate(0.0F, -1.0625F, 0.0F);
 
-        TileEntityRendererDispatcher.instance.renderTileEntityAt(this.teedit, -0.5D, -0.75D, -0.5D, 0.0F);
+        TileEntityRendererDispatcher.instance.render(this.teedit, -0.5D, -0.75D, -0.5D, 0.0F);
         GlStateManager.popMatrix();
 	}
 	protected void actionPerformed(GuiButton button) {

@@ -1,29 +1,25 @@
 package io.github.cvronmin.railwayp.client.renderer;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.lwjgl.opengl.GL11;
-
 import com.google.common.collect.Maps;
-
 import io.github.cvronmin.railwayp.client.model.ModelRouteSignage;
 import io.github.cvronmin.railwayp.client.renderer.texture.UnifedBannerTextures;
 import io.github.cvronmin.railwayp.tileentity.TileEntityRouteSignage;
 import io.github.cvronmin.railwayp.tileentity.TileEntityRouteSignage.Station;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import java.util.List;
+import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<TileEntityRouteSignage> {
@@ -33,17 +29,16 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
 			"textures/entity/signage_base.png");
 	private ModelRouteSignage bannerModel = new ModelRouteSignage();
 
-	public void renderTileEntityAt(TileEntityRouteSignage entityBanner, double x, double y, double z, float p_180545_8_,
-			int p_180545_9_) {
-		boolean flag = entityBanner.getWorld() != null;
-		int j = flag ? entityBanner.getBlockMetadata() : 0;
-		long k = flag ? entityBanner.getWorld().getTotalWorldTime() : 0L;
+	@Override
+	public void render(TileEntityRouteSignage te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+		boolean flag = te.getWorld() != null;
+		int j = flag ? te.getBlockMetadata() : 0;
+		long k = flag ? te.getWorld().getTotalWorldTime() : 0L;
 		GlStateManager.pushMatrix();
 		float f1 = 0.6666667F;
 		float f3;
 
 		f3 = 0.0F;
-
 		if (j == 2) {
 			f3 = 180.0F;
 		}
@@ -61,30 +56,30 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
 		GlStateManager.translate(-0.0175F, -0.3125F, -0.5375F);
 		// this.bannerModel.extensionViews(true);
 		GlStateManager.enableRescaleNormal();
-		ResourceLocation resourcelocation = this.func_178463_a(entityBanner);
+		ResourceLocation resourcelocation = this.func_178463_a(te);
 		float[] stmidpts = null;
 		if (resourcelocation != null) {
 			this.bindTexture(resourcelocation);
 			GlStateManager.pushMatrix();
 			GlStateManager.scale(f1, -f1, -f1);
 			this.bannerModel.renderBanner();
-			if (entityBanner.checkGoodBanner()) {
+			if (te.checkGoodBanner()) {
 				/** Route Length = 4(Scaled) **/
-				stmidpts = new float[entityBanner.getStationList().size()];
+				stmidpts = new float[te.getStationList().size()];
 				//stmidpts[0] = 0;
 				float now = 0;
 				int hereId = -1;
 				float start = 0;
 				float end = 0;
 				for (int i = 0; i < stmidpts.length; i++) {
-					stmidpts[i] = (float) i / (entityBanner.getStationList().size() - 1) * 4f;
-					Station station = entityBanner.getStationList().get(i);
+					stmidpts[i] = (float) i / (te.getStationList().size() - 1) * 4f;
+					Station station = te.getStationList().get(i);
 					if (station.amIHere()) {
 						now = stmidpts[i] - 2f;
 						if(hereId == -1){
 							hereId = i;
-							start = entityBanner.getDirection() == 0 ? now : (entityBanner.getDirection() == 2 ? -2f :  0);
-							end = entityBanner.getDirection() == 0 ? 2f : (entityBanner.getDirection() == 2 ? now :  0);
+							start = te.getDirection() == 0 ? now : (te.getDirection() == 2 ? -2f :  0);
+							end = te.getDirection() == 0 ? 2f : (te.getDirection() == 2 ? now :  0);
 						}
 						}
 				}
@@ -92,9 +87,9 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
 				GlStateManager.disableTexture2D();
 				//GlStateManager.disableLighting();
 				Tessellator tessellator = Tessellator.getInstance();
-				VertexBuffer buffer = tessellator.getBuffer();
+				BufferBuilder buffer = tessellator.getBuffer();
 				buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-				int color = entityBanner.getRouteColor();
+				int color = te.getRouteColor();
 				buffer.pos(-2f, -1.55f, -0.075)
 				.color(((color >> 16) & 255) / 255f, ((color >> 8) & 255) / 255f, (color & 255) / 255f, 1f)
 				.endVertex();
@@ -115,8 +110,8 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
 				buffer.pos(end, -1.55f, -0.075556).color(0.5f, 0.5f, 0.5f, 1f).endVertex();
 				tessellator.draw();
 				for (int i = 0; i < stmidpts.length; i++) {
-					Station station = entityBanner.getStationList().get(i);
-						drawStation(stmidpts[i], station, i, hereId == i ? false : (entityBanner.getDirection() == 0 ? (i < hereId ? false : true) : (entityBanner.getDirection() == 2 ? (i > hereId ? false : true) : false)));
+					Station station = te.getStationList().get(i);
+						drawStation(stmidpts[i], station, i, hereId == i ? false : (te.getDirection() == 0 ? (i < hereId ? false : true) : (te.getDirection() == 2 ? (i > hereId ? false : true) : false)));
 				}
 				GlStateManager.enableTexture2D();
 				//GlStateManager.enableLighting();
@@ -127,7 +122,7 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
 		if (stmidpts != null) {
 			FontRenderer fontrenderer = this.getFontRenderer();
 			f3 = 0.015625F * f1;
-			boolean overed = entityBanner.getDirection() == 2 ? true : false;
+			boolean overed = te.getDirection() == 2 ? true : false;
 			boolean needpost = false, changed = false;
 			int color = overed ? 0x7F7F7F : 0x000000;
 			// Main
@@ -136,8 +131,8 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
 				float offsetY = 0.25f / 1.5f;
 				if (i % 2 == 1)
 					offsetY = -offsetY + 0.1f;
-				Station station = entityBanner.getStationList().get(i);
-				if (station.amIHere() & entityBanner.getDirection() != 1 & !changed) {
+				Station station = te.getStationList().get(i);
+				if (station.amIHere() & te.getDirection() != 1 & !changed) {
 					if (overed) {
 						overed = false;
 						color = overed ? 0x7F7F7F : 0x000000;
@@ -151,7 +146,7 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
 				GlStateManager.scale(f3 * .65, -f3 * .65, f3 * .65);
 				GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
 				GlStateManager.depthMask(false);
-				if (p_180545_9_ < 0) {
+				if (destroyStage < 0) {
 					if (station.stationName[0] != null) {
 						ITextComponent ichatcomponent = station.stationName[0];
 						List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false, true);
@@ -169,7 +164,7 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
 				GlStateManager.scale(f3 * 0.45, -f3 * 0.45, f3 * 0.45);
 				GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
 				GlStateManager.depthMask(false);
-				if (p_180545_9_ < 0) {
+				if (destroyStage < 0) {
 					if (station.stationName[1] != null) {
 						ITextComponent ichatcomponent = station.stationName[1];
 						List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false, true);
@@ -195,7 +190,7 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
 					GlStateManager.scale(f3 * .45, -f3 * .45, f3 * .45);
 					GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
 					GlStateManager.depthMask(false);
-					if (p_180545_9_ < 0) {
+					if (destroyStage < 0) {
 						if (station.getInterchangeLineName()[0] != null) {
 							ITextComponent ichatcomponent = station.getInterchangeLineName()[0];
 							List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false,
@@ -215,7 +210,7 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
 					GlStateManager.scale(f3 * 0.25, -f3 * 0.25, f3 * 0.25);
 					GL11.glNormal3f(0.0F, 0.0F, -1.0F * f3);
 					GlStateManager.depthMask(false);
-					if (p_180545_9_ < 0) {
+					if (destroyStage < 0) {
 						if (station.getInterchangeLineName()[1] != null) {
 							ITextComponent ichatcomponent = station.getInterchangeLineName()[1];
 							List list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false,
@@ -291,7 +286,7 @@ public class TileEntityRouteSignageRenderer extends TileEntitySpecialRenderer<Ti
 
 	private void drawStation(double offsetMiddleTop, Station station, int index, boolean overed) {
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuffer();
 		float bordercolor = overed ? 0.5f : 0f;
 		GlStateManager.depthMask(false);
 		if (station.isInterchangeStation()) {

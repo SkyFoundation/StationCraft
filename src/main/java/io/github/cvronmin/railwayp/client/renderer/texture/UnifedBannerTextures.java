@@ -54,7 +54,7 @@ public class UnifedBannerTextures {
                 else
                 {
                     p_187478_1_ = this.cacheId + p_187478_1_;
-                    UnifedBannerTextures.CacheEntry bannertextures$cacheentry = (UnifedBannerTextures.CacheEntry)this.cacheMap.get(p_187478_1_);
+                    UnifedBannerTextures.CacheEntry bannertextures$cacheentry = this.cacheMap.get(p_187478_1_);
 
                     if (bannertextures$cacheentry == null)
                     {
@@ -88,8 +88,8 @@ public class UnifedBannerTextures {
 
                 while (iterator.hasNext())
                 {
-                    String s = (String)iterator.next();
-                    UnifedBannerTextures.CacheEntry bannertextures$cacheentry = (UnifedBannerTextures.CacheEntry)this.cacheMap.get(s);
+                    String s = iterator.next();
+                    UnifedBannerTextures.CacheEntry bannertextures$cacheentry = this.cacheMap.get(s);
 
                     if (i - bannertextures$cacheentry.systemTime > 5000L)
                     {

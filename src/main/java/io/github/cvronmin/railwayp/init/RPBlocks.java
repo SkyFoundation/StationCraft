@@ -6,23 +6,24 @@ import io.github.cvronmin.railwayp.block.BlockNameBanner;
 import io.github.cvronmin.railwayp.block.BlockPlatformBanner;
 import io.github.cvronmin.railwayp.block.BlockPlatformDoor;
 import io.github.cvronmin.railwayp.block.BlockPlatformGlass;
-import io.github.cvronmin.railwayp.block.BlockRColorful;
 import io.github.cvronmin.railwayp.block.BlockRailNoticer;
 import io.github.cvronmin.railwayp.block.BlockRouteSignage;
 import io.github.cvronmin.railwayp.block.BlockWHPF;
 import io.github.cvronmin.railwayp.block.BlockPlatformDoor.Base;
-import io.github.cvronmin.railwayp.item.ItemPlatformBanner;
-import io.github.cvronmin.railwayp.item.ItemRColorful;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemColored;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
+import net.minecraftforge.registries.IForgeRegistry;
 
+@Mod.EventBusSubscriber
 public class RPBlocks {
 	@ObjectHolder("railwayp:wall_platform_banner")
 	public static final BlockPlatformBanner wall_platform_banner = (BlockPlatformBanner)(new BlockPlatformBanner.BlockBannerHanging()).setUnlocalizedName("banner");
@@ -40,30 +41,39 @@ public class RPBlocks {
 	//紙皮石
 	public static final BlockColorful mosaic_tile = (BlockColorful) new BlockColorful(Material.ROCK).setUnlocalizedName("mosaic_tile");
 	public static final BlockRailNoticer noticer = (BlockRailNoticer) new BlockRailNoticer().setUnlocalizedName("noticer").setCreativeTab(CreativeTabs.TRANSPORTATION);
-	public static void register(){
-		registerItemlessBlock(wall_platform_banner, "wall_platform_banner");
-		registerItemlessBlock(wall_name_banner, "wall_name_banner");
-		registerItemlessBlock(wall_route_sign, "wall_route_sign");
-		registerBlock(platform_door_base, "platform_door");
-		registerBlock(platform_door_head, "platform_door_head");
-		registerBlock(platform_door_extension, "platform_door_extension");
-		registerBlock(platform_glass, "platform_glass");
-		registerItemlessBlock(roof_where_pf, "roof_whpf");
-		registerItemlessBlock(wall_where_pf, "wall_whpf");
-		registerBlock(plate, "plate");
-		registerBlock(mosaic_tile, "mosaic_tile");
-		registerBlock(noticer, "rail_noticer");
+	@SubscribeEvent
+	public static void onRegisterBlock(RegistryEvent.Register<Block> event){
+		register(wall_platform_banner, "wall_platform_banner",event.getRegistry());
+		register(wall_name_banner, "wall_name_banner",event.getRegistry());
+		register(wall_route_sign, "wall_route_sign",event.getRegistry());
+		register(platform_door_base, "platform_door",event.getRegistry());
+		register(platform_door_head, "platform_door_head",event.getRegistry());
+		register(platform_door_extension, "platform_door_extension",event.getRegistry());
+		register(platform_glass, "platform_glass",event.getRegistry());
+		register(roof_where_pf, "roof_whpf", event.getRegistry());
+		register(wall_where_pf, "wall_whpf",event.getRegistry());
+		register(plate, "plate",event.getRegistry());
+		register(mosaic_tile, "mosaic_tile",event.getRegistry());
+		register(noticer, "rail_noticer",event.getRegistry());
 	}
-	private static void registerItemlessBlock(Block block, String name){
+
+	@SubscribeEvent
+	public static void onRegisterBlockItem(RegistryEvent.Register<Item> event){
+		register(new ItemBlock(platform_door_base), "platform_door",event.getRegistry());
+		//register(new ItemBlock(platform_door_head), "platform_door_head",event.getRegistry());
+		//register(new ItemBlock(platform_door_extension), "platform_door_extension",event.getRegistry());
+		register(new ItemBlock(platform_glass), "platform_glass",event.getRegistry());
+		register(new ItemBlock(plate), "plate",event.getRegistry());
+		register(new ItemBlock(mosaic_tile), "mosaic_tile",event.getRegistry());
+		register(new ItemBlock(noticer), "rail_noticer",event.getRegistry());
+	}
+	private static void register(Block block, String name, IForgeRegistry<Block> registry){
 		ResourceLocation rl = new ResourceLocation(Reference.MODID, name);
-		GameRegistry.register(block.setRegistryName(rl));
+		registry.register(block.setRegistryName(rl));
 	}
-	private static void registerBlock(Block block, String name){
-		registerBlock(block, new ItemBlock(block), name);
-	}
-	private static void registerBlock(Block block, ItemBlock itemBlock, String name){
+	private static void register(Item block, String name, IForgeRegistry<Item> registry){
 		ResourceLocation rl = new ResourceLocation(Reference.MODID, name);
-		GameRegistry.register(block.setRegistryName(rl));
-		GameRegistry.register(itemBlock.setRegistryName(rl));
+		registry.register(block.setRegistryName(rl));
 	}
+
 }

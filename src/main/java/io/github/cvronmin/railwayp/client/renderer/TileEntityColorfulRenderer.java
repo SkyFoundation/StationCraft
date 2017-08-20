@@ -1,42 +1,29 @@
 package io.github.cvronmin.railwayp.client.renderer;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.lwjgl.opengl.GL11;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import io.github.cvronmin.railwayp.client.model.ModelBlock;
 import io.github.cvronmin.railwayp.client.renderer.texture.LayeredCustomColorMaskTexture;
-import io.github.cvronmin.railwayp.client.renderer.texture.UnifedBannerTextures;
-import io.github.cvronmin.railwayp.init.RPBlocks;
 import io.github.cvronmin.railwayp.init.RPCapabilities;
 import io.github.cvronmin.railwayp.tileentity.TileEntityColorful;
-import io.github.cvronmin.railwayp.tileentity.TileEntityWHPF;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockPistonBase;
-import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 public class TileEntityColorfulRenderer extends TileEntitySpecialRenderer<TileEntityColorful>{
     /** An array of all the patterns that are being currently rendered. */
     private static final Map DESIGNS = Maps.newHashMap();
@@ -44,9 +31,9 @@ public class TileEntityColorfulRenderer extends TileEntitySpecialRenderer<TileEn
     private static final ResourceLocation MOSAIC_TEXTURES = new ResourceLocation("railwayp", "textures/entity/mosaic.png");
 	private ModelBlock model = new ModelBlock();
     private BlockRendererDispatcher blockRenderer;
-    
-	public void renderTileEntityAt(TileEntityColorful te, double x, double y, double z,
-			float partialTicks, int destroyStage) {
+
+    @Override
+    public void render(TileEntityColorful te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if(blockRenderer == null) blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
         /*boolean flag = te.getWorld() != null;
         int j = flag ? te.getBlockMetadata() : 0;
@@ -90,7 +77,7 @@ public class TileEntityColorfulRenderer extends TileEntitySpecialRenderer<TileEn
         if (iblockstate.getMaterial() != Material.AIR)
         {
             Tessellator tessellator = Tessellator.getInstance();
-            VertexBuffer vertexbuffer = tessellator.getBuffer();
+            BufferBuilder vertexbuffer = tessellator.getBuffer();
             this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             RenderHelper.disableStandardItemLighting();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -124,7 +111,7 @@ public class TileEntityColorfulRenderer extends TileEntitySpecialRenderer<TileEn
         }
 	}
 	
-    private boolean renderStateModel(BlockPos pos, IBlockState state, VertexBuffer buffer, World world, boolean checkSide)
+    private boolean renderStateModel(BlockPos pos, IBlockState state, BufferBuilder buffer, World world, boolean checkSide)
     {
         return this.blockRenderer.getBlockModelRenderer().renderModel(world, this.blockRenderer.getModelForState(state), state, pos, buffer, checkSide);
     }

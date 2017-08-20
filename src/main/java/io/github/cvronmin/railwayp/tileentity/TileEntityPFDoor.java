@@ -90,7 +90,7 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
     private void moveCollidedEntities()
     {
         AxisAlignedBB axisalignedbb = this.getAABB(this.world, this.pos).offset(this.pos);
-        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity)null, axisalignedbb);
+        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(null, axisalignedbb);
 
         if (!list.isEmpty())
         {
@@ -98,7 +98,7 @@ public class TileEntityPFDoor extends TileEntity implements ITickable
 
             for (int i = 0; i < list.size(); ++i)
             {
-                Entity entity = (Entity)list.get(i);
+                Entity entity = list.get(i);
 
                 if (entity.getPushReaction() != EnumPushReaction.IGNORE)
                 {

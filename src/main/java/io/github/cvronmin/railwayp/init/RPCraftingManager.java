@@ -12,82 +12,86 @@ import net.minecraft.item.ItemWrittenBook;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.RecipeSorter.Category;
+import net.minecraftforge.registries.IForgeRegistry;
 
+import javax.annotation.Nullable;
+@Mod.EventBusSubscriber
 public class RPCraftingManager {
-	public static void register() {
-		GameRegistry.addRecipe(new ItemStack(RPItems.platform_banner, 2), new Object[]{
-				"AAA",
+	private static void register() {
+		GameRegistry.addShapedRecipe(new ResourceLocation("railwayp:platform_banner"),new ResourceLocation("railwayp"),new ItemStack(RPItems.platform_banner, 2), "AAA",
 				"BBB",
 				'A', new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,EnumDyeColor.WHITE.getMetadata()),
-				'B',Blocks.PLANKS});
-		GameRegistry.addRecipe(new ItemStack(RPItems.platform_banner, 4), new Object[]{
-				"CCC",
+				'B',Blocks.PLANKS);
+		GameRegistry.addShapedRecipe(new ResourceLocation("railwayp:platform_banner_more"),new ResourceLocation("railwayp"),new ItemStack(RPItems.platform_banner, 4), "CCC",
 				"AAA",
 				"BBB",
 				'A', new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,EnumDyeColor.WHITE.getMetadata()),
 				'B',Blocks.PLANKS,
-				'C',Items.SIGN});
-		GameRegistry.addRecipe(new ItemStack(RPItems.whpf, 2), new Object[]{
-				"AAA",
+				'C',Items.SIGN);
+		GameRegistry.addShapedRecipe(new ResourceLocation("railwayp:platform_indicator"),new ResourceLocation("railwayp"),new ItemStack(RPItems.whpf, 2), "AAA",
 				"BBB",
 				'A', new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,EnumDyeColor.BLACK.getMetadata()),
-				'B',Blocks.PLANKS});
-		GameRegistry.addRecipe(new ItemStack(RPItems.name_banner, 4), new Object[]{
-				" A ",
+				'B',Blocks.PLANKS);
+		GameRegistry.addShapedRecipe(new ResourceLocation("railwayp:station_name_banner"),new ResourceLocation("railwayp"),new ItemStack(RPItems.name_banner, 4), " A ",
 				"BBB",
 				'A', Items.SIGN,
-				'B',Blocks.STAINED_HARDENED_CLAY});
-		GameRegistry.addRecipe(new ItemStack(RPItems.EDITOR, 1), new Object[]{
-				"  A",
+				'B',Blocks.STAINED_HARDENED_CLAY);
+		GameRegistry.addShapedRecipe(new ResourceLocation("railwayp:editor"),new ResourceLocation("railwayp"),new ItemStack(RPItems.EDITOR, 1), "  A",
 				" A ",
 				"B  ",
 				'A', Items.STICK,
-				'B',Items.DYE});
+				'B',Items.DYE);
 		registerMosaticTile();
 		registerPlate();
 		net.minecraftforge.oredict.RecipeSorter.register("railwayp:cloning", CloningRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless");
-		registerCloningRecipe();
 	}
 	private static void registerMosaticTile(){
 		for(int i = 0;i < 16;i++){
+			final EnumDyeColor color = EnumDyeColor.byMetadata(i);
 			ItemStack itemstack = new ItemStack(RPBlocks.mosaic_tile, 8);
             NBTTagCompound nbttagcompound = new NBTTagCompound();
-            nbttagcompound.setString("Color", Integer.toHexString(EnumDyeColor.byMetadata(i).getMapColor().colorValue));
+			nbttagcompound.setString("Color", Integer.toHexString(color.getColorValue()));
             itemstack.setTagInfo("BlockEntityTag", nbttagcompound);
-			GameRegistry.addRecipe(itemstack, new Object[]{
-					"ABA",
+			GameRegistry.addShapedRecipe(new ResourceLocation(String.format("railwayp:%s_mosatic_tile", color.getName())),new ResourceLocation("railwayp"),itemstack, "ABA",
 					"BBB",
 					"ABA",
 					'A', new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, i),
-					'B',Items.QUARTZ});
+					'B',Items.QUARTZ);
 		}
 	}
 	private static void registerPlate(){
 		for(int i = 0;i < 16;i++){
+			final EnumDyeColor color = EnumDyeColor.byMetadata(i);
 			ItemStack itemstack = new ItemStack(RPBlocks.plate, 8);
             NBTTagCompound nbttagcompound = new NBTTagCompound();
-            nbttagcompound.setString("Color", Integer.toHexString(EnumDyeColor.byMetadata(i).getMapColor().colorValue));
+			nbttagcompound.setString("Color", Integer.toHexString(color.getColorValue()));
             itemstack.setTagInfo("BlockEntityTag", nbttagcompound);
-			GameRegistry.addRecipe(itemstack, new Object[]{
-					"AAA",
+			GameRegistry.addShapedRecipe(new ResourceLocation(String.format("railwayp:%s_plate", color.getName())),new ResourceLocation("railwayp"),itemstack, "AAA",
 					"ABA",
 					"AAA",
 					'B', new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, i),
-					'A',Items.IRON_INGOT});
+					'A',Items.IRON_INGOT);
 		}
 	}
-	private static void registerCloningRecipe(){
-		GameRegistry.addRecipe(new CloningRecipe(RPItems.name_banner));
-		GameRegistry.addRecipe(new CloningRecipe(RPItems.platform_banner));
-		GameRegistry.addRecipe(new CloningRecipe(RPItems.whpf));
-		GameRegistry.addRecipe(new CloningRecipe(RPItems.route_sign));
-		GameRegistry.addRecipe(new CloningRecipe(Item.getItemFromBlock(RPBlocks.mosaic_tile)));
-		GameRegistry.addRecipe(new CloningRecipe(Item.getItemFromBlock(RPBlocks.plate)));
+	@SubscribeEvent
+	public static void onRegisterRecipe(RegistryEvent.Register<IRecipe> event){
+		register();
+		IForgeRegistry<IRecipe> registry = event.getRegistry();
+		registry.register(new CloningRecipe(RPItems.name_banner).setRegistryName("railwayp:station_name_banner_cloning"));
+		registry.register(new CloningRecipe(RPItems.platform_banner).setRegistryName("railwayp:platform_banner_cloning"));
+		registry.register(new CloningRecipe(RPItems.whpf).setRegistryName("railwayp:platform_indicator_cloning"));
+		registry.register(new CloningRecipe(RPItems.route_sign).setRegistryName("railwayp:railline_sign_cloning"));
+		registry.register(new CloningRecipe(Item.getItemFromBlock(RPBlocks.mosaic_tile)).setRegistryName("railwayp:mosaic_tile_cloning"));
+		registry.register(new CloningRecipe(Item.getItemFromBlock(RPBlocks.plate)).setRegistryName("railwayp:plate_cloning"));
 	}
-	private static class CloningRecipe implements IRecipe{
+	private static class CloningRecipe extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<IRecipe> implements IRecipe{
 		Item item;
 		public CloningRecipe(Item item) {
 			this.item = item;
@@ -133,12 +137,7 @@ public class RPCraftingManager {
 
 	        return nonnulllist;
 		}
-		
-		@Override
-		public int getRecipeSize() {
-			return 9;
-		}
-		
+
 		@Override
 		public ItemStack getRecipeOutput() {
 			return ItemStack.EMPTY;
@@ -187,5 +186,15 @@ public class RPCraftingManager {
 	            return ItemStack.EMPTY;
 	        }
 		}
+
+		public boolean isHidden()
+		{
+			return true;
+		}
+		@Override
+		public boolean canFit(int width, int height) {
+			return width >= 3 && height >= 3;
+		}
+
 	}
 }

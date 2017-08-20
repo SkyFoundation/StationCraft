@@ -33,7 +33,7 @@ public class BlockRColorful extends Block
      */
     public int damageDropped(IBlockState state)
     {
-        return ((EnumDyeColor)state.getValue(COLOR)).getMetadata();
+        return state.getValue(COLOR).getMetadata();
     }
 
     /**
@@ -49,14 +49,6 @@ public class BlockRColorful extends Block
     }
 
     /**
-     * Get the MapColor for this Block and the given BlockState
-     */
-    public MapColor getMapColor(IBlockState state)
-    {
-        return ((EnumDyeColor)state.getValue(COLOR)).getMapColor();
-    }
-
-    /**
      * Convert the given metadata into a BlockState for this Block
      */
     public IBlockState getStateFromMeta(int meta)
@@ -69,7 +61,7 @@ public class BlockRColorful extends Block
      */
     public int getMetaFromState(IBlockState state)
     {
-        return ((EnumDyeColor)state.getValue(COLOR)).getMetadata();
+        return state.getValue(COLOR).getMetadata();
     }
 
     protected BlockStateContainer createBlockState()

@@ -33,8 +33,6 @@ public class CommonProxy {
 	public static SimpleNetworkWrapper snw; 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-    	RPBlocks.register();
-    	RPItems.register();
     	RPCapabilities.preInit(event);
     	registerEntity();
     	snw = NetworkRegistry.INSTANCE.newSimpleChannel("RPchannel");
@@ -42,7 +40,7 @@ public class CommonProxy {
     }
     @EventHandler
     public void init(FMLInitializationEvent event) {
-    	RPCraftingManager.register();
+    	//RPCraftingManager.register();
     }
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
@@ -58,23 +56,12 @@ public class CommonProxy {
     	GameRegistry.registerTileEntity(TileEntityColorful.class, "Colorful");
     	GameRegistry.registerTileEntity(TileEntityRailNoticer.class, "noticer");
     }
-	protected void blockRend(Block block, String registerName){
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0,
-                new ModelResourceLocation("railwayp:" + registerName, "inventory"));
-	}
-	protected void itemRend(Item item, String registerName){
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0,
-                new ModelResourceLocation("railwayp:" + registerName, "inventory"));
-	}
-	protected void itemRend(Item item, int damage, String ideniter){
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, damage,
-                new ModelResourceLocation("railwayp:" + ideniter, "inventory"));
-	}
+
 	public EntityPlayer getPlayerFromNetHandler(INetHandler handler)
 	{
 		if (handler instanceof NetHandlerPlayServer)
 		{
-			return ((NetHandlerPlayServer) handler).playerEntity;
+			return ((NetHandlerPlayServer) handler).player;
 		}
 		else
 		{

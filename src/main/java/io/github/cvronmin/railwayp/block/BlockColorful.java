@@ -117,7 +117,7 @@ public class BlockColorful extends BlockContainer{
         }
         else
         {
-            super.harvestBlock(worldIn, player, pos, state, (TileEntity)null, stack);
+            super.harvestBlock(worldIn, player, pos, state, null, stack);
         }
     }
     @Override

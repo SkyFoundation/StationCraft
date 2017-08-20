@@ -34,7 +34,7 @@ public class MessagerFromServer {
 				     // Packets received on the client side must be handled differently!  See MessageHandlerOnClient 
 				 
 				 
-				     final EntityPlayerMP sendingPlayer = ctx.getServerHandler().playerEntity; 
+				     final EntityPlayerMP sendingPlayer = ctx.getServerHandler().player;
 				     if (sendingPlayer == null) { 
 				       System.err.println("EntityPlayerMP was null when AirstrikeMessageToServer was received"); 
 				       return null; 
@@ -47,11 +47,7 @@ public class MessagerFromServer {
 				     //      this.theProfiler.startSection("jobs"); 
 				     //  In this case, the task is to call messageHandlerOnServer.processMessage(message, sendingPlayer) 
 				     final WorldServer playerWorldServer = sendingPlayer.getServerWorld(); 
-				     playerWorldServer.addScheduledTask(new Runnable() { 
-				       public void run() { 
-				         processMessage(worldClient, message); 
-				       } 
-				     }); 
+				     playerWorldServer.addScheduledTask(() -> processMessage(worldClient, message));
 
 				     return null; 
 

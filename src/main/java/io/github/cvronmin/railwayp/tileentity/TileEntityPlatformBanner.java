@@ -1,23 +1,18 @@
 package io.github.cvronmin.railwayp.tileentity;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
-import com.google.gson.JsonParseException;
-
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class TileEntityPlatformBanner extends TileEntityBanner
 {
@@ -240,7 +235,7 @@ public class TileEntityPlatformBanner extends TileEntityBanner
 
                     if (stack.getTagCompound().hasNoTags())
                     {
-                        stack.setTagCompound((NBTTagCompound)null);
+                        stack.setTagCompound(null);
                     }
                 }
             }
@@ -264,7 +259,7 @@ public class TileEntityPlatformBanner extends TileEntityBanner
                 this.patternList = Lists.newArrayList();
                 this.colorList = Lists.newArrayList();
                 this.patternList.add(EnumUnifiedBannerPattern.BASE);
-                this.colorList.add(EnumDyeColor.byDyeDamage(15).getMapColor().colorValue);
+                this.colorList.add(EnumDyeColor.byDyeDamage(15).getColorValue());
                 this.patternResourceLocation = "b" + 0;
                 
                 if (this.checkGoodBanner()) {

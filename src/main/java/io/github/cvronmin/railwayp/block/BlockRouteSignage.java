@@ -131,7 +131,7 @@ public class BlockRouteSignage extends BlockContainer
         }
         else
         {
-            super.harvestBlock(worldIn, player, pos, state, (TileEntity)null, stack);
+            super.harvestBlock(worldIn, player, pos, state, null, stack);
         }
     }
 
@@ -156,7 +156,7 @@ public class BlockRouteSignage extends BlockContainer
             protected static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0.0D, 0.109375f, 0.0D, 0.125D, 0.890625f, 1.0D);
             public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
             {
-                switch ((EnumFacing)state.getValue(FACING))
+                switch (state.getValue(FACING))
                 {
                     case NORTH:
                     default:
@@ -205,7 +205,7 @@ public class BlockRouteSignage extends BlockContainer
              */
             public int getMetaFromState(IBlockState state)
             {
-                return ((EnumFacing)state.getValue(FACING)).getIndex();
+                return state.getValue(FACING).getIndex();
             }
 
             protected BlockStateContainer createBlockState()

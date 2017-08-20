@@ -149,7 +149,7 @@ public class BlockPlatformBanner extends BlockContainer
         }
         else
         {
-            super.harvestBlock(worldIn, player, pos, state, (TileEntity)null, stack);
+            super.harvestBlock(worldIn, player, pos, state, null, stack);
         }
     }
     @Override
@@ -198,7 +198,7 @@ public class BlockPlatformBanner extends BlockContainer
 
             public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
             {
-                switch ((EnumFacing)state.getValue(FACING))
+                switch (state.getValue(FACING))
                 {
                     case NORTH:
                     default:
@@ -214,7 +214,7 @@ public class BlockPlatformBanner extends BlockContainer
             //TODO
             @Override
             public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-                EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+                EnumFacing enumfacing = state.getValue(FACING);
 
                 if (!worldIn.getBlockState(pos.offset(enumfacing.getOpposite())).getMaterial().isSolid())
                 {
@@ -230,7 +230,7 @@ public class BlockPlatformBanner extends BlockContainer
             public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
             	
                 IBlockState state = world.getBlockState(pos);
-				EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+				EnumFacing enumfacing = state.getValue(FACING);
 
                 if (!world.getBlockState(pos.offset(enumfacing.getOpposite())).getMaterial().isSolid())
                 {
@@ -245,7 +245,7 @@ public class BlockPlatformBanner extends BlockContainer
              */
             public IBlockState withRotation(IBlockState state, Rotation rot)
             {
-                return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
+                return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
             }
 
             /**
@@ -254,7 +254,7 @@ public class BlockPlatformBanner extends BlockContainer
              */
             public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
             {
-                return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+                return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
             }
             /**
              * Convert the given metadata into a BlockState for this Block
@@ -276,7 +276,7 @@ public class BlockPlatformBanner extends BlockContainer
              */
             public int getMetaFromState(IBlockState state)
             {
-                return ((EnumFacing)state.getValue(FACING)).getIndex();
+                return state.getValue(FACING).getIndex();
             }
 
             protected BlockStateContainer createBlockState()

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
@@ -22,7 +23,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
@@ -56,15 +56,10 @@ public class GuiColorfulEditor extends GuiScreen {
 		this.buttonList.clear();
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
-		this.colorField = new GuiTextField(11, this.fontRendererObj, posX + (+75 / 2 + 20), posY + (-80), 75, 17);
+		this.colorField = new GuiTextField(11, this.fontRenderer, posX + (+75 / 2 + 20), posY + (-80), 75, 17);
 		this.colorField.setMaxStringLength(6);
 		this.colorField.setText(Integer.toHexString(teedit.getColor()));
-		this.colorField.setValidator(new Predicate<String>() {
-			@Override
-			public boolean apply(String s) {
-				return s.isEmpty() | s.matches("-?[0-9a-fA-F]+");
-				}
-		});
+		this.colorField.setValidator(s -> s.isEmpty() || s.matches("-?[0-9a-fA-F]+"));
 		this.buttonList.add(doneBtn = new GuiButton(0, posX - 4 - 150, this.height - 40, 150, 20, I18n.format("gui.done", new Object[0])));
 		this.buttonList.add(cancelBtn = new GuiButton(1, posX + 4, this.height - 40, 150, 20, I18n.format("gui.cancel", new Object[0])));
 		this.buttonList.add(selectColorBtn = new GuiButton(10,posX + (+75 / 2 + 20 + 75 + 2),posY -80 - 1, 20,20,"..."));
@@ -75,20 +70,20 @@ public class GuiColorfulEditor extends GuiScreen {
 		this.drawDefaultBackground();
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
-		this.drawString(fontRendererObj, I18n.format("gui.color", new Object[0]), posX + (75 / 2 + 20), posY + (-80) - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
-		this.drawString(fontRendererObj, I18n.format("gui.preview", new Object[0]), posX +(75 / 2 + 20), posY - 50 - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.color", new Object[0]), posX + (75 / 2 + 20), posY + (-80) - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
+		this.drawString(fontRenderer, I18n.format("gui.preview", new Object[0]), posX +(75 / 2 + 20), posY - 50 - fontRenderer.FONT_HEIGHT, 0xFFFFFF);
 		this.colorField.drawTextBox();
         float f = 1.0F / 16;
         float f1 = 1.0F / 16;
         int r = (teedit.getColor() >> 16)&255, g = (teedit.getColor() >> 8)&255, b = (teedit.getColor())&255;
         FMLClientHandler.instance().getClient().getTextureManager().bindTexture(te.getBlockType().getMaterial(te.getBlockType().getDefaultState()) == Material.ROCK ? MTILE : PLATE);
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexbuffer = tessellator.getBuffer();
+        BufferBuilder vertexbuffer = tessellator.getBuffer();
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        vertexbuffer.pos((double)(posX + 75/2 + 70 - 50), (double)(posY - 45 + 100), 0.0D).tex((double)(0               * f), (double)((0 + (float)16) * f1)).color(r, g, b, 255).endVertex();
-        vertexbuffer.pos((double)(posX + 75/2 + 70 + 50), (double)(posY - 45 + 100), 0.0D).tex((double)((0 + (float)16) * f), (double)((0 + (float)16) * f1)).color(r, g, b, 255).endVertex();
-        vertexbuffer.pos((double)(posX + 75/2 + 70 + 50), (double) posY - 45       , 0.0D).tex((double)((0 + (float)16) * f), (double)(0               * f1)).color(r, g, b, 255).endVertex();
-        vertexbuffer.pos((double)(posX + 75/2 + 70 - 50), (double) posY - 45       , 0.0D).tex((double)(0               * f), (double)(0               * f1)).color(r, g, b, 255).endVertex();
+        vertexbuffer.pos(posX + 37.5 + 70 - 50, (double)(posY - 45 + 100), 0.0D).tex((double)(0               * f), (double)((0 + (float)16) * f1)).color(r, g, b, 255).endVertex();
+        vertexbuffer.pos(posX + 37.5 + 70 + 50, (double)(posY - 45 + 100), 0.0D).tex((double)((0 + (float)16) * f), (double)((0 + (float)16) * f1)).color(r, g, b, 255).endVertex();
+        vertexbuffer.pos(posX + 37.5 + 70 + 50, (double) posY - 45       , 0.0D).tex((double)((0 + (float)16) * f), (double)(0               * f1)).color(r, g, b, 255).endVertex();
+        vertexbuffer.pos(posX + 37.5 + 70 - 50, (double) posY - 45       , 0.0D).tex((double)(0               * f), (double)(0               * f1)).color(r, g, b, 255).endVertex();
         tessellator.draw();
 		//renderPreview(mouseX, mouseY, partialTicks);
 		super.drawScreen(mouseX, mouseY, partialTicks);
@@ -121,7 +116,7 @@ public class GuiColorfulEditor extends GuiScreen {
             //GlStateManager.rotate(-f2, 0.0F, 1.0F, 0.0F);
             GlStateManager.translate(0.0F, -1.0625F, 0.0F);
         //this.itemRender.renderItemAndEffectIntoGUI(new ItemStack(this.teedit.getBlockType()), 0, 0);
-        TileEntityRendererDispatcher.instance.renderTileEntityAt(this.teedit, -0.5D, -0.75D, -0.5D, 0.0F);
+        TileEntityRendererDispatcher.instance.render(this.teedit, -0.5D, -0.75D, -0.5D, 0.0F);
         GlStateManager.popMatrix();
 	}
 	@Override

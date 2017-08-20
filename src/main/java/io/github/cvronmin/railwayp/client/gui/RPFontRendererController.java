@@ -73,7 +73,7 @@ public class RPFontRendererController {
 		}
         finally
         {
-            IOUtils.closeQuietly((Closeable)iresource);
+            IOUtils.closeQuietly(iresource);
         }
     }
     protected static IResource getResource(ResourceLocation location) throws IOException

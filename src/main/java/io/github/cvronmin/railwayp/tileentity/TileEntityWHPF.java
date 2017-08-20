@@ -222,7 +222,7 @@ public class TileEntityWHPF extends TileEntityBanner {
 					stack.getTagCompound().removeTag("BlockEntityTag");
 
 					if (stack.getTagCompound().hasNoTags()) {
-						stack.setTagCompound((NBTTagCompound) null);
+						stack.setTagCompound(null);
 					}
 				}
 			}
@@ -242,7 +242,7 @@ public class TileEntityWHPF extends TileEntityBanner {
 				this.patternList = Lists.newArrayList();
 				this.colorList = Lists.newArrayList();
 				this.patternList.add(EnumUnifiedBannerPattern.BASE);
-				this.colorList.add(EnumDyeColor.byDyeDamage(0).getMapColor().colorValue);
+				this.colorList.add(EnumDyeColor.byDyeDamage(0).getColorValue());
 				this.patternResourceLocation = "b" + 0;
 
 				if (this.checkGoodBanner()) {
@@ -266,7 +266,7 @@ public class TileEntityWHPF extends TileEntityBanner {
 					}
 					if (enumbannerpattern != null) {
 						this.patternList.add(enumbannerpattern);
-						this.colorList.add(EnumDyeColor.byDyeDamage(15).getMapColor().colorValue);
+						this.colorList.add(EnumDyeColor.byDyeDamage(15).getColorValue());
 						this.patternResourceLocation = this.patternResourceLocation + enumbannerpattern.getPatternID()
 								+ 15;
 					}
@@ -275,7 +275,7 @@ public class TileEntityWHPF extends TileEntityBanner {
 
 					if (enumbannerpattern != null) {
 						this.patternList.add(enumbannerpattern);
-						this.colorList.add(EnumDyeColor.byDyeDamage(15).getMapColor().colorValue);
+						this.colorList.add(EnumDyeColor.byDyeDamage(15).getColorValue());
 						this.patternResourceLocation = this.patternResourceLocation + enumbannerpattern.getPatternID()
 								+ 15;
 					}

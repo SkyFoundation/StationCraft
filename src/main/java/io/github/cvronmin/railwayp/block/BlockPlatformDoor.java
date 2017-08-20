@@ -80,11 +80,11 @@ public int getStrongPower(IBlockState blockState, IBlockAccess blockAccess, Bloc
 	    	// TODO Auto-generated method stub
 	        return ((Boolean)blockState.getValue(POWERED)).booleanValue() ? 15 : 0;
 	    }*/
-@Override
-public boolean isFullyOpaque(IBlockState state) {
-	// TODO Auto-generated method stub
-	return false;
-}
+
+		@Override
+		public boolean isFullBlock(IBlockState state) {
+			return false;
+		}
 
 	    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	    {
@@ -189,17 +189,17 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 	    }
 		private void checkForMove(World worldIn, BlockPos pos, IBlockState state)
 	    {
-	        EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+	        EnumFacing enumfacing = state.getValue(FACING);
 	        boolean flag = this.shouldBeExtended(worldIn, pos, enumfacing);
 
-	        if (flag && !((Boolean)state.getValue(EXTENDED)).booleanValue())
+	        if (flag && !state.getValue(EXTENDED).booleanValue())
 	        {
 	            if ((new DoorStructureHelper(worldIn, pos, enumfacing, true)).canMove())
 	            {
 	                worldIn.addBlockEvent(pos, this, 0, enumfacing.getHorizontalIndex());
 	            }
 	        }
-	        else if (!flag && ((Boolean)state.getValue(EXTENDED)).booleanValue())
+	        else if (!flag && state.getValue(EXTENDED).booleanValue())
 	        {
 	            worldIn.setBlockState(pos, state.withProperty(EXTENDED, Boolean.valueOf(false)).withProperty(POWERED, Boolean.valueOf(false)), 2);
 	            worldIn.addBlockEvent(pos, this, 1, enumfacing.getHorizontalIndex());
@@ -246,7 +246,7 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 
 	    @Override
 	    public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param) {
-	        EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+	        EnumFacing enumfacing = state.getValue(FACING);
 
 	        if (!worldIn.isRemote)
 	        {
@@ -289,7 +289,7 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 	            worldIn.setBlockState(pos, RPBlocks.platform_door_extension.getDefaultState().withProperty(Moving.FACING, enumfacing).withProperty(LEFTY, state.getValue(LEFTY)), 3);
 	            worldIn.setTileEntity(pos, teDoor);
 	            worldIn.setBlockToAir(pos.offset(enumfacing));
-	            worldIn.playSound((EntityPlayer)null, pos, SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.15F + 0.6F);
+	            worldIn.playSound(null, pos, SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.15F + 0.6F);
 	        }
 
 	        return true;
@@ -299,7 +299,7 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 	     */
 	    public boolean onBlockEventReceived(World worldIn, BlockPos pos, IBlockState state, int eventID, int eventParam)
 	    {
-	        EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+	        EnumFacing enumfacing = state.getValue(FACING);
 
 	        if (!worldIn.isRemote)
 	        {
@@ -339,7 +339,7 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 	            worldIn.setBlockState(pos, RPBlocks.platform_door_extension.getDefaultState().withProperty(Moving.FACING, enumfacing).withProperty(LEFTY, state.getValue(LEFTY)), 3);
 	            worldIn.setTileEntity(pos, Moving.newTileEntity(this.getStateFromMeta(eventParam | (state.getValue(LEFTY) ? 4 : 0)), enumfacing, false, true));
 	            worldIn.setBlockToAir(pos.offset(enumfacing));
-	            worldIn.playSound((EntityPlayer)null, pos, SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.15F + 0.6F);
+	            worldIn.playSound(null, pos, SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.15F + 0.6F);
 	        }
 
 	        return true;
@@ -353,7 +353,7 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 	    {
 	        /*if (((Boolean)state.getValue(EXTENDED)).booleanValue())
 	        {*/
-	            switch ((EnumFacing)state.getValue(FACING))
+	            switch (state.getValue(FACING))
 	            {
 	                default:
 	                case NORTH:
@@ -433,7 +433,7 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
                         return p_185646_4_;
                     }
                 }
-                else if (((Boolean)p_185646_0_.getValue(EXTENDED)).booleanValue())
+                else if (p_185646_0_.getValue(EXTENDED).booleanValue())
                 {
                     return false;
                 }
@@ -557,12 +557,12 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 	    public int getMetaFromState(IBlockState state)
 	    {
 	        byte b0 = 0;
-	        int i = b0 | ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
+	        int i = b0 | state.getValue(FACING).getHorizontalIndex();
 	        
-	        if(((Boolean)state.getValue(LEFTY)).booleanValue()) {
+	        if(state.getValue(LEFTY).booleanValue()) {
 	        	i |= 4;
 	        }
-	        if (((Boolean)state.getValue(EXTENDED)).booleanValue())
+	        if (state.getValue(EXTENDED).booleanValue())
 	        {
 	            i |= 8;
 	        }
@@ -633,7 +633,7 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 	    {
 	        if (player.capabilities.isCreativeMode)
 	        {
-	            EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+	            EnumFacing enumfacing = state.getValue(FACING);
 
 	            if (enumfacing != null)
 	            {
@@ -653,11 +653,11 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 	    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	    {
 	        super.breakBlock(worldIn, pos, state);
-	        EnumFacing enumfacing = ((EnumFacing)state.getValue(FACING)).getOpposite();
+	        EnumFacing enumfacing = state.getValue(FACING).getOpposite();
 	        pos = pos.offset(enumfacing);
 	        IBlockState iblockstate1 = worldIn.getBlockState(pos);
 
-	        if ((iblockstate1.getBlock() == RPBlocks.platform_door_base) && ((Boolean)iblockstate1.getValue(Base.EXTENDED)).booleanValue())
+	        if ((iblockstate1.getBlock() == RPBlocks.platform_door_base) && iblockstate1.getValue(Base.EXTENDED).booleanValue())
 	        {
 	            iblockstate1.getBlock().dropBlockAsItem(worldIn, pos, iblockstate1, 0);
 	            worldIn.setBlockToAir(pos);
@@ -692,7 +692,7 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 	    
 	    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	    {
-	        switch ((EnumFacing)state.getValue(FACING))
+	        switch (state.getValue(FACING))
 	        {
 	            default:
 	            case NORTH:
@@ -722,7 +722,7 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 	    @Override
 	    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
 	        IBlockState state = world.getBlockState(pos);
-			EnumFacing enumfacing = (EnumFacing)state .getValue(FACING);
+			EnumFacing enumfacing = state .getValue(FACING);
 	        BlockPos blockpos1 = pos.offset(enumfacing.getOpposite());
 	        IBlockState iblockstate1 = world.getBlockState(blockpos1);
 
@@ -738,7 +738,7 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 
 	    @Override
 	    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos from) {
-	        EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+	        EnumFacing enumfacing = state.getValue(FACING);
 	        BlockPos blockpos1 = pos.offset(enumfacing.getOpposite());
 	        IBlockState iblockstate1 = worldIn.getBlockState(blockpos1);
 
@@ -785,7 +785,7 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 	    public int getMetaFromState(IBlockState state)
 	    {
 	        byte b0 = 0;
-	        int i = b0 | ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
+	        int i = b0 | state.getValue(FACING).getHorizontalIndex();
 	        
 	        if(state.getValue(Base.LEFTY)){
 	        	i |= 4;
@@ -876,10 +876,10 @@ private boolean shouldBlockPlacedAsLefty(World worldIn, BlockPos clickedBlock, E
 	     */
 	    public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
 	    {
-	        BlockPos blockpos1 = pos.offset(((EnumFacing)state.getValue(FACING)).getOpposite());
+	        BlockPos blockpos1 = pos.offset(state.getValue(FACING).getOpposite());
 	        IBlockState iblockstate1 = worldIn.getBlockState(blockpos1);
 
-	        if (iblockstate1.getBlock() instanceof Base && ((Boolean)iblockstate1.getValue(Base.EXTENDED)).booleanValue())
+	        if (iblockstate1.getBlock() instanceof Base && iblockstate1.getValue(Base.EXTENDED).booleanValue())
 	        {
 	            worldIn.setBlockToAir(blockpos1);
 	        }
@@ -986,7 +986,7 @@ public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Bloc
 	    public int getMetaFromState(IBlockState state)
 	    {
 	        byte b0 = 0;
-	        int i = b0 | ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
+	        int i = b0 | state.getValue(FACING).getHorizontalIndex();
 	        
 	        if(state.getValue(Base.LEFTY)){
 	        	i |= 4;
